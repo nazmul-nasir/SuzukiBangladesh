@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import www.icebd.com.suzukibangladesh.R;
-import www.icebd.com.suzukibangladesh.notification.MainActivity;
+import www.icebd.com.suzukibangladesh.FirstActivity;
 
 
 public class Splash extends Activity {
@@ -51,7 +51,7 @@ public class Splash extends Activity {
             public void run() {
 
                 finish();
-                Intent i = new Intent(getBaseContext(), MainActivity.class);
+                Intent i = new Intent(getBaseContext(), FirstActivity.class);
                 startActivity(i);
             }
         }, 4000);// delay in milliseconds (200)
