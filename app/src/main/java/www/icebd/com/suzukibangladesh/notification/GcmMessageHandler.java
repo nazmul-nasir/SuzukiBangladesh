@@ -115,34 +115,8 @@ public class GcmMessageHandler extends GcmListenerService {
         notificationManager.notify(Config.NOTIFICATION_ID, notification);*/
 
 
-/*/*
-        Context context = getBaseContext();
-
-        Intent intent = new Intent(context,MoreInfoNotification.class);
-        intent.putExtra("value",title);
-        intent.putExtra("body",data);
-        PendingIntent notificIntent = PendingIntent.getActivity(context, 0,
-                intent, 0);
 
 
-        Notification notification = new Notification.Builder(context)
-                // Show controls on lock screen even when user hides sensitive content.
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.yin)
-                        // Add media control buttons that invoke intents in your media service
-                .addAction(R.temp.prev, "Previous", notificIntent) // #0
-                .addAction(R.drawable.ic_pause, "Pause", notificIntent)  // #1
-                .addAction(R.drawable.ic_next, "Next", notificIntent)     // #2
-                        // Apply the media style template
-                .setStyle(new Notification.MediaStyle()
-                        .setShowActionsInCompactView(1 *//* #1: pause button *//*)
-                        .setMediaSession(mMediaSession.getSessionToken())
-                        .setContentTitle("Wonderful music")
-                        .setContentText("My Awesome Band")
-                        .setLargeIcon(albumArtBitmap)
-                        .build();
-
-*/
     }
 
 }
