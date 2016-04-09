@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.FirstActivity;
+import www.icebd.com.suzukibangladesh.quiz.QuizStarter;
 
 
 public class Splash extends Activity {
@@ -51,7 +52,7 @@ public class Splash extends Activity {
             public void run() {
 
                 finish();
-                Intent i = new Intent(getBaseContext(), FirstActivity.class);
+                Intent i = new Intent(getBaseContext(), QuizStarter.class);
                 startActivity(i);
             }
         }, 4000);// delay in milliseconds (200)
