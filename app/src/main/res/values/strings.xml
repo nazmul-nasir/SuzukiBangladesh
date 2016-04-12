@@ -15,4 +15,10 @@
 
     <string name="action_settings">Settings</string>
     <string name="str_next">Next</string>
+    <string name="my_bike_btn_txt">MY BIKE</string>
+    <string name="spare_parts_btn_txt">SPARE PARTS</string>
+    <string name="request_services_btn_txt">REQUEST SERVICES</string>
+    <string name="news_events_btn_txt"><![CDATA[NEWS & EVENTS]]></string>
+    <string name="promotion_btn_txt">Promotion</string>
+    <string name="invite_friends_btn_txt">INVITE FRIENDS</string>
 </resources>

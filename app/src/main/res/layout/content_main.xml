@@ -34,27 +34,28 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btn_my_parts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
+                android:background="@drawable/border"
                 android:layout_weight="1.0"
-                android:text="Button" />
+                android:drawableTop="@drawable/logo"
+                android:text="@string/my_bike_btn_txt" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btn_spare_parts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/holo_green_light"
+                android:background="@drawable/border"
                 android:layout_weight="1.0"
-                android:text="Button" />
+                android:text="@string/spare_parts_btn_txt" />
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/btn_req_services"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/holo_blue_bright"
+                android:background="@drawable/border"
                 android:layout_weight="1.0"
-                android:text="Button" />
+                android:text="@string/request_services_btn_txt" />
 
         </LinearLayout>
 
@@ -65,29 +66,32 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btn_news_events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/holo_blue_light"
+                android:background="@drawable/border"
                 android:layout_weight="1.0"
-                android:text="Button" />
+                android:text="@string/news_events_btn_txt" />
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/holo_red_light"
-                android:layout_weight="1.0"
-                android:text="Button" />
+
 
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/btn_promotion"
+                android:background="@drawable/border"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/holo_orange_dark"
+
                 android:layout_weight="1.0"
-                android:text="Button" />
+                android:text="@string/promotion_btn_txt" />
+
+            <Button
+                android:id="@+id/btn_invite_friends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:text="@string/invite_friends_btn_txt" />
 
       
 
