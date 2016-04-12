@@ -1,5 +1,6 @@
 package www.icebd.com.suzukibangladesh;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import www.icebd.com.suzukibangladesh.quiz.QuizStarter;
 
 
 public class FirstActivity extends AppCompatActivity
@@ -67,11 +70,18 @@ public class FirstActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_notifiction) {
             return true;
         }
+        else if (id==R.id.action_find_location)
+        {
+            return true;
+        }
+        else {
+            return super.onOptionsItemSelected(item);
+        }
 
-        return super.onOptionsItemSelected(item);
+       // return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -83,6 +93,10 @@ public class FirstActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+
+            Intent intent = new Intent(this, QuizStarter.class);
+            startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_slideshow) {
 
