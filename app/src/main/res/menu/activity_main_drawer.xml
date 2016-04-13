@@ -3,34 +3,51 @@
 
     <group android:checkableBehavior="single" android:background="#80FFFFFF">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_home"
             android:icon="@drawable/logo_icon"
-            android:title="Import" />
+            android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_my_bike"
             android:icon="@drawable/logo_icon"
-            android:title="Gallery" />
+            android:title="My Bike" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_spare_parts"
             android:icon="@drawable/logo_icon"
-            android:title="Slideshow" />
+            android:title="Spare Parts" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_request_services"
             android:icon="@drawable/logo_icon"
-            android:title="Tools" />
+            android:title="Request Service" />
+        <item
+            android:id="@+id/nav_news_events"
+            android:icon="@drawable/logo_icon"
+            android:title="News and Events" />
+        <item
+            android:id="@+id/nav_promotions"
+            android:icon="@drawable/logo_icon"
+            android:title="Promotions" />
+        <item
+            android:id="@+id/nav_quizzes"
+            android:icon="@drawable/logo_icon"
+            android:title="Quizzes" />
+        <item
+            android:id="@+id/nav_sos"
+            android:icon="@drawable/logo_icon"
+            android:title="Sos" />
+        <item
+            android:id="@+id/nav_invite_friends"
+            android:icon="@drawable/logo_icon"
+            android:title="Invite Friends" />
+        <item
+            android:id="@+id/nav_social_media"
+            android:icon="@drawable/logo_icon"
+            android:title="Social Media Facebook" />
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/logo_icon"
+            android:title="Login" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/logo_icon"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/logo_icon"
-                android:title="Send" />
-        </menu>
-    </item>
+
 
 </menu>

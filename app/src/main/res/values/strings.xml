@@ -21,4 +21,7 @@
     <string name="news_events_btn_txt"><![CDATA[NEWS & EVENTS]]></string>
     <string name="promotion_btn_txt">Promotion</string>
     <string name="invite_friends_btn_txt">INVITE FRIENDS</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

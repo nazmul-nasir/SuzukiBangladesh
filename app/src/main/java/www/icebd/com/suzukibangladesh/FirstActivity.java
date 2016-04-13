@@ -1,10 +1,8 @@
 package www.icebd.com.suzukibangladesh;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,13 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import www.icebd.com.suzukibangladesh.quiz.QuizStarter;
+import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 
 
 public class FirstActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+
+{
+
+    NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class FirstActivity extends AppCompatActivity
         }
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
@@ -88,23 +90,41 @@ public class FirstActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_my_bike) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, QuizStarter.class);
-            startActivity(intent);
-            finish();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, HomeFragment.newInstance())
+                    .commit();
 
-        } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_spare_parts) {
+
+        } else if (id == R.id.nav_request_services) {
+
+        } else if (id == R.id.nav_news_events) {
+
+        } else if (id == R.id.nav_promotions) {
+
+        }else if (id == R.id.nav_quizzes) {
+
+        } else if (id == R.id.nav_sos) {
+
+        } else if (id == R.id.nav_invite_friends) {
+
+        }
+        else if (id == R.id.nav_social_media) {
+
+        } else if (id == R.id.nav_login) {
 
         }
 
@@ -112,4 +132,6 @@ public class FirstActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
