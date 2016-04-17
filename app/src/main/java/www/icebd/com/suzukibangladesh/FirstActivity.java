@@ -12,6 +12,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
+import www.icebd.com.suzukibangladesh.menu.InviteFriends;
+import www.icebd.com.suzukibangladesh.menu.Login;
+import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
+import www.icebd.com.suzukibangladesh.menu.NewsEvents;
+import www.icebd.com.suzukibangladesh.menu.Promotions;
+import www.icebd.com.suzukibangladesh.menu.Quiz;
+import www.icebd.com.suzukibangladesh.menu.RequestServices;
+import www.icebd.com.suzukibangladesh.menu.SOS;
+import www.icebd.com.suzukibangladesh.menu.SocialMedia;
+import www.icebd.com.suzukibangladesh.menu.SpareParts;
 
 
 public class FirstActivity extends AppCompatActivity
@@ -96,35 +106,60 @@ public class FirstActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_bike) {
-            // Handle the camera action
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, MyBikeFragment.newInstance())
+                    .commit();
         } else if (id == R.id.nav_home) {
 
             fragmentManager.beginTransaction()
                     .replace(R.id.container, HomeFragment.newInstance())
                     .commit();
 
-
-
-
-
         } else if (id == R.id.nav_spare_parts) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, SpareParts.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_request_services) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, RequestServices.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_news_events) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, NewsEvents.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_promotions) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Promotions.newInstance())
+                    .commit();
 
         }else if (id == R.id.nav_quizzes) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Quiz.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_sos) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, SOS.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_invite_friends) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, InviteFriends.newInstance())
+                    .commit();
 
         }
         else if (id == R.id.nav_social_media) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, SocialMedia.newInstance())
+                    .commit();
 
         } else if (id == R.id.nav_login) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Login.newInstance())
+                    .commit();
 
         }
 

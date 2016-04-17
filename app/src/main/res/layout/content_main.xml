@@ -5,7 +5,8 @@
     android:layout_height="fill_parent"
     android:layout_width="match_parent"
     android:layout_weight="8"
-    android:background="@color/blue_grey_900"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
 
     tools:context="www.icebd.com.suzukibangladesh.FirstActivity"
     tools:showIn="@layout/app_bar_main"
