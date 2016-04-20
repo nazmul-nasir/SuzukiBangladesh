@@ -22,6 +22,10 @@ import www.icebd.com.suzukibangladesh.menu.RequestServices;
 import www.icebd.com.suzukibangladesh.menu.SOS;
 import www.icebd.com.suzukibangladesh.menu.SocialMedia;
 import www.icebd.com.suzukibangladesh.menu.SpareParts;
+import www.icebd.com.suzukibangladesh.reg.ChangePassword;
+import www.icebd.com.suzukibangladesh.reg.Logout;
+import www.icebd.com.suzukibangladesh.reg.ResetPassword;
+import www.icebd.com.suzukibangladesh.reg.Signup;
 
 
 public class FirstActivity extends AppCompatActivity
@@ -156,9 +160,31 @@ public class FirstActivity extends AppCompatActivity
                     .replace(R.id.container, SocialMedia.newInstance())
                     .commit();
 
-        } else if (id == R.id.nav_login) {
+        }else if (id == R.id.nav_logout) {
             fragmentManager.beginTransaction()
+                    .replace(R.id.container, Logout.newInstance())
+                    .commit();
+
+        }else if (id == R.id.nav_change_password) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, ChangePassword.newInstance())
+                    .commit();
+
+        }else if (id == R.id.nav_reset_password) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, ResetPassword.newInstance())
+                    .commit();
+
+        }
+
+        else if (id == R.id.nav_login) {
+
+
+          /*  fragmentManager.beginTransaction()
                     .replace(R.id.container, Login.newInstance())
+                    .commit();*/
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Signup.newInstance())
                     .commit();
 
         }

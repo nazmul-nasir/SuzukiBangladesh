@@ -1,8 +1,10 @@
 package www.icebd.com.suzukibangladesh.json;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import www.icebd.com.suzukibangladesh.reg.Signup;
 
 /**
  * Created by Oum Saokosal, the author of KosalGeek on 9/6/15.
@@ -41,8 +45,8 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
         this.context = (Context)delegate;
     }
 
-    public PostResponseAsyncTask(AsyncResponse delegate, HashMap<String, String> postData){
-        this.delegate = delegate;
+    public PostResponseAsyncTask(FragmentActivity delegate, HashMap<String, String> postData){
+        this.delegate = (AsyncResponse) delegate;
         this.context = (Context)delegate;
         this.postData = postData;
     }
@@ -59,6 +63,14 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
         this.postData = postData;
         this.loadingMessage = loadingMessage;
     }
+
+    public PostResponseAsyncTask(Signup signup, HashMap<String, String> postData) {
+        this.delegate=signup;
+        this.context=signup.getContext();
+        this.postData=postData;
+    }
+
+
     //End Constructor
 
     @Override

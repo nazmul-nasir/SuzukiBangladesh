@@ -42,10 +42,25 @@
             android:id="@+id/nav_social_media"
             android:icon="@drawable/logo_icon"
             android:title="Social Media Facebook" />
+
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/logo_icon"
+            android:title="Change Password" />
+
+        <item
+            android:id="@+id/nav_reset_password"
+            android:icon="@drawable/logo_icon"
+            android:title="Reset Password" />
         <item
             android:id="@+id/nav_login"
             android:icon="@drawable/logo_icon"
             android:title="Login" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logo_icon"
+            android:title="Logout" />
     </group>
 
 

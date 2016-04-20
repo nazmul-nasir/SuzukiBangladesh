@@ -42,10 +42,11 @@
 
 
         </activity>
-        <activity android:name=".MyBike">
+        <activity android:name=".reg.Signup">
 
 
         </activity>
+
 
 
         <activity android:name=".quiz.QuizStarter">
