@@ -21,6 +21,10 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import www.icebd.com.suzukibangladesh.menu.Login;
+import www.icebd.com.suzukibangladesh.reg.ChangePassword;
+import www.icebd.com.suzukibangladesh.reg.Logout;
+import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
 
 /**
@@ -67,6 +71,31 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
     public PostResponseAsyncTask(Signup signup, HashMap<String, String> postData) {
         this.delegate=signup;
         this.context=signup.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(ResetPassword resetPassword, HashMap<String, String> postData) {
+        this.delegate=resetPassword;
+        this.context=resetPassword.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(Login login, HashMap<String, String> postData) {
+        this.delegate=login;
+        this.context=login.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(ChangePassword changePassword, HashMap<String, String> postData) {
+        this.delegate=changePassword;
+        this.context=changePassword.getContext();
+        this.postData=postData;
+
+    }
+
+    public PostResponseAsyncTask(Logout logout, HashMap<String, String> postData) {
+        this.delegate=logout;
+        this.context=logout.getContext();
         this.postData=postData;
     }
 

@@ -1,6 +1,9 @@
 package www.icebd.com.suzukibangladesh;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -8,9 +11,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.HashMap;
+
+import www.icebd.com.suzukibangladesh.json.AsyncResponse;
+import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
 import www.icebd.com.suzukibangladesh.menu.Login;
@@ -29,7 +38,7 @@ import www.icebd.com.suzukibangladesh.reg.Signup;
 
 
 public class FirstActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+        implements NavigationView.OnNavigationItemSelectedListener, AsyncResponse
 
 {
 
@@ -57,7 +66,26 @@ public class FirstActivity extends AppCompatActivity
          navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
+            navigationView.setCheckedItem(0);
+            //navigationView.getMenu().getItem(0).setChecked(true);
         }
+
+
+    /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        String uid = telephonyManager.getDeviceId();
+        Log.i("Test",uid);*/
+
+      /*  SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("auth_key",);
+        editor.apply();*/
+
+       /* HashMap<String, String> postData = new HashMap<String, String>();
+        postData.put("unique_device_id","152698785698536562214852");
+        postData.put("notification_key", "2");
+        postData.put("platform","2");
+        PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+        loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");*/
     }
 
     @Override
@@ -184,6 +212,17 @@ public class FirstActivity extends AppCompatActivity
                     .replace(R.id.container, Login.newInstance())
                     .commit();*/
             fragmentManager.beginTransaction()
+                    .replace(R.id.container, Login.newInstance())
+                    .commit();
+
+        }
+        else if (id == R.id.nav_sign_up) {
+
+
+          /*  fragmentManager.beginTransaction()
+                    .replace(R.id.container, Login.newInstance())
+                    .commit();*/
+            fragmentManager.beginTransaction()
                     .replace(R.id.container, Signup.newInstance())
                     .commit();
 
@@ -195,4 +234,24 @@ public class FirstActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void processFinish(String output) {
+        Log.i("Test",output);
+
+    }
+
+    /*public void onSectionAttached(int position) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+
+
+        if (position == 0) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, MyBikeFragment.newInstance())
+                    .commit();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }*/
 }

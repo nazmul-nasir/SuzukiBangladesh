@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Suzuki Bangladesh</string>
+    <string name="serverAddress">http://icebd.com/suzuki/suzukiApi/Server/</string>
+    <string name="auth_key">9736fd0b8c4dfd2964acbfb31d24eed3</string>
+    <string name="user_id">0</string>
 
      <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>

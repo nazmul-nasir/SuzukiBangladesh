@@ -52,6 +52,13 @@
             android:id="@+id/nav_reset_password"
             android:icon="@drawable/logo_icon"
             android:title="Reset Password" />
+
+        <item
+            android:id="@+id/nav_sign_up"
+            android:icon="@drawable/logo_icon"
+            android:title="Sign Up" />
+
+
         <item
             android:id="@+id/nav_login"
             android:icon="@drawable/logo_icon"
