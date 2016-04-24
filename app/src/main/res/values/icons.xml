@@ -1,0 +1,21 @@
+<resources>
+	<string name="fa_home">&#xf015;</string>
+    <string name="fa_motorcycle">&#xf21c;</string>
+    <string name="fa_gear">&#xf013;</string>
+	<string name="fa_gears">&#xf085;</string>
+    <string name="fa_newspaper_o">&#xf1ea;</string>
+	<string name="fa_bullhorn">&#xf0a1;</string>
+	<string name="fa_user_plus">&#xf234;</string>
+	
+	<string name="fa_map_marker">&#xf041;</string>
+	<string name="fa_bell_o">&#xf0a2;</string>
+	<string name="fa_pencil_square_o">&#xf044;</string>
+	<string name="fa_phone">&#xf095;</string>
+	<string name="fa_facebook_square">&#xf082;</string>
+	<string name="fa_sign_in">&#xf090;</string>
+	<string name="fa_sign_out">&#xf08b;</string>
+	<string name="fa_certificate">&#xf0a3;</string>
+
+	<string name="fa_shopping_cart">&#xf07a;</string>
+	<string name="fa_cog">&#xf013;</string>
+</resources>
