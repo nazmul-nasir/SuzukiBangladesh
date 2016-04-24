@@ -102,6 +102,8 @@ public class FirstActivity extends AppCompatActivity
         }
 
 
+
+
     /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String uid = telephonyManager.getDeviceId();
         Log.i("Test",uid);*/
@@ -276,7 +278,10 @@ public class FirstActivity extends AppCompatActivity
             String auth_key = object.getString("auth_key");
 
             editor.putString("auth_key",auth_key);
+            editor.commit();
             Log.i("Test","auth_key ="+auth_key);
+
+           // Log.i("Test","Auth Key from Shared Pref "+pref.getString("auth_key","empty"));
 
 
 
