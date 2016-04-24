@@ -2,8 +2,9 @@ package www.icebd.com.suzukibangladesh;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -11,10 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -24,10 +28,9 @@ import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
 import www.icebd.com.suzukibangladesh.menu.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
-import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
 import www.icebd.com.suzukibangladesh.menu.Quiz;
-import www.icebd.com.suzukibangladesh.menu.RequestServices;
+import www.icebd.com.suzukibangladesh.request.RequestServices;
 import www.icebd.com.suzukibangladesh.menu.SOS;
 import www.icebd.com.suzukibangladesh.menu.SocialMedia;
 import www.icebd.com.suzukibangladesh.menu.SpareParts;
@@ -35,12 +38,15 @@ import www.icebd.com.suzukibangladesh.reg.ChangePassword;
 import www.icebd.com.suzukibangladesh.reg.Logout;
 import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
+import www.icebd.com.suzukibangladesh.request.Quotation;
 
 
 public class FirstActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AsyncResponse
 
 {
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     NavigationView navigationView;
 
@@ -51,6 +57,9 @@ public class FirstActivity extends AppCompatActivity
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+        editor = pref.edit();
 
 
 
@@ -69,6 +78,27 @@ public class FirstActivity extends AppCompatActivity
             navigationView.setCheckedItem(0);
             //navigationView.getMenu().getItem(0).setChecked(true);
         }
+
+        String auth_key = pref.getString("auth_key",null);
+
+        if (auth_key==null)
+        {
+            HashMap<String, String> postData = new HashMap<String, String>();
+            postData.put("unique_device_id","152698785698536562214851");
+            postData.put("notification_key", "2");
+            postData.put("platform","2");
+            if(isNetworkAvailable()) {
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");
+            }
+            else
+            {
+                Toast.makeText(this,"Please connect to Internet",Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+
 
 
     /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -159,7 +189,7 @@ public class FirstActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_news_events) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, NewsEvents.newInstance())
+                    .replace(R.id.container, Quotation.newInstance())
                     .commit();
 
         } else if (id == R.id.nav_promotions) {
@@ -238,6 +268,25 @@ public class FirstActivity extends AppCompatActivity
     public void processFinish(String output) {
         Log.i("Test",output);
 
+        try {
+            JSONObject object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            String auth_key = object.getString("auth_key");
+
+            editor.putString("auth_key",auth_key);
+            editor.commit();
+            Log.i("Test","auth_key ="+auth_key);
+
+           // Log.i("Test","Auth Key from Shared Pref "+pref.getString("auth_key","empty"));
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*public void onSectionAttached(int position) {
@@ -254,4 +303,12 @@ public class FirstActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }*/
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }

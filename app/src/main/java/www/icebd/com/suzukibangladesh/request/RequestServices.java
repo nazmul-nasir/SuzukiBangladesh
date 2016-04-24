@@ -1,4 +1,4 @@
-package www.icebd.com.suzukibangladesh.menu;
+package www.icebd.com.suzukibangladesh.request;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +22,7 @@ public class RequestServices extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_request_service, container,
+        View rootView = inflater.inflate(R.layout.fragment_service, container,
                 false);
         return rootView;
     }

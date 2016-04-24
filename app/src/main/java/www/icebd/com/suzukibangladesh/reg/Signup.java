@@ -45,6 +45,8 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
     EditText name,address,mobile_no,email,password,thana;
     String blood_group;
     Button button;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
 
     public static Signup newInstance() {
@@ -69,6 +71,9 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
         thana = (EditText)rootView.findViewById(R.id.thana);
         button=(Button) rootView.findViewById(R.id.button);
 
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
 
         button.setOnClickListener(this);
 
@@ -88,7 +93,11 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
         {
             Log.i("Test", "Network is available ");
             HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key","46dde59d2bf7149c4d070f8cba8314e0");
+            String auth_key = pref.getString("auth_key","");
+            Log.i("Test","Auth Key from shared preference "+auth_key);
+
+            if ((auth_key!=""))
+            postData.put("auth_key",auth_key);
             postData.put("app_user_name", name.getText().toString());
             postData.put("app_user_email", email.getText().toString());
             postData.put("app_user_address", address.getText().toString());
@@ -112,6 +121,8 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
         else {
             Toast.makeText(getActivity(),"Please connect to the Internet",Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     @Override
@@ -127,10 +138,10 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
             String user_id = object.getString("user_id");
 
             FragmentManager fragmentManager = getFragmentManager();
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("user_id",user_id);
-            editor.apply();
+           // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+           // SharedPreferences.Editor editor = preferences.edit();
+           // editor.putString("user_id",user_id);
+           // editor.apply();
 
             if (status_code.equals("200"))
             {
@@ -140,6 +151,15 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
                /* fragmentManager.beginTransaction()
                         .replace(R.id.container, HomeFragment.newInstance())
                         .commit();*/
+
+                editor.putString("name",name.toString());
+                editor.putString("email",email.toString());
+                editor.putString("address",address.toString());
+                editor.putString("mobile_no",mobile_no.toString());
+                editor.putString("thana",thana.toString());
+                editor.putString("user_id",user_id);
+                editor.commit();
+
                 Intent intent = new Intent(getActivity(), FirstActivity.class);
                 startActivity(intent);
 
