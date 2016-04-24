@@ -2,6 +2,8 @@ package www.icebd.com.suzukibangladesh;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -15,6 +17,10 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -42,8 +48,8 @@ public class FirstActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AsyncResponse
 
 {
-    SharedPreferences pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
-    SharedPreferences.Editor editor = pref.edit();
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     NavigationView navigationView;
 
@@ -54,6 +60,9 @@ public class FirstActivity extends AppCompatActivity
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+        editor = pref.edit();
 
 
 
@@ -77,6 +86,18 @@ public class FirstActivity extends AppCompatActivity
 
         if (auth_key==null)
         {
+            HashMap<String, String> postData = new HashMap<String, String>();
+            postData.put("unique_device_id","152698785698536562214851");
+            postData.put("notification_key", "2");
+            postData.put("platform","2");
+            if(isNetworkAvailable()) {
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");
+            }
+            else
+            {
+                Toast.makeText(this,"Please connect to Internet",Toast.LENGTH_LONG).show();
+            }
 
         }
 
@@ -248,6 +269,22 @@ public class FirstActivity extends AppCompatActivity
     public void processFinish(String output) {
         Log.i("Test",output);
 
+        try {
+            JSONObject object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            String auth_key = object.getString("auth_key");
+
+            editor.putString("auth_key",auth_key);
+            Log.i("Test","auth_key ="+auth_key);
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*public void onSectionAttached(int position) {
@@ -264,4 +301,12 @@ public class FirstActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }*/
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }
