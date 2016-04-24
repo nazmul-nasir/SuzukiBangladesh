@@ -1,5 +1,6 @@
 package www.icebd.com.suzukibangladesh.request;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,9 @@ public class Quotation extends Fragment implements AsyncResponse, View.OnClickLi
     TextView name,email,cell,address,miles,cc;
     EditText say_Something;
 
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
+
     public static Quotation newInstance() {
         Quotation fragment = new Quotation();
         return fragment;
@@ -56,13 +60,15 @@ public class Quotation extends Fragment implements AsyncResponse, View.OnClickLi
 
         submit_btn_quation.setOnClickListener(this);
 
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
 
 
-
-
-
-
-
+        name.setText(pref.getString("name","Name not found"));
+        email.setText(pref.getString("email","Email not found"));
+        address.setText(pref.getString("address","Address not found"));
+        cell.setText(pref.getString("mobile_no","Cell not found"));
+       // name.setText(pref.getString("name","Name not found"));
 
 
         return rootView;
@@ -103,6 +109,8 @@ public class Quotation extends Fragment implements AsyncResponse, View.OnClickLi
     @Override
     public void onClick(View v) {
         HashMap<String, String> postData = new HashMap<String, String>();
+
+        Log.i("Test","Name : "+pref.getString("name","not found"));
 
         postData.put("auth_key","3c227bbba98cd9360006d095558d09a9");
         postData.put("app_user_name","Nasir");

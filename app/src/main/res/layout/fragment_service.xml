@@ -104,49 +104,104 @@
             android:text="REPAIR"/>
 
     </RadioGroup>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         >
+         <CheckBox
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="ENGINE"
+             android:layout_marginLeft="20dp"/>
+         <CheckBox
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="SPEEDO MOTOR"
+             android:layout_marginRight="20dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Cell No."
-        android:gravity="center"
-        android:padding="20dp"
-        android:background="#e3fdf9"
-        android:id="@+id/txt_cell_no" />
-
+     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ELECTRICAL"
+            android:layout_marginLeft="20dp"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GEAR"
+            android:layout_marginRight="20dp"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_weight="2"
-        android:layout_marginRight="10dp"
-
-        android:text="SUZUKI FS 100"
-        android:gravity="center"
-        android:padding="20dp"
-        android:background="#e3fdf9"
-        android:id="@+id/txt_miles" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentRight="true"
-        android:text="150 CC"
-
-
-        android:gravity="center"
-        android:padding="20dp"
-        android:background="#e3fdf9"
-        android:id="@+id/txt_cc" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SUSPENSION"
+            android:layout_marginLeft="20dp"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CLUTCH PLATE"
+            android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="WHILE/TYRE"
+            android:layout_marginLeft="20dp"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OIL FILTER"
+            android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BREAK"
+            android:layout_marginLeft="20dp"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BODY PARTS"
+            android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+
+
+
 
     <EditText
         android:layout_width="match_parent"
@@ -164,7 +219,7 @@
 
     <Button
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:text="Submit"
 
         android:textColor="#FFFFFF"
