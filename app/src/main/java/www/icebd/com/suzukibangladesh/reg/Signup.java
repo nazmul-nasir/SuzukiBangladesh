@@ -114,6 +114,14 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
 
            // Context context=getContext();
 
+         /*   editor.putString("name",name.getText().toString());
+            editor.putString("email",email.getText().toString());
+            editor.putString("address",address.getText().toString());
+            editor.putString("mobile_no",mobile_no.getText().toString());
+            editor.putString("thana",thana.getText().toString());
+           // editor.putString("user_id",user_id);
+            editor.commit();*/
+
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
             loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/registerUser");
 
@@ -129,6 +137,7 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
     public void processFinish(String result) {
 
         Log.i("Test","result: "+result);
+        //761607ecb8f9cb0cbb45136b30c69d06
 
         try {
             JSONObject object = new JSONObject(result);
@@ -146,19 +155,14 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
             if (status_code.equals("200"))
             {
                 Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
-
-               // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-               /* fragmentManager.beginTransaction()
-                        .replace(R.id.container, HomeFragment.newInstance())
-                        .commit();*/
-
-                editor.putString("name",name.toString());
-                editor.putString("email",email.toString());
-                editor.putString("address",address.toString());
-                editor.putString("mobile_no",mobile_no.toString());
-                editor.putString("thana",thana.toString());
+                editor.putString("name",name.getText().toString());
+                editor.putString("email",email.getText().toString());
+                editor.putString("address",address.getText().toString());
+                editor.putString("mobile_no",mobile_no.getText().toString());
+                editor.putString("thana",thana.getText().toString());
                 editor.putString("user_id",user_id);
                 editor.commit();
+
 
                 Intent intent = new Intent(getActivity(), FirstActivity.class);
                 startActivity(intent);

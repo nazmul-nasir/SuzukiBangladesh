@@ -34,9 +34,9 @@
 
         android:text="Bike Model"
         android:gravity="center"
-        android:padding="10dp"
+
         android:background="#d8d8d8"
-        android:id="@+id/txt_name" />
+        android:id="@+id/txt_dropdown" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,6 +54,7 @@
         android:background="@drawable/border"
         android:orientation="horizontal"
 
+
         android:padding="10dp"
 
         android:id="@+id/txt_address" >
@@ -65,14 +66,13 @@
             android:text="FREE"/>
         <RadioButton
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="PAID"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_gravity="right"
-            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="WARRANTY"/>
@@ -224,7 +224,7 @@
 
         android:textColor="#FFFFFF"
 
-        android:layout_below="@+id/btn_submit"
+        android:layout_below="@+id/btn_submit_service"
         android:id="@+id/btn_Sign_up"
         android:layout_marginTop="10dp"
         android:background="#475CCB"
