@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+
+ >
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:orientation="vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_my_parts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:drawableTop="@drawable/logo"
+                android:text="@string/my_bike_btn_txt" />
+
+            <Button
+                android:id="@+id/btn_spare_parts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:text="@string/spare_parts_btn_txt" />
+            <Button
+                android:id="@+id/btn_req_services"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:text="@string/request_services_btn_txt" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_news_events"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:text="@string/news_events_btn_txt" />
+
+
+
+
+            <Button
+                android:id="@+id/btn_promotion"
+                android:background="@drawable/border"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1.0"
+                android:text="@string/promotion_btn_txt" />
+
+            <Button
+                android:id="@+id/btn_invite_friends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:layout_weight="1.0"
+                android:text="@string/invite_friends_btn_txt" />
+
+
+
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:orientation="vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </LinearLayout>
+</LinearLayout>
