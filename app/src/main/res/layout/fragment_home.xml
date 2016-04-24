@@ -37,8 +37,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/border"
                 android:layout_weight="1.0"
-                android:drawableTop="@drawable/logo"
-                android:text="@string/my_bike_btn_txt" />
+                android:text="@string/fa_motorcycle" />
 
             <Button
                 android:id="@+id/btn_spare_parts"
