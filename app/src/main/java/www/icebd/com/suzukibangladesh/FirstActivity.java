@@ -35,12 +35,15 @@ import www.icebd.com.suzukibangladesh.reg.ChangePassword;
 import www.icebd.com.suzukibangladesh.reg.Logout;
 import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
+import www.icebd.com.suzukibangladesh.request.Quotation;
 
 
 public class FirstActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AsyncResponse
 
 {
+    SharedPreferences pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+    SharedPreferences.Editor editor = pref.edit();
 
     NavigationView navigationView;
 
@@ -68,6 +71,13 @@ public class FirstActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
             navigationView.setCheckedItem(0);
             //navigationView.getMenu().getItem(0).setChecked(true);
+        }
+
+        String auth_key = pref.getString("auth_key",null);
+
+        if (auth_key==null)
+        {
+
         }
 
 
@@ -159,7 +169,7 @@ public class FirstActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_news_events) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, NewsEvents.newInstance())
+                    .replace(R.id.container, Quotation.newInstance())
                     .commit();
 
         } else if (id == R.id.nav_promotions) {
