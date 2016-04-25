@@ -57,11 +57,12 @@
 
         android:padding="10dp"
 
-        android:id="@+id/txt_address" >
+        android:id="@+id/rdo_grp_service_type_1" >
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:layout_gravity="left"
             android:text="FREE"/>
         <RadioButton
@@ -82,7 +83,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:id="@+id/rdo_grb_service_type_2"
         android:background="@drawable/border"
         android:orientation="horizontal">
 
@@ -97,9 +98,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
-
-
-
+            android:checked="true"
             android:layout_height="50dp"
             android:text="REPAIR"/>
 
@@ -114,11 +113,13 @@
              android:layout_height="wrap_content"
              android:layout_weight="1"
              android:text="ENGINE"
+             android:id="@+id/chk_engine"
              android:layout_marginLeft="20dp"/>
          <CheckBox
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_weight="1"
+             android:id="@+id/chk_speedo_motor"
              android:text="SPEEDO MOTOR"
              android:layout_marginRight="20dp"/>
 
@@ -132,12 +133,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/chk_electrical"
             android:text="ELECTRICAL"
             android:layout_marginLeft="20dp"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/chk_gear"
             android:text="GEAR"
             android:layout_marginRight="20dp"/>
 
@@ -152,11 +155,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="SUSPENSION"
+            android:id="@+id/chk_suspension"
             android:layout_marginLeft="20dp"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/chk_clutch_plate"
             android:text="CLUTCH PLATE"
             android:layout_marginRight="20dp"/>
 
@@ -171,11 +176,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="WHILE/TYRE"
+            android:id="@+id/chk_while_tyre"
             android:layout_marginLeft="20dp"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/chk_oil_filter"
             android:text="OIL FILTER"
             android:layout_marginRight="20dp"/>
 
@@ -189,12 +196,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BREAK"
+            android:text="BRAKE"
+            android:id="@+id/chk_brake"
             android:layout_marginLeft="20dp"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/chk_body_parts"
             android:text="BODY PARTS"
             android:layout_marginRight="20dp"/>
 
@@ -225,7 +234,7 @@
         android:textColor="#FFFFFF"
 
         android:layout_below="@+id/btn_submit_service"
-        android:id="@+id/btn_Sign_up"
+        android:id="@+id/btn_service_submit"
         android:layout_marginTop="10dp"
         android:background="#475CCB"
         android:layout_gravity="right"

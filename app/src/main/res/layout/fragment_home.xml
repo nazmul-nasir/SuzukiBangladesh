@@ -35,7 +35,7 @@
                 android:id="@+id/btn_my_parts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border"
+                android:background="@drawable/my_bike"
                 android:layout_weight="1.0"
                 android:text="@string/fa_motorcycle" />
 
@@ -43,16 +43,16 @@
                 android:id="@+id/btn_spare_parts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border"
+                android:background="@drawable/spere_parts"
                 android:layout_weight="1.0"
-                android:text="@string/spare_parts_btn_txt" />
+          />
             <Button
                 android:id="@+id/btn_req_services"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border"
+                android:background="@drawable/requst_services"
                 android:layout_weight="1.0"
-                android:text="@string/request_services_btn_txt" />
+                 />
 
         </LinearLayout>
 
@@ -66,29 +66,29 @@
                 android:id="@+id/btn_news_events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border"
+                android:background="@drawable/news_events"
                 android:layout_weight="1.0"
-                android:text="@string/news_events_btn_txt" />
+         />
 
 
 
 
             <Button
                 android:id="@+id/btn_promotion"
-                android:background="@drawable/border"
+                android:background="@drawable/promotion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
                 android:layout_weight="1.0"
-                android:text="@string/promotion_btn_txt" />
+               />
 
             <Button
                 android:id="@+id/btn_invite_friends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border"
+                android:background="@drawable/invite_friend"
                 android:layout_weight="1.0"
-                android:text="@string/invite_friends_btn_txt" />
+                 />
 
 
 
