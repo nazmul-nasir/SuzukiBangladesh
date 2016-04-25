@@ -27,6 +27,7 @@ import www.icebd.com.suzukibangladesh.reg.Logout;
 import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
 import www.icebd.com.suzukibangladesh.request.Quotation;
+import www.icebd.com.suzukibangladesh.request.RequestServices;
 
 /**
  * Created by Oum Saokosal, the author of KosalGeek on 9/6/15.
@@ -103,6 +104,12 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
     public PostResponseAsyncTask(Quotation quotation, HashMap<String, String> postData) {
         this.delegate=quotation;
         this.context=quotation.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(RequestServices requestServices, HashMap<String, String> postData) {
+        this.delegate=requestServices;
+        this.context=requestServices.getContext();
         this.postData=postData;
     }
 
