@@ -3,10 +3,8 @@ package www.icebd.com.suzukibangladesh.reg;
 /**
  * Created by Nasir on 11/19/2015.
  */
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -26,11 +23,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.R;
-import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
-import www.icebd.com.suzukibangladesh.menu.Login;
-import www.icebd.com.suzukibangladesh.notification.MainActivity;
 
 
 public class ResetPassword extends Fragment implements View.OnClickListener, AsyncResponse {

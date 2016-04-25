@@ -26,7 +26,7 @@ import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
-import www.icebd.com.suzukibangladesh.menu.Login;
+import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
 import www.icebd.com.suzukibangladesh.menu.Quiz;

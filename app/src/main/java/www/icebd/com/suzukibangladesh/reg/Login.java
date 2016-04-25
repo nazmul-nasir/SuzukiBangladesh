@@ -1,10 +1,11 @@
-package www.icebd.com.suzukibangladesh.menu;
+package www.icebd.com.suzukibangladesh.reg;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,12 @@ import java.util.HashMap;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 
 
 public class Login extends Fragment implements View.OnClickListener, AsyncResponse {
     EditText password,email;
-    Button button;
+    Button button,forgotPass,signUp;
 
     public static Login newInstance() {
         Login fragment = new Login();
@@ -41,6 +43,30 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
         password = (EditText) rootView.findViewById(R.id.login_password);
 
         button=(Button) rootView.findViewById(R.id.button);
+        forgotPass=(Button) rootView.findViewById(R.id.btn_forgot_pass);
+        signUp=(Button) rootView.findViewById(R.id.btn_sign_up);
+
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, ResetPassword.newInstance())
+                            .commit();
+            }
+        });
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, Signup.newInstance())
+                        .commit();
+            }
+        });
 
 
         button.setOnClickListener(this);

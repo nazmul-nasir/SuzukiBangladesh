@@ -1,6 +1,5 @@
 package www.icebd.com.suzukibangladesh.json;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import www.icebd.com.suzukibangladesh.menu.Login;
+import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.reg.ChangePassword;
 import www.icebd.com.suzukibangladesh.reg.Logout;
 import www.icebd.com.suzukibangladesh.reg.ResetPassword;
