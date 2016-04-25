@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.2"
+        android:layout_weight="1.5"
         >
         <ImageView
             android:layout_width="wrap_content"
@@ -23,8 +23,95 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/text_holder"
-        android:layout_weight="2"
+        android:layout_weight="3"
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:textColorLink="#FFFFFF"
+                android:drawableLeft="@drawable/name"
+                android:hint="Name"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:textColorLink="#FFFFFF"
+                android:drawableLeft="@drawable/email"
+                android:hint="Email"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/password"
+                android:textColorLink="#FFFFFF"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/pass"
+                android:hint="Create Password"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mobile_no"
+                android:textColorLink="#FFFFFF"
+                android:hint="Mobile Number"
+                android:inputType="number"
+                android:drawableLeft="@drawable/mobile"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/address"
+                android:textColorLink="#FFFFFF"
+                android:drawableLeft="@drawable/thana"
+                android:hint="Address"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/thana"
+                android:drawableLeft="@drawable/thana"
+                android:hint="Thana"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
+
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -32,6 +119,20 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="Sign Up"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:id="@+id/button"
+            android:background="#000000"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/thana"
+           />
 
 
 
