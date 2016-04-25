@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" android:background="#80FFFFFF">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" android:background="#191919">
 
-    <group android:checkableBehavior="single" android:background="#80FFFFFF">
+    <group android:checkableBehavior="single" android:background="#FFFFFF">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/logo_icon"
-            android:title="Home" />
+            android:title="@string/fa_home" />
         <item
             android:id="@+id/nav_my_bike"
             android:icon="@drawable/logo_icon"
