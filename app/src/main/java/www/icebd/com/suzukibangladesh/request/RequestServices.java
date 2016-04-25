@@ -1,5 +1,6 @@
 package www.icebd.com.suzukibangladesh.request;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
@@ -78,7 +80,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
         clutch_plate = (CheckBox)rootView.findViewById(R.id.chk_clutch_plate);
         oil_filter = (CheckBox)rootView.findViewById(R.id.chk_oil_filter);
         body_parts = (CheckBox)rootView.findViewById(R.id.chk_body_parts);
-        userComments = (EditText) rootView.findViewById(R.id.et_say_something)
+        userComments = (EditText) rootView.findViewById(R.id.et_say_something);
 
 
 
@@ -112,31 +114,38 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
         if(!auth_key.equals("empty"))
         {
             postData.put("auth_key",auth_key);
+            Log.i("Test","auth_key :"+auth_key);
+
             postData.put("app_user_id",user_id);
-            postData.put("app_user_id",user_id);
+            Log.i("Test","app_user_id :"+user_id);
+         //   postData.put("app_user_id",user_id);
 
             int position = dropdown_bike_name.getSelectedItemPosition();
             postData.put("bike_id",bikeId[position]);
+            Log.i("Test","bike_id :"+bikeId[position]);
             postData.put("bike_name",dropdown_bike_name.getSelectedItem().toString());
+           // postData.put("bike_name","GS150R");
+            Log.i("Test","bike_name :"+dropdown_bike_name.getSelectedItem().toString());
 
             int selected_service_1= service_type1.getCheckedRadioButtonId();
             String value_service1="";
             switch (selected_service_1)
             {
-                case 0:
-                    value_service1="FREE";
+                case R.id.free:
+                    value_service1="free";
                     break;
-                case 1:
-                    value_service1 ="PAID";
+                case R.id.paid:
+                    value_service1 ="paid";
                     break;
-                case 2:
-                    value_service1="WARRANTY";
+                case R.id.warranty:
+                    value_service1="warranty";
                     break;
                 default:
                     break;
             }
 
             postData.put("service_type",value_service1);
+            Log.i("Test","service_type :"+value_service1);
 
 
 
@@ -144,17 +153,18 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
             String value_service2="";
             switch (selected_service_2)
             {
-                case 0:
-                    value_service2="PARTS CHANGE";
+                case R.id.parts_change:
+                    value_service2="parts_change";
                     break;
-                case 1:
-                    value_service2 ="REPAIR";
+                case R.id.repair:
+                    value_service2 ="repair";
                     break;
                 default:
                     break;
             }
 
             postData.put("servicing_type",value_service2);
+            Log.i("Test","servicing_type :"+value_service2);
 
             String service_option="";
 
@@ -271,7 +281,10 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
             }
 
             postData.put("service_option",service_option);
+            Log.i("Test","service_option :"+service_option);
+
             postData.put("cust_comment",userComments.getText().toString());
+            Log.i("Test","cust_comment :"+userComments.getText().toString());
 
 
 
@@ -288,25 +301,23 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
         }
 
 
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
     public void processFinish(String output) {
         Log.i("Test",output);
 
+
         try {
+            Log.i("Test", "Enter");
             JSONObject object = new JSONObject(output);
-            String message = object.getString("message ");
+            String message ="";
+                  message =  object.getString("message ");
+            if (message.equals(""))
+            {
+                message =  object.getString("message");
+            }
+           // Log.i("Test", "Enter");
 
             if (message.equals("Successfull"))
             {
@@ -333,11 +344,58 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
 
 
+
+
+
+
+            }
+            else if (message.equals("Request failed please try again"))
+            {
+                Toast.makeText(getActivity(),"Request failed please try again",Toast.LENGTH_LONG).show();
+            }
+            else if (message.equals("Your request has been sent successfully"))
+            {
+                Toast.makeText(getActivity(),"Your request has been sent successfully",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), FirstActivity.class);
+                startActivity(intent);
+
+            }
+            else
+            {
+                Log.i("Test",message);
             }
 
         } catch (JSONException e) {
+         //   Log.i("Test", "Enter");
+
+            try {
+                JSONObject ob = new JSONObject(output);
+                Log.i("Test", "Enter last try");
+                String message = ob.getString("message");
+                 if (message.equals("Request failed please try again"))
+                {
+                    Toast.makeText(getActivity(),"Request failed please try again",Toast.LENGTH_LONG).show();
+                }
+                else if (message.equals("Your request has been sent successfully"))
+                {
+                    Toast.makeText(getActivity(),"Your request has been sent successfully",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), FirstActivity.class);
+                    startActivity(intent);
+
+                }
+                else
+                {
+                    Log.i("Test",message);
+                }
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+                Log.i("Test", "Enter last catch");
+            }
             e.printStackTrace();
         }
+
+     //   Log.i("Test", "Enter");
 
 
     }

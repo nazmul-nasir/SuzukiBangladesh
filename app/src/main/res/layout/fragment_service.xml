@@ -71,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:id="@+id/paid"
             android:layout_height="wrap_content"
             android:text="PAID"/>
         <RadioButton
@@ -78,6 +79,7 @@
             android:layout_gravity="right"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/warranty"
             android:text="WARRANTY"/>
 
         </RadioGroup>
@@ -93,8 +95,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
-
-
+            android:id="@+id/parts_change"
             android:layout_height="50dp"
             android:text="PARTS CHANGE"/>
 
@@ -102,7 +103,6 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:id="@+id/repair"
-
             android:layout_height="50dp"
             android:text="REPAIR"/>
 
