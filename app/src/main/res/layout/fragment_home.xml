@@ -4,9 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-
  >
-
     <LinearLayout
         android:id="@+id/ll1"
         android:orientation="vertical"
@@ -28,31 +26,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
-
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/btn_my_parts"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/my_bike"
-                android:layout_weight="1.0"
-                android:text="@string/fa_motorcycle" />
+                android:orientation="vertical"
+                android:background="@drawable/bottom_right_border"
+                android:layout_weight="1.0">
+                <Button
+                    android:id="@+id/btn_my_parts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/my_bike"/>
 
-            <Button
-                android:id="@+id/btn_spare_parts"
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/spere_parts"
-                android:layout_weight="1.0"
-          />
-            <Button
-                android:id="@+id/btn_req_services"
+                android:orientation="vertical"
+                android:background="@drawable/bottom_right_border"
+                android:layout_weight="1.0">
+                <Button
+                    android:id="@+id/btn_spare_parts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/spere_parts"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/requst_services"
-                android:layout_weight="1.0"
-                 />
+                android:orientation="vertical"
+                android:background="@drawable/bottom_border"
+                android:layout_weight="1.0">
+                <Button
+                    android:id="@+id/btn_req_services"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/requst_services"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -61,26 +73,34 @@
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:orientation="horizontal" >
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/right_border"
+                android:layout_weight="1.0">
             <Button
                 android:id="@+id/btn_news_events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/news_events"
-                android:layout_weight="1.0"
-         />
+                android:layout_weight="1.0"/>
+            </LinearLayout>
 
-
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/right_border"
+                android:layout_weight="1.0">
 
             <Button
                 android:id="@+id/btn_promotion"
                 android:background="@drawable/promotion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-                android:layout_weight="1.0"
-               />
+                android:layout_weight="1.0"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_invite_friends"
@@ -89,11 +109,6 @@
                 android:background="@drawable/invite_friend"
                 android:layout_weight="1.0"
                  />
-
-
-
-
-
 
         </LinearLayout>
     </LinearLayout>
