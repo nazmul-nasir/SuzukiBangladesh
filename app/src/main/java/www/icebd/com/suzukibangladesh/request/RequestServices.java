@@ -37,6 +37,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
     CheckBox engine,electrical,suspension,while_tyre,brake,speedo_motor,gear,clutch_plate,oil_filter,body_parts;
     String auth_key;
     String[] bikeId;
+    EditText userComments;
 
 
 
@@ -77,6 +78,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
         clutch_plate = (CheckBox)rootView.findViewById(R.id.chk_clutch_plate);
         oil_filter = (CheckBox)rootView.findViewById(R.id.chk_oil_filter);
         body_parts = (CheckBox)rootView.findViewById(R.id.chk_body_parts);
+        userComments = (EditText) rootView.findViewById(R.id.et_say_something)
 
 
 
@@ -156,13 +158,128 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
             String service_option="";
 
+           if (engine.isChecked())
+           {
+               if (service_option.equals(""))
+               {
+                   service_option=engine.getText().toString();
+               }
+               else
+               {
+                   service_option = service_option +","+engine.getText().toString();
+               }
+           }
+
+            if (electrical.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=electrical.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+electrical.getText().toString();
+                }
+            }
+            if (suspension.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=suspension.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+suspension.getText().toString();
+                }
+            }
+            if (while_tyre.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=while_tyre.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+while_tyre.getText().toString();
+                }
+            }
+            if (brake.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=brake.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+brake.getText().toString();
+                }
+            }
+            if (speedo_motor.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=speedo_motor.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+speedo_motor.getText().toString();
+                }
+            }
+            if (gear.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=gear.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+gear.getText().toString();
+                }
+            }
+            if (clutch_plate.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=clutch_plate.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+clutch_plate.getText().toString();
+                }
+            }
+            if (oil_filter.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=oil_filter.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+oil_filter.getText().toString();
+                }
+            }
+            if (body_parts.isChecked())
+            {
+                if (service_option.equals(""))
+                {
+                    service_option=body_parts.getText().toString();
+                }
+                else
+                {
+                    service_option = service_option +","+body_parts.getText().toString();
+                }
+            }
+
+            postData.put("service_option",service_option);
+            postData.put("cust_comment",userComments.getText().toString());
+
 
 
 
 
 
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeList");
+            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/reqService");
 
         }
         else
