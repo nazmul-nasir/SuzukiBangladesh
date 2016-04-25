@@ -20,6 +20,7 @@
         android:id="@+id/ll2"
         android:orientation="vertical"
 
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -27,29 +28,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/border"
             android:layout_weight="1.0"
 
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/btn_my_parts"
+                android:padding="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/my_bike"
                 android:layout_weight="1.0"
-                android:text="@string/fa_motorcycle" />
+              />
 
             <Button
                 android:id="@+id/btn_spare_parts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/spere_parts"
+                android:padding="1dp"
                 android:layout_weight="1.0"
           />
             <Button
                 android:id="@+id/btn_req_services"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="1dp"
                 android:background="@drawable/requst_services"
                 android:layout_weight="1.0"
                  />
@@ -60,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
+            android:background="@drawable/border"
             android:orientation="horizontal" >
 
             <Button

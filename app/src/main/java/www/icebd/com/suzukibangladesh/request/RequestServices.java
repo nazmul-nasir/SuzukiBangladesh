@@ -27,7 +27,7 @@ import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 
 
-public class RequestServices extends Fragment implements AsyncResponse {
+public class RequestServices extends Fragment implements AsyncResponse, View.OnClickListener {
 
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
@@ -35,12 +35,15 @@ public class RequestServices extends Fragment implements AsyncResponse {
     Button submit;
     RadioGroup service_type1,service_type2;
     CheckBox engine,electrical,suspension,while_tyre,brake,speedo_motor,gear,clutch_plate,oil_filter,body_parts;
+    String auth_key;
+    String[] bikeId;
 
 
 
     public static RequestServices newInstance() {
         RequestServices fragment = new RequestServices();
         return fragment;
+
     }
 
     public RequestServices() {
@@ -77,7 +80,7 @@ public class RequestServices extends Fragment implements AsyncResponse {
 
 
 
-        String auth_key= pref.getString("auth_key","empty");
+       auth_key= pref.getString("auth_key","empty");
 
         if(!auth_key.equals("empty"))
         {
@@ -91,16 +94,93 @@ public class RequestServices extends Fragment implements AsyncResponse {
             Toast.makeText(getActivity(),"Connect to internet and restart the app",Toast.LENGTH_LONG).show();
         }
 
-      // submit.setOnClickListener(this);
-
-
-
-
-
-
-
+       submit.setOnClickListener(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        HashMap<String, String> postData = new HashMap<String, String>();
+       // postData.put("mobile","android");
+       // postData.put("mobile","android");
+        String user_id = pref.getString("user_id","Not found");
+
+        if(!auth_key.equals("empty"))
+        {
+            postData.put("auth_key",auth_key);
+            postData.put("app_user_id",user_id);
+            postData.put("app_user_id",user_id);
+
+            int position = dropdown_bike_name.getSelectedItemPosition();
+            postData.put("bike_id",bikeId[position]);
+            postData.put("bike_name",dropdown_bike_name.getSelectedItem().toString());
+
+            int selected_service_1= service_type1.getCheckedRadioButtonId();
+            String value_service1="";
+            switch (selected_service_1)
+            {
+                case 0:
+                    value_service1="FREE";
+                    break;
+                case 1:
+                    value_service1 ="PAID";
+                    break;
+                case 2:
+                    value_service1="WARRANTY";
+                    break;
+                default:
+                    break;
+            }
+
+            postData.put("service_type",value_service1);
+
+
+
+            int selected_service_2= service_type2.getCheckedRadioButtonId();
+            String value_service2="";
+            switch (selected_service_2)
+            {
+                case 0:
+                    value_service2="PARTS CHANGE";
+                    break;
+                case 1:
+                    value_service2 ="REPAIR";
+                    break;
+                default:
+                    break;
+            }
+
+            postData.put("servicing_type",value_service2);
+
+            String service_option="";
+
+
+
+
+
+
+            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeList");
+
+        }
+        else
+        {
+            Toast.makeText(getActivity(),"Connect to internet and restart the app",Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override
@@ -116,6 +196,7 @@ public class RequestServices extends Fragment implements AsyncResponse {
                 Log.i("Test","I am successful");
                 JSONArray bikeList = object.getJSONArray("bikeList");
                 String[] string = new String[bikeList.length()];
+                bikeId = new String[bikeList.length()];
                // ArrayList<String> mylist = new ArrayList<String>();
 
                 for (int i = 0; i <bikeList.length() ; i++) {
@@ -124,6 +205,7 @@ public class RequestServices extends Fragment implements AsyncResponse {
                     String bike_cc = bikeDetail.getString("bike_cc");
                    // mylist.add(bike_name+"/"+bike_cc);
                     string[i]=bike_name+"/"+bike_cc;
+                    bikeId[i]= bikeDetail.getString("bike_id");
                     Log.i("Test",bike_name+"/"+bike_cc);
 
 
@@ -142,4 +224,6 @@ public class RequestServices extends Fragment implements AsyncResponse {
 
 
     }
+
+
 }
