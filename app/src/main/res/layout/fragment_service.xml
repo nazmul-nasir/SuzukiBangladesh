@@ -50,6 +50,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
+        android:checkedButton="@+id/free"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
         android:orientation="horizontal"
@@ -62,13 +63,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
+            android:id="@+id/free"
+
             android:layout_gravity="left"
             android:text="FREE"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:id="@+id/paid"
             android:layout_height="wrap_content"
             android:text="PAID"/>
         <RadioButton
@@ -76,6 +79,7 @@
             android:layout_gravity="right"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/warranty"
             android:text="WARRANTY"/>
 
         </RadioGroup>
@@ -85,20 +89,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/rdo_grb_service_type_2"
         android:background="@drawable/border"
+        android:checkedButton="@+id/repair"
         android:orientation="horizontal">
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
-
-
+            android:id="@+id/parts_change"
             android:layout_height="50dp"
             android:text="PARTS CHANGE"/>
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:checked="true"
+            android:id="@+id/repair"
             android:layout_height="50dp"
             android:text="REPAIR"/>
 
