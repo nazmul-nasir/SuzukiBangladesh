@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" android:background="#191919">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      android:background="#191919">
 
     <group android:checkableBehavior="single" android:background="#FFFFFF">
         <item
             android:id="@+id/nav_home"
-            android:title="@string/fa_home" />
+            android:title="" />
         <item
             android:id="@+id/nav_my_bike"
-            android:icon="@drawable/logo_icon"
-            android:title="My Bike" />
+            android:title="@string/fa_motorcycle" />
         <item
             android:id="@+id/nav_spare_parts"
             android:icon="@drawable/logo_icon"
