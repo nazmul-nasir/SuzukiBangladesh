@@ -101,7 +101,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.0"/>
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:layout_weight="1.0">
             <Button
                 android:id="@+id/btn_invite_friends"
                 android:layout_width="match_parent"
@@ -109,7 +114,7 @@
                 android:background="@drawable/invite_friend"
                 android:layout_weight="1.0"
                  />
-
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
