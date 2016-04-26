@@ -23,7 +23,8 @@
             >
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom">
                 <TableRow>
                     <TextView
                         android:paddingTop="90dp"
@@ -40,6 +41,7 @@
                         android:text="150cc"
                         android:paddingLeft="10dp"
                         android:layout_weight="2"
+
                         android:gravity="center_horizontal"
                         />
 
@@ -59,6 +61,7 @@
                 android:text="Get A Quote"
                 android:background="@android:color/transparent"
                 android:layout_weight="2"
+                android:layout_marginRight="10dp"
                 />
         </TableRow>
 
