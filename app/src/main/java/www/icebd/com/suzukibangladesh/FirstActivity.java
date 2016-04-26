@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -78,6 +79,11 @@ public class FirstActivity extends AppCompatActivity
             navigationView.setCheckedItem(0);
             //navigationView.getMenu().getItem(0).setChecked(true);
         }
+
+        String android_id = Settings.Secure.getString(this.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        Log.i("Test","Android ID : "+android_id);
 
         String auth_key = pref.getString("auth_key",null);
 
