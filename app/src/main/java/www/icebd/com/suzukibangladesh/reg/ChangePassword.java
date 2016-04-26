@@ -35,6 +35,8 @@ public class ChangePassword extends Fragment implements View.OnClickListener, As
     EditText oldPassword,newPassword;
 
     Button button;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
 
     public static ChangePassword newInstance() {
@@ -56,6 +58,9 @@ public class ChangePassword extends Fragment implements View.OnClickListener, As
         newPassword = (EditText) rootView.findViewById(R.id.new_password);
         button=(Button) rootView.findViewById(R.id.button);
 
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
 
 
         button.setOnClickListener(this);
@@ -67,17 +72,29 @@ public class ChangePassword extends Fragment implements View.OnClickListener, As
     @Override
     public void onClick(View v) {
         HashMap<String, String> postData = new HashMap<String, String>();
-        postData.put("auth_key","46dde59d2bf7149c4d070f8cba8314e0");
-        postData.put("old_password",oldPassword.toString());
-        postData.put("new_password",newPassword.toString());
-        postData.put("user_id","409");
-
-        if(isNetworkAvailable()) {
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/changePassword");
+        String auth_key = pref.getString("auth_key",null);
+        String user_id = pref.getString("user_id",null);
+        if (auth_key==null)
+        {
+            Toast.makeText(getActivity(),"Please Connect to the Internet and Restart the app",Toast.LENGTH_LONG).show();
 
 
         }
+        else {
+            postData.put("auth_key",auth_key);
+            postData.put("old_password",oldPassword.getText().toString());
+            postData.put("new_password",newPassword.getText().toString());
+            postData.put("user_id",user_id);
+
+            if(isNetworkAvailable()) {
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/changePassword");
+
+
+            }
+
+        }
+
     }
 
     private boolean isNetworkAvailable() {

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,16 +27,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
-import www.icebd.com.suzukibangladesh.menu.Login;
+import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
 import www.icebd.com.suzukibangladesh.menu.Quiz;
@@ -131,13 +136,23 @@ public class FirstActivity extends AppCompatActivity
         }*/
 
         String auth_key = pref.getString("auth_key",null);
+        String notification_key = pref.getString("gcm_registration_token",null);
+      //  Log.i("Test","GCM registration token :"+notification_key);
 
         if (auth_key==null)
         {
             HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("unique_device_id","152698785698536562214851");
-            postData.put("notification_key", "2");
-            postData.put("platform","2");
+
+            String android_id = Settings.Secure.getString(this.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+
+            Log.i("Test","Android ID : "+android_id);
+        Log.i("Test","Notification key : "+notification_key);
+        //Log.i("Test","Auth_key : "+auth_key);
+
+            postData.put("unique_device_id",android_id);
+            postData.put("notification_key", notification_key);
+            postData.put("platform","1");
             if(isNetworkAvailable()) {
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
                 loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");
@@ -149,24 +164,11 @@ public class FirstActivity extends AppCompatActivity
 
         }
 
-
-
-
     /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String uid = telephonyManager.getDeviceId();
         Log.i("Test",uid);*/
 
-      /*  SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("auth_key",);
-        editor.apply();*/
 
-       /* HashMap<String, String> postData = new HashMap<String, String>();
-        postData.put("unique_device_id","152698785698536562214852");
-        postData.put("notification_key", "2");
-        postData.put("platform","2");
-        PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-        loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");*/
     }
     private void selectItem(int position) {
 

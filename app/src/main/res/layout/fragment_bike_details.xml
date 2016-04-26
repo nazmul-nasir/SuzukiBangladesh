@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
-</LinearLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_table"
+        android:stretchColumns="1">
+
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:weightSum="8.5"
+            android:background="#d8d8d8"
+            >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom">
+                <TableRow>
+                    <TextView
+                        android:paddingTop="90dp"
+                        android:paddingLeft="20dp"
+                        android:text="Gixer SF"
+                        android:id="@+id/bike_name"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        />
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="150cc"
+                        android:paddingLeft="10dp"
+                        android:layout_weight="2"
+
+                        android:gravity="center_horizontal"
+                        />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+
+                android:text="Image"
+                android:layout_height="130dp"
+                android:gravity="bottom|center"
+                android:layout_weight="6"
+
+                />
+            <Button
+                android:text="Get A Quote"
+                android:background="@android:color/transparent"
+                android:layout_weight="2"
+                android:layout_marginRight="10dp"
+                />
+        </TableRow>
+
+        <View
+            android:layout_height="5dp"
+            android:background="#FFFFFF" />
+
+    </TableLayout>
+</ScrollView>

@@ -1,6 +1,7 @@
 package www.icebd.com.suzukibangladesh.reg;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -27,7 +29,10 @@ import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 
 public class Logout extends Fragment implements View.OnClickListener, AsyncResponse {
     EditText password,email;
+    TextView text;
     Button button;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     public static Logout newInstance() {
         Logout fragment = new Logout();
@@ -43,8 +48,10 @@ public class Logout extends Fragment implements View.OnClickListener, AsyncRespo
         View rootView = inflater.inflate(R.layout.fragment_logout, container,
                 false);
 
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
 
-
+        text = (TextView)rootView.findViewById(R.id.text) ;
         button=(Button) rootView.findViewById(R.id.btn_logout);
 
 
@@ -58,10 +65,30 @@ public class Logout extends Fragment implements View.OnClickListener, AsyncRespo
 
         if (isNetworkAvailable()) {
             HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key","46dde59d2bf7149c4d070f8cba8314e0");
+            String auth_key = pref.getString("auth_key",null);
+            String user_id = pref.getString("user_id",null);
+            String is_login = pref.getString("is_login","0");
+            if (auth_key==null)
+            {
+                Toast.makeText(getActivity(),"Please Connect to the Internet and Restart the app",Toast.LENGTH_LONG).show();
 
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/logout");
+
+            }
+            else if(is_login.equals("0"))
+            {
+                Toast.makeText(getActivity(),"You are not logged In :)",Toast.LENGTH_LONG).show();
+
+
+            }
+            else{
+                postData.put("auth_key",auth_key);
+                postData.put("user_id",user_id);
+
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/logout");
+
+            }
+
 
 
 
@@ -90,12 +117,19 @@ public class Logout extends Fragment implements View.OnClickListener, AsyncRespo
 
             if (status_code.equals("200"))
             {
-                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
 
                 // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, HomeFragment.newInstance())
-                        .commit();
+
+                button.setVisibility(View.INVISIBLE);
+                text.setVisibility(View.VISIBLE);
+
+                editor.remove("user_id");
+                editor.putString("is_login","0");
+                editor.apply();
+
+
+
 
             }
             else {

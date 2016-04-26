@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,9 +49,21 @@ public class MainActivity extends AppCompatActivity {
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
                     mInformationTextView.setText(getString(R.string.gcm_send_message));
+
                 } else {
                     mInformationTextView.setText(getString(R.string.token_error_message));
                 }
+
+              /*  Intent intent1 = new Intent(context.getApplicationContext(), FirstActivity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startService(intent1);*/
+
+                Intent i = new Intent();
+                i.setClassName("www.icebd.com.suzukibangladesh", "www.icebd.com.suzukibangladesh.FirstActivity");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+                Log.i("Test", "I am from onReceive end");
             }
         };
         mInformationTextView = (TextView) findViewById(R.id.informationTextView);
@@ -63,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+
+
+
+
     }
 
     @Override

@@ -60,7 +60,7 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.signup, container,
+        View rootView = inflater.inflate(R.layout.fragment_signup, container,
                 false);
 
         name = (EditText) rootView.findViewById(R.id.name);
