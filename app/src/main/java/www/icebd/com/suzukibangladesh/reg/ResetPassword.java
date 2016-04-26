@@ -3,18 +3,21 @@ package www.icebd.com.suzukibangladesh.reg;
 /**
  * Created by Nasir on 11/19/2015.
  */
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -25,6 +28,7 @@ import java.util.HashMap;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 
 
 public class ResetPassword extends Fragment implements View.OnClickListener, AsyncResponse {
@@ -32,6 +36,8 @@ public class ResetPassword extends Fragment implements View.OnClickListener, Asy
     EditText email;
     Button btnReset;
     FragmentActivity activity;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     public static ResetPassword newInstance() {
         ResetPassword fragment = new ResetPassword();
@@ -50,6 +56,9 @@ public class ResetPassword extends Fragment implements View.OnClickListener, Asy
         email=(EditText) rootView.findViewById(R.id.reset_email);
         btnReset = (Button) rootView.findViewById(R.id.button);
 
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
         btnReset.setOnClickListener(this);
 
 
@@ -64,11 +73,23 @@ public class ResetPassword extends Fragment implements View.OnClickListener, Asy
 
         if(isNetworkAvailable()) {
             HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key","46dde59d2bf7149c4d070f8cba8314e0");
-            postData.put("user_email","nazmul.nasir@icebd.com");
-            postData.put("user_id", "409");
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(ResetPassword.this,postData);
-            loginTask.execute( "http://icebd.com/suzuki/suzukiApi/Server/forgetPassword");
+            String auth_key = pref.getString("auth_key",null);
+            String user_id = pref.getString("user_id",null);
+            if (auth_key==null)
+            {
+                Toast.makeText(getActivity(),"Please Connect to the Internet and Restart the app",Toast.LENGTH_LONG).show();
+
+
+            }
+            else{
+                postData.put("auth_key",auth_key);
+                postData.put("user_email",email.getText().toString());
+                postData.put("user_id", user_id);
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(ResetPassword.this,postData);
+                loginTask.execute( "http://icebd.com/suzuki/suzukiApi/Server/forgetPassword");
+
+            }
+
 
         }
     }
@@ -78,19 +99,33 @@ public class ResetPassword extends Fragment implements View.OnClickListener, Asy
 
         Log.i("Test","After forgot password"+ output);
 
+        JSONObject object = null;
         try {
-            Log.i("Test","Inside Try");
-            JSONObject object = new JSONObject(output);
-            String message =object.getString("message");
-           // Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
-            Log.i("Test","message : "+ message);
+            object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            FragmentManager fragmentManager = getFragmentManager();
 
-            Log.i("Test","Inside Try");
+
+
+            if (status_code.equals("200"))
+            {
+                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+
+                // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AfterResetPassword.newInstance())
+                        .commit();
+
+            }
+            else {
+                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.i("Test","Outside Try");
 
     }
 

@@ -1,6 +1,8 @@
 package www.icebd.com.suzukibangladesh.reg;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,9 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
@@ -24,6 +31,8 @@ import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 public class Login extends Fragment implements View.OnClickListener, AsyncResponse {
     EditText password,email;
     Button button,forgotPass,signUp;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     public static Login newInstance() {
         Login fragment = new Login();
@@ -38,6 +47,10 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container,
                 false);
+
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
 
         email = (EditText) rootView.findViewById(R.id.login_email);
         password = (EditText) rootView.findViewById(R.id.login_password);
@@ -80,18 +93,28 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
         if (isNetworkAvailable()) {
 
             HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key","46dde59d2bf7149c4d070f8cba8314e0");
-            postData.put("user_email",email.toString());
-            postData.put("user_pass",password.toString());
+            String auth_key = pref.getString("auth_key",null);
+            Log.i("Test","Auth Key from shared preference "+auth_key);
 
+            if ((auth_key!=null))
+            {
+                postData.put("auth_key",auth_key);
+                postData.put("user_email",email.getText().toString());
+                postData.put("user_pass",password.getText().toString());
 
+                if (isNetworkAvailable()) {
 
+                    PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+                    loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/login");
+                }
 
-            if (isNetworkAvailable()) {
-
-                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
-                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/login");
             }
+            else {
+                Toast.makeText(getActivity(),"Please Connect to the Internet and Restart the app",Toast.LENGTH_LONG).show();
+
+            }
+
+
 
         }
     }
@@ -107,6 +130,42 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
     public void processFinish(String output) {
 
         Log.i("Test",output);
+        try {
+            JSONObject object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            String auth_key = object.getString("auth_key");
+            String user_id = object.getString("user_id");
+
+            FragmentManager fragmentManager = getFragmentManager();
+            // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            // SharedPreferences.Editor editor = preferences.edit();
+            // editor.putString("user_id",user_id);
+            // editor.apply();
+
+            if (status_code.equals("200"))
+            {
+                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+
+                editor.putString("is_login","1");
+                editor.putString("user_id",user_id);
+                editor.commit();
+
+
+                Intent intent = new Intent(getActivity(), FirstActivity.class);
+                startActivity(intent);
+
+            }
+            else {
+                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+            }
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }

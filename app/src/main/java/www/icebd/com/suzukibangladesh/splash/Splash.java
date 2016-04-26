@@ -2,6 +2,7 @@ package www.icebd.com.suzukibangladesh.splash;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -10,9 +11,12 @@ import android.widget.ImageView;
 
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.notification.MainActivity;
 
 
 public class Splash extends Activity {
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,21 @@ public class Splash extends Activity {
             public void run() {
 
                 finish();
-                Intent i = new Intent(getBaseContext(), FirstActivity.class);
+                pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+                editor = pref.edit();
+                String notification_key = pref.getString("gcm_registration_token",null);
+                Intent i;
+
+                if (notification_key==null)
+                {
+                    i = new Intent(getBaseContext(), MainActivity.class);
+                }
+                else {
+                    i = new Intent(getBaseContext(), FirstActivity.class);
+                }
+
+                //
+
                 startActivity(i);
             }
         }, 4000);// delay in milliseconds (200)

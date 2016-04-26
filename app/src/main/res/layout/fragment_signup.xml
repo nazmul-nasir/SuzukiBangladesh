@@ -46,6 +46,7 @@
                 android:drawableLeft="@drawable/name"
                 android:hint="Name"
                 android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:backgroundTint="#FFFFFF"
 
