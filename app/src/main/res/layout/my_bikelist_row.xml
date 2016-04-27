@@ -1,27 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/serial"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bikelist_img_holder">
+        <ImageView
+            android:id="@+id/id_bike_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ProgressBar
+            android:id="@+id/rn_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/my_progress_indeterminate" />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="25dp"
-        android:layout_margin="5dp"
-        android:layout_alignParentLeft="true"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:background="@drawable/bikelist_text_holder"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/engine"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:text="Engine"
+                android:textColor="@color/line_grey"/>
+            <TextView
+                android:id="@+id/engine_cc"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:text="150.0 CC"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:text="Mileage"
+                android:textColor="@color/line_grey"/>
+            <TextView
+                android:id="@+id/mileage_kilo"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:text="60 Kmpl"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/bike_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textAlignment="center"
+                android:paddingBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:text="60 Kmpl"/>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_toRightOf="@id/serial"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:paddingLeft="20dp"
-        android:textSize="18dp" />
 
-</RelativeLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

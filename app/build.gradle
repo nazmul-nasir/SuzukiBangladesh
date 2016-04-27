@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
+    useLibrary 'org.apache.http.legacy' // added by momen
 
     defaultConfig {
         applicationId "www.icebd.com.suzukibangladesh"
@@ -37,4 +38,8 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.vlonjatg.android:app-tour:1.0'
     compile 'com.android.support:support-v4:23.3.0'
+
+    //added start by momen
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
