@@ -38,8 +38,10 @@ import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
+import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
@@ -127,13 +129,10 @@ public class FirstActivity extends AppCompatActivity
                 selectItem(position);
             }
         });
-         //navigationView = (NavigationView) findViewById(R.id.nav_view);
-        /*if (navigationView != null)
-        {
-            navigationView.setNavigationItemSelectedListener(this);
-            navigationView.setCheckedItem(0);
-            //navigationView.getMenu().getItem(0).setChecked(true);
-        }*/
+
+        //Select home by default
+        selectItem(0);
+
 
         String auth_key = pref.getString("auth_key",null);
         String notification_key = pref.getString("gcm_registration_token",null);
@@ -170,7 +169,7 @@ public class FirstActivity extends AppCompatActivity
 
 
     }
-    private void selectItem(int position) {
+    public void selectItem(int position) {
 
         Fragment fragment = null;
 
@@ -184,6 +183,36 @@ public class FirstActivity extends AppCompatActivity
             case 2:
                 fragment = new SpareParts().newInstance();
                 break;
+            case 3:
+                fragment = new RequestServices().newInstance();
+                break;
+            case 4:
+                fragment = new NewsEvents().newInstance();
+                break;
+            case 5:
+                fragment = new Promotions().newInstance();
+                break;
+            case 6:
+                fragment = new Quiz().newInstance();
+                break;
+            case 7:
+                fragment = new SOS().newInstance();
+                break;
+            case 8:
+                fragment = new InviteFriends().newInstance();
+                break;
+            case 9:
+                fragment = new SocialMedia().newInstance();
+                break;
+            case 10:
+                fragment = new ChangePassword().newInstance();
+                break;
+            case 11:
+                fragment = new Login().newInstance();
+                break;
+            case 12:
+                fragment = new Logout().newInstance();
+                break;
 
             default:
                 break;
@@ -191,7 +220,7 @@ public class FirstActivity extends AppCompatActivity
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
 
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
@@ -230,13 +259,18 @@ public class FirstActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notifiction) {
+
             return true;
         }
         else if (id==R.id.action_find_location)
         {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, MapsActivity.newInstance())
+                    .commit();
             return true;
         }
         else {
