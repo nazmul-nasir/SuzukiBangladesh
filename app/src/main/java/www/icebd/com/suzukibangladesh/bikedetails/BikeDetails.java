@@ -43,13 +43,16 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.change_password, container,
                 false);
+        Bundle bundle = new Bundle();
+        int bike_id = bundle.getInt("bike_id");
+
         tableLayout=(TableLayout)rootView.findViewById(R.id.main_table);
         bike_name_tv = (TextView)rootView.findViewById(R.id.bike_name);
 
         HashMap<String, String> postData = new HashMap<String, String>();
 
         postData.put("auth_key","3c227bbba98cd9360006d095558d09a9");
-        postData.put("bike_id","27");
+        postData.put("bike_id",String.valueOf(bike_id));
 
         PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
         loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeDetail");

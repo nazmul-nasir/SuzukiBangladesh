@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.bikedetails.BikeDetails;
 import www.icebd.com.suzukibangladesh.bikelist.BikeList;
 import www.icebd.com.suzukibangladesh.bikelist.BikeListSwipeListAdapter;
 import www.icebd.com.suzukibangladesh.utilities.APIFactory;
@@ -63,9 +64,11 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_bike, container,
                 false);
-        context = getActivity();
+        context = getActivity().getApplicationContext();
         pref = context.getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
+        fragmentManager = getChildFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         Log.e("Test : ","inside my bike list");
 
@@ -73,7 +76,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
         bikeList = new ArrayList<>();
-        bikeListSwipeListAdapter = new BikeListSwipeListAdapter(context, bikeList);
+        bikeListSwipeListAdapter = new BikeListSwipeListAdapter(context, bikeList,MyBikeFragment.this);
         listView.setAdapter(bikeListSwipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -91,6 +94,17 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         );
 
         return view;
+    }
+    public void goBikeDetails(int bike_id)
+    {
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        BikeDetails fragmentBikeDetails = new BikeDetails();
+        Bundle bundle = new Bundle();
+        bundle.putInt( "bike_id", bike_id );
+        fragmentBikeDetails.setArguments(bundle);
+        ft.replace(R.id.container, fragmentBikeDetails);
+        // ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
@@ -126,7 +140,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         @Override
         protected void onPreExecute() {
 
-            progressDialog = ProgressDialog.show(getActivity(), null, null);
+            //progressDialog = ProgressDialog.show(getActivity(), null, null);
         }
         @Override
         protected String doInBackground(Void... params)
@@ -164,7 +178,8 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         @Override
         protected void onPostExecute(String result)
         {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
+            swipeRefreshLayout.setRefreshing(false);
             if(RESULT.equalsIgnoreCase("OK"))
             {
                 try
@@ -176,7 +191,9 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         //preferenceUtil.setPINstatus(1);
                         Toast.makeText(getActivity(), returnJsonData.get(0).getMessage(), Toast.LENGTH_SHORT).show();
 
-                        //bikeList.add(0, (returnJsonData.get(0).BikeItem) );
+                        bikeList = returnJsonData.get(0).getBikeItemsList();
+                        bikeListSwipeListAdapter = new BikeListSwipeListAdapter(context, bikeList,MyBikeFragment.this);
+                        listView.setAdapter(bikeListSwipeListAdapter);
 
                         bikeListSwipeListAdapter.notifyDataSetChanged();
                     } else
@@ -184,6 +201,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         System.out.println("data return : " + returnJsonData);
                         Toast.makeText(getActivity(), returnJsonData.get(0).getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 catch(Exception ex)
                 {
@@ -200,7 +218,8 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         protected void onCancelled()
         {
             fetchBikeListTask = null;
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

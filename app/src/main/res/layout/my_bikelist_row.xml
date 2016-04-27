@@ -7,20 +7,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bikelist_img_holder">
-        <ImageView
-            android:id="@+id/id_bike_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:background="@drawable/bikelist_img_holder"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
         <ProgressBar
             android:id="@+id/rn_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/my_progress_indeterminate" />
+        <ImageView
+            android:id="@+id/id_bike_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,10 +54,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:textSize="10dp"
                 android:textStyle="bold"
-                android:text="150.0 CC"/>
+                android:text="150.0 CC"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,10 +81,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:textStyle="bold"
                 android:textSize="10dp"
-                android:text="60 Kmpl"/>
+                android:text="60 Kmpl"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +102,8 @@
                 android:textAlignment="center"
                 android:paddingBottom="5dp"
                 android:textStyle="bold"
-                android:textSize="12dp"
+                android:textSize="14dp"
+                android:textColor="@android:color/black"
                 android:text="60 Kmpl"/>
         </LinearLayout>
 

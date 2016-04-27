@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,11 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.List;
+
+import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.bikedetails.BikeDetails;
+import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.utilities.Utils;
 
 
@@ -30,19 +36,21 @@ import www.icebd.com.suzukibangladesh.utilities.Utils;
  */
 public class BikeListSwipeListAdapter extends BaseAdapter
 {
-    private Activity activity;
+    //private Activity activity;
     private LayoutInflater inflater;
     private List<BikeList.BikeItem> bikeList;
     private String[] bgColors;
     public ImageLoader imageLoader = null;
     DisplayImageOptions options;
     Utils utilClass = new Utils();
+    MyBikeFragment myBikeFragment;
 
     Context context;
 
-    public BikeListSwipeListAdapter(Context context, List<BikeList.BikeItem> bikeList) {
+    public BikeListSwipeListAdapter(Context context, List<BikeList.BikeItem> bikeList,MyBikeFragment myBikeFragment) {
         this.context = context;
         this.bikeList = bikeList;
+        this.myBikeFragment = myBikeFragment;
         //bgColors = activity.getApplicationContext().getResources().getStringArray(R.array.movie_serial_bg);
 
         imageLoader = ImageLoader.getInstance();
@@ -75,15 +83,15 @@ public class BikeListSwipeListAdapter extends BaseAdapter
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         final Holder holder;
-        /*if (inflater == null)
-            inflater = (LayoutInflater) activity
+        if (inflater == null)
+            inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null)
+        /*if (convertView == null)
             convertView = inflater.inflate(R.layout.my_bikelist_row, null);*/
-        if(convertView != null)
+        if(convertView == null)
         {
             convertView = inflater.inflate(R.layout.my_bikelist_row, null);
-            holder=new Holder();
+            holder = new Holder();
             holder.bikeImg = (ImageView) convertView.findViewById(R.id.id_bike_img);
             holder.progressBar=(ProgressBar)convertView.findViewById(R.id.rn_progress);
             holder.txtEngine_cc = (TextView) convertView.findViewById(R.id.engine_cc);
@@ -100,6 +108,7 @@ public class BikeListSwipeListAdapter extends BaseAdapter
 
         //holder.bikeImg.setImageResource( bikeList.get(position).thumble_img );
         //holder.bikeImg.setImageIcon( Icon.createWithContentUri( bikeList.get(position).thumble_img ) );
+        Log.v("Engine : ",bikeList.get(position).getBike_cc().toString());
         imageLoader.displayImage(bikeList.get(position).getThumble_img(), holder.bikeImg, options,
                 new SimpleImageLoadingListener() {
                     @Override
@@ -123,17 +132,22 @@ public class BikeListSwipeListAdapter extends BaseAdapter
                         holder.progressBar.setProgress(Math.round(100.0f * current/ total));
                     }
                 });
+        Log.v("Engine : ",bikeList.get(position).getBike_cc().toString());
         holder.txtEngine_cc.setText( bikeList.get(position).getBike_cc().toString() );
         holder.txtMileage_kilo.setText( bikeList.get(position).getBike_mileage().toString() );
         holder.txtBike_name.setText( bikeList.get(position).getBike_name().toString() );
 
-        /*convertView.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked "+bikeList.get(position), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You Clicked "+bikeList.get(position).getBike_id(), Toast.LENGTH_LONG).show();
+
+                //MyBikeFragment fa = (MyBikeFragment) context.getSupportFragmentManager().findFragmentById(R.id.container);
+                //MyBikeFragment fa = new MyBikeFragment();
+                myBikeFragment.goBikeDetails(Integer.parseInt( bikeList.get(position).getBike_id()));
             }
-        });*/
+        });
 
 
 
