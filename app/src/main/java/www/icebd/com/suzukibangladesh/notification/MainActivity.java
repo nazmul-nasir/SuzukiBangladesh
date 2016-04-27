@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mRegistrationProgressBar;
     private TextView mInformationTextView;
     private boolean isReceiverRegistered;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
+            pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+            editor = pref.edit();
+            editor.putString("gcm_registration_token","GooglePlayServiceNotFound");
+            editor.apply();
+
+
             Intent i = new Intent();
             i.setClassName("www.icebd.com.suzukibangladesh", "www.icebd.com.suzukibangladesh.FirstActivity");
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

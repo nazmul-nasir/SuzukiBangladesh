@@ -38,6 +38,7 @@ import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
 import www.icebd.com.suzukibangladesh.menu.NewsEvents;
@@ -129,14 +130,9 @@ public class FirstActivity extends AppCompatActivity
             }
         });
 
+        //Select home by default
         selectItem(0);
-         //navigationView = (NavigationView) findViewById(R.id.nav_view);
-        /*if (navigationView != null)
-        {
-            navigationView.setNavigationItemSelectedListener(this);
-            navigationView.setCheckedItem(0);
-            //navigationView.getMenu().getItem(0).setChecked(true);
-        }*/
+
 
         String auth_key = pref.getString("auth_key",null);
         String notification_key = pref.getString("gcm_registration_token",null);
@@ -263,13 +259,18 @@ public class FirstActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notifiction) {
+
             return true;
         }
         else if (id==R.id.action_find_location)
         {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, MapsActivity.newInstance())
+                    .commit();
             return true;
         }
         else {
