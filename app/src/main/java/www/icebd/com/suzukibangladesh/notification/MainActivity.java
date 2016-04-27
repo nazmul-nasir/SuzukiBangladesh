@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+        else
+        {
+            Intent i = new Intent();
+            i.setClassName("www.icebd.com.suzukibangladesh", "www.icebd.com.suzukibangladesh.FirstActivity");
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(i);
+        }
 
 
 

@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         btnInviteFriends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                ((FirstActivity)getActivity()).selectItem(6);
+                ((FirstActivity)getActivity()).selectItem(8);
 
             }
         });
