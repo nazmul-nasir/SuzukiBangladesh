@@ -9,4 +9,6 @@ public class Constant {
 	
 	//public static final Integer[] right_menu_images = { R.drawable.ic_card_xdpi,R.drawable.menu_myprofile_normal, R.drawable.menu_logout_normal};
 	public static final double taxPercentage = 24.0;
+
+
 }

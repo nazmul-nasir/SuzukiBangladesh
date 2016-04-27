@@ -2,6 +2,7 @@ package www.icebd.com.suzukibangladesh.menu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,17 +29,29 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.app.Constants;
+import www.icebd.com.suzukibangladesh.json.AsyncResponse;
+import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.notification.MainActivity;
+import www.icebd.com.suzukibangladesh.utilities.Constant;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AsyncResponse {
 
 
     private Button btnMyBike,btnSpareParts,btnRequestServices,btnNews_Events,btnPromtoins,btnInviteFriends;
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor ;
+    String gallery_image [];
     public ImageLoader imageLoader = ImageLoader.getInstance();
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -45,6 +59,7 @@ public class HomeFragment extends Fragment {
     }
 
     public HomeFragment () {
+
     }
 
     @Override
@@ -55,6 +70,17 @@ public class HomeFragment extends Fragment {
         Typeface iconFont = FontManager.getTypeface(getActivity(), FontManager.FONTAWESOME);
 
         imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+
+        pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
+
+        String auth_key = pref.getString("auth_key",null);
+
+
+
+
+
 
 
 
@@ -117,6 +143,19 @@ public class HomeFragment extends Fragment {
         pager.setAdapter(new ImageAdapter(getActivity()));
        //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 
+        if(auth_key!=null)
+        {
+            HashMap<String, String> postData = new HashMap<String, String>();
+            postData.put("auth_key",auth_key);
+
+            // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
+
+            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this);
+            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
+
+        }
+
+
 
         return rootView;
     }
@@ -124,6 +163,35 @@ public class HomeFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // ((FirstActivity) activity).onSectionAttached(0);
+    }
+
+    @Override
+    public void processFinish(String output) {
+
+        try {
+            JSONObject object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            if (status_code.equals("200"))
+            {
+                JSONArray gallery = object.getJSONArray("gallery");
+                gallery_image =new String[gallery.length()];
+
+                for (int i = 0; i <gallery.length() ; i++) {
+                    JSONObject galleryDetails = gallery.getJSONObject(i);
+                    String g_image =galleryDetails.getString("g_image");
+                    gallery_image[i]=g_image;
+                    Log.i("Test",g_image);
+
+
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private static class ImageAdapter extends PagerAdapter {
