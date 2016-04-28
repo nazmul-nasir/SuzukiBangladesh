@@ -23,7 +23,7 @@
         android:layout_height="25dp"
         android:layout_alignTop="@+id/pager_bottom"
         android:layout_alignLeft="@+id/text_right"
-        android:paddingLeft="130dp"
+        android:paddingLeft="110dp"
         android:text="@string/fa_motorcycle"
         android:id="@+id/text_left"
         android:gravity="center_vertical"
@@ -52,6 +52,7 @@
         android:text="Bike Model"
 
         android:gravity="left"
+
 
 
         android:background="@drawable/text_holder"
