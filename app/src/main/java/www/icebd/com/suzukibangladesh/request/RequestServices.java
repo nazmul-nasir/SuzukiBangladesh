@@ -121,8 +121,8 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
          //   postData.put("app_user_id",user_id);
 
             int position = dropdown_bike_name.getSelectedItemPosition();
-            postData.put("bike_id",bikeId[position]);
-            Log.i("Test","bike_id :"+bikeId[position]);
+            postData.put("bike_id",bikeId[position-1]);
+            Log.i("Test","bike_id :"+bikeId[position-1]);
             postData.put("bike_name",dropdown_bike_name.getSelectedItem().toString());
            // postData.put("bike_name","GS150R");
             Log.i("Test","bike_name :"+dropdown_bike_name.getSelectedItem().toString());
@@ -316,11 +316,12 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
            // Log.i("Test", "Enter");
 
-            if (message.equals("Successfull"))
+            if (message.equals("Successful"))
             {
                 Log.i("Test","I am successful");
                 JSONArray bikeList = object.getJSONArray("bikeList");
-                String[] string = new String[bikeList.length()];
+                String[] string = new String[bikeList.length()+1];
+                string [0] = "Model";
                 bikeId = new String[bikeList.length()];
                // ArrayList<String> mylist = new ArrayList<String>();
 
@@ -329,7 +330,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
                     String bike_name = bikeDetail.getString("bike_name");
                     String bike_cc = bikeDetail.getString("bike_cc");
                    // mylist.add(bike_name+"/"+bike_cc);
-                    string[i]=bike_name+"/"+bike_cc;
+                    string[i+1]=bike_name+"/"+bike_cc;
                     bikeId[i]= bikeDetail.getString("bike_id");
                     Log.i("Test",bike_name+"/"+bike_cc);
 

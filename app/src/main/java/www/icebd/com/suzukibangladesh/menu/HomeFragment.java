@@ -61,9 +61,11 @@ public class HomeFragment extends Fragment implements AsyncResponse {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     String gallery_image [];
-    final int NUM_PAGES=3;
+    int NUM_PAGES;
     int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
+    ViewPager pager;
+
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -95,15 +97,10 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
             // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
 
-           /* PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");*/
+            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
 
         }
-
-
-        Log.i("Test","Before Init");
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-        Log.i("Test","After Init");
 
 
 
@@ -164,36 +161,16 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         //ImageAdapter imageAdapter = new ImageAdapter((getActivity()));
 
 
-        final ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
+         pager = (ViewPager) rootView.findViewById(R.id.pager);
        // pager.setAdapter(imageAdapter);
        // pager.setCurrentItem(0);
-        CircleIndicator indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
+       // CircleIndicator indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
         //viewpager.setAdapter(mPageAdapter);
-        indicator.setViewPager(pager);
-        pager.setAdapter(new ImageAdapter((getActivity())));
+       // indicator.setViewPager(pager);
 
 
 
 
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-
-
-                    @Override
-                    public void run() {
-                        if (currentPage == NUM_PAGES) {
-                            currentPage = 0;
-                        }
-                        pager.setCurrentItem(currentPage++, true);
-                    }
-                });
-            }
-        }, 500, 3000);
-       //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 
 
 
@@ -217,6 +194,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
             {
                 JSONArray gallery = object.getJSONArray("gallery");
                 gallery_image =new String[gallery.length()];
+                NUM_PAGES = gallery.length();
 
                 for (int i = 0; i <gallery.length() ; i++) {
                     JSONObject galleryDetails = gallery.getJSONObject(i);
@@ -231,6 +209,29 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        pager.setAdapter(new ImageAdapter((getActivity())));
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+
+                    @Override
+                    public void run() {
+                        if (currentPage == NUM_PAGES) {
+                            currentPage = 0;
+                        }
+                        pager.setCurrentItem(currentPage++, true);
+                    }
+                });
+            }
+        }, 500, 3000);
+        //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
+
+
 
 
     }
@@ -239,7 +240,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
 
 
-        private String[] IMAGE_URLS = Constants.IMAGES;
+        private String[] IMAGE_URLS = gallery_image;
 
         private LayoutInflater inflater;
         private DisplayImageOptions options;

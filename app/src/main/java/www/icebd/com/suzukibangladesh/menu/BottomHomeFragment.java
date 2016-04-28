@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -40,13 +42,14 @@ import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 
 
-public class BottomHomeFragment extends Fragment implements AsyncResponse {
+public class BottomHomeFragment extends Fragment implements AsyncResponse, AdapterView.OnItemSelectedListener {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     String[] bikeId;
     String[] bikeID_cc;
     ViewPager pager;
     String[] IMAGE_URLS;
+    Spinner dropdown_bike_name;
     public ImageLoader imageLoader = ImageLoader.getInstance();
 
 
@@ -81,6 +84,7 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse {
         {
             Toast.makeText(getActivity(),"Connect to internet and restart the app",Toast.LENGTH_LONG).show();
         }
+        dropdown_bike_name =(Spinner)rootView.findViewById(R.id.txt_dropdown);
          pager = (ViewPager) rootView.findViewById(R.id.pager_bottom);
 
         return rootView;
@@ -103,7 +107,8 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse {
             {
                 Log.i("Test","I am successful");
                 JSONArray bikeList = object.getJSONArray("bikeList");
-                String[] string = new String[bikeList.length()];
+                String[] string = new String[bikeList.length()+1];
+                string[0]="Model";
                 bikeId = new String[bikeList.length()];
                 bikeID_cc = new String[bikeList.length()];
                 IMAGE_URLS = new String[bikeList.length()];
@@ -114,7 +119,7 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse {
                     String bike_name = bikeDetail.getString("bike_name");
                     String bike_cc = bikeDetail.getString("bike_cc");
                     // mylist.add(bike_name+"/"+bike_cc);
-                    string[i]=bike_name+"/"+bike_cc;
+                    string[i+1]=bike_name+"/"+bike_cc;
                     bikeId[i]= bikeDetail.getString("bike_id");
                     Log.i("Test",bike_name+"/"+bike_cc);
                     IMAGE_URLS[i]=bikeDetail.getString("thumble_img");
@@ -123,6 +128,12 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse {
 
                 }
                 bikeID_cc =string;
+//                String dropdownstr = "Model" +string;
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, string);
+                dropdown_bike_name.setAdapter(adapter);
+
+
+                dropdown_bike_name.setOnItemSelectedListener(this);
 
 
 
@@ -146,6 +157,19 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse {
 
 
 
+
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position!=0) // position 0 = "Model" , default string
+        pager.setCurrentItem(position-1);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
