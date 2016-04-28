@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -30,6 +31,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.app.Constants;
@@ -157,10 +161,18 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         //btnMyBike.setText(getResources().getString(R.string.fa_motorcycle)+"\n\nMY BIKE");
         //btnMyBike.setTypeface(iconFont);
 
+        //ImageAdapter imageAdapter = new ImageAdapter((getActivity()));
+
 
         final ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
-        pager.setAdapter(new ImageAdapter(getActivity()));
-        pager.setCurrentItem(1);
+       // pager.setAdapter(imageAdapter);
+       // pager.setCurrentItem(0);
+        CircleIndicator indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
+        //viewpager.setAdapter(mPageAdapter);
+        indicator.setViewPager(pager);
+        pager.setAdapter(new ImageAdapter((getActivity())));
+
+
 
 
         Timer swipeTimer = new Timer();

@@ -312,11 +312,8 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
             Log.i("Test", "Enter");
             JSONObject object = new JSONObject(output);
             String message ="";
-                  message =  object.getString("message ");
-            if (message.equals(""))
-            {
-                message =  object.getString("message");
-            }
+                  message =  object.getString("message");
+
            // Log.i("Test", "Enter");
 
             if (message.equals("Successfull"))
@@ -341,12 +338,6 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, string);
                 dropdown_bike_name.setAdapter(adapter);
-
-
-
-
-
-
 
             }
             else if (message.equals("Request failed please try again"))
