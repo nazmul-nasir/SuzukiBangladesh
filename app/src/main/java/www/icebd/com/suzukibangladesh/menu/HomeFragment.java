@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
@@ -44,6 +47,8 @@ import www.icebd.com.suzukibangladesh.notification.MainActivity;
 import www.icebd.com.suzukibangladesh.utilities.Constant;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
+import static com.google.android.gms.internal.zzir.runOnUiThread;
+
 
 public class HomeFragment extends Fragment implements AsyncResponse {
 
@@ -52,6 +57,8 @@ public class HomeFragment extends Fragment implements AsyncResponse {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     String gallery_image [];
+    final int NUM_PAGES=3;
+    int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -69,7 +76,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
                 false);
         Typeface iconFont = FontManager.getTypeface(getActivity(), FontManager.FONTAWESOME);
 
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
@@ -77,10 +84,22 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
         String auth_key = pref.getString("auth_key",null);
 
+        if(auth_key!=null)
+        {
+            HashMap<String, String> postData = new HashMap<String, String>();
+            postData.put("auth_key",auth_key);
+
+            // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
+
+           /* PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");*/
+
+        }
 
 
-
-
+        Log.i("Test","Before Init");
+        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        Log.i("Test","After Init");
 
 
 
@@ -139,21 +158,31 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         //btnMyBike.setTypeface(iconFont);
 
 
-        ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
+        final ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
         pager.setAdapter(new ImageAdapter(getActivity()));
+        pager.setCurrentItem(1);
+
+
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+
+                    @Override
+                    public void run() {
+                        if (currentPage == NUM_PAGES) {
+                            currentPage = 0;
+                        }
+                        pager.setCurrentItem(currentPage++, true);
+                    }
+                });
+            }
+        }, 500, 3000);
        //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 
-        if(auth_key!=null)
-        {
-            HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key",auth_key);
-
-            // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
-
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
-
-        }
 
 
 
@@ -194,9 +223,11 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
     }
 
-    private static class ImageAdapter extends PagerAdapter {
+    private class ImageAdapter extends PagerAdapter {
 
-        private static final String[] IMAGE_URLS = Constants.IMAGES;
+
+
+        private String[] IMAGE_URLS = Constants.IMAGES;
 
         private LayoutInflater inflater;
         private DisplayImageOptions options;

@@ -17,6 +17,7 @@ package www.icebd.com.suzukibangladesh.app;
 
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -38,7 +39,9 @@ public final class Constants implements AsyncResponse {
 	private Constants() {
 		/*pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
 		editor = pref.edit();
+		 Log.i("Test","");
 */
+		Log.i("Test","Inside constants");
 	}
 
 
