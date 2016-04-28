@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -40,6 +42,7 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.app.Constants;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
 public class BottomHomeFragment extends Fragment implements AsyncResponse, AdapterView.OnItemSelectedListener {
@@ -52,6 +55,8 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
     Spinner dropdown_bike_name;
     public ImageLoader imageLoader = ImageLoader.getInstance();
 
+    TextView text_left;
+    TextView text_right;
 
 
     public static BottomHomeFragment newInstance() {
@@ -69,6 +74,12 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
                 false);
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
+        Typeface iconFont = FontManager.getTypeface(getActivity().getApplicationContext(), FontManager.FONTAWESOME);
+
+        text_left = (TextView) rootView.findViewById(R.id.text_left);
+        text_left.setTypeface(iconFont);
+       /* text_right = (TextView) rootView.findViewById(R.id.text_right);
+        text_right.setTypeface(iconFont);*/
 
         HashMap<String, String> postData = new HashMap<String, String>();
         String auth_key= pref.getString("auth_key","empty");

@@ -18,10 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="#488D8A"
+        android:textColor="@android:color/holo_blue_dark"
 
 
-        android:text="Request For Service"
+        android:text="REQUEST FOR SERVICE"
         android:gravity="left"
         android:padding="10dp"
 
@@ -30,34 +30,58 @@
 
     <Spinner
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
 
         android:text="Bike Model"
         android:gravity="center"
 
         android:background="#d8d8d8"
         android:id="@+id/txt_dropdown" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:background="#d8d8d8"
+        android:gravity="center"
+        >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Select Service"
-        android:gravity="center"
-        android:padding="20dp"
 
-        android:id="@+id/txt_email" />
+        android:text="SELECT SERVICES"
+
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:gravity="right|center_vertical"
+
+
+        android:layout_weight="1"
+
+        android:id="@+id/txt_email_left" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="@string/fa_double_down"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+
+            android:layout_weight="2"
+
+
+            android:id="@+id/txt_email_right" />
+    </LinearLayout>
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
+
         android:checkedButton="@+id/free"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:background="@drawable/border"
         android:orientation="horizontal"
-
-
-        android:padding="10dp"
-
+        android:layout_marginTop="10dp"
         android:id="@+id/rdo_grp_service_type_1" >
         <RadioButton
             android:layout_width="wrap_content"
@@ -86,24 +110,27 @@
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:id="@+id/rdo_grb_service_type_2"
         android:background="@drawable/border"
         android:checkedButton="@+id/repair"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:id="@+id/parts_change"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+
             android:text="PARTS CHANGE"/>
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:id="@+id/repair"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+
             android:text="REPAIR"/>
 
     </RadioGroup>

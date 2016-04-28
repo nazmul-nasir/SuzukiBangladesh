@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
     SharedPreferences.Editor editor ;
     String gallery_image [];
     int NUM_PAGES;
+    CircleIndicator indicator;
     int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
     ViewPager pager;
@@ -162,6 +163,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
 
          pager = (ViewPager) rootView.findViewById(R.id.pager);
+         indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
        // pager.setAdapter(imageAdapter);
        // pager.setCurrentItem(0);
        // CircleIndicator indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
@@ -211,6 +213,11 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         }
         imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
         pager.setAdapter(new ImageAdapter((getActivity())));
+
+        //viewpager.setAdapter(mPageAdapter);
+         indicator.setViewPager(pager);
+
+
         Timer swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
 

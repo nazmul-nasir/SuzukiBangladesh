@@ -2,6 +2,7 @@ package www.icebd.com.suzukibangladesh.request;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,6 +29,7 @@ import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
 public class RequestServices extends Fragment implements AsyncResponse, View.OnClickListener {
@@ -40,6 +43,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
     String auth_key;
     String[] bikeId;
     EditText userComments;
+    TextView text_right;
 
 
 
@@ -61,6 +65,10 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
+        Typeface iconFont = FontManager.getTypeface(getActivity().getApplicationContext(), FontManager.FONTAWESOME);
+        text_right = (TextView) rootView.findViewById(R.id.txt_email_right);
+        text_right.setTypeface(iconFont);
+
 
         HashMap<String, String> postData = new HashMap<String, String>();
 
