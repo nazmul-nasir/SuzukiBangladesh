@@ -89,19 +89,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         editor = pref.edit();
 
 
-        String auth_key = pref.getString("auth_key",null);
 
-        if(auth_key!=null)
-        {
-            HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key",auth_key);
-
-            // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
-
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
-
-        }
 
 
 
@@ -156,23 +144,26 @@ public class HomeFragment extends Fragment implements AsyncResponse {
             }
         });
 
-        //btnMyBike.setText(getResources().getString(R.string.fa_motorcycle)+"\n\nMY BIKE");
-        //btnMyBike.setTypeface(iconFont);
-
-        //ImageAdapter imageAdapter = new ImageAdapter((getActivity()));
-
-
-         pager = (ViewPager) rootView.findViewById(R.id.pager);
-         indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
-       // pager.setAdapter(imageAdapter);
-       // pager.setCurrentItem(0);
-       // CircleIndicator indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
-        //viewpager.setAdapter(mPageAdapter);
-       // indicator.setViewPager(pager);
 
 
 
+        if (pager==null) {
+            String auth_key = pref.getString("auth_key",null);
 
+            if(auth_key!=null)
+            {
+                HashMap<String, String> postData = new HashMap<String, String>();
+                postData.put("auth_key",auth_key);
+
+                // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
+
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
+
+            }
+            pager = (ViewPager) rootView.findViewById(R.id.pager);
+            indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
+        }
 
 
 

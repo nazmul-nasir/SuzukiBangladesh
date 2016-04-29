@@ -29,7 +29,7 @@
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:gravity="bottom"
-                android:layout_alignTop="@+id/pager"
+                android:layout_alignBottom="@+id/pager"
                 android:layout_height="48dp"/>
         </RelativeLayout>
 
