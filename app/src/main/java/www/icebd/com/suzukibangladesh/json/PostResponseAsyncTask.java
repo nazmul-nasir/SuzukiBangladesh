@@ -22,6 +22,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import www.icebd.com.suzukibangladesh.app.Constants;
 import www.icebd.com.suzukibangladesh.bikedetails.BikeDetails;
+import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.BottomHomeFragment;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.reg.Login;
@@ -137,6 +138,12 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
     public PostResponseAsyncTask(BottomHomeFragment bottomHomeFragment, HashMap<String, String> postData) {
         this.delegate=bottomHomeFragment;
         this.context=bottomHomeFragment.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(MapsActivity mapsActivity, HashMap<String, String> postData) {
+        this.delegate=mapsActivity;
+        this.context=mapsActivity.getContext();
         this.postData=postData;
     }
 
