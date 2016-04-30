@@ -121,6 +121,10 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
         Log.i("Test","Location: "+output);
         Log.i("Test",output);
 
+
+        String show_room= "Show room";
+        String service_center= "Service Center";
+
         try {
             JSONObject object = new JSONObject(output);
             String status_code = object.getString("status_code");
@@ -160,7 +164,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
                                     .icon(BitmapDescriptorFactory
                                             .defaultMarker(BitmapDescriptorFactory.HUE_RED))
                                     .title(location_address)
-                                  //  .snippet("Show Room")
+                                  //  .snippet(show_room)
                             );
 
                         }
@@ -171,7 +175,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
                                     .icon(BitmapDescriptorFactory
                                             .defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                                     .title(location_address)
-                                  //  .snippet("Service Center")
+                                   // .snippet(service_center)
                             );
                         }
 
