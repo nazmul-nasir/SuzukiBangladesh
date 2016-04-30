@@ -28,12 +28,18 @@ public class InviteFriends extends Fragment {
                 false);
 
 
-       /* String shareBody = "Find us at:\n"+getResources().getString(R.string.facebook_page_address);
+        String shareBody = "Welcome to Suzuki Bangladesh Official Mobile App\n" +
+                "\n" +
+                "google play link\n" +
+                "\n" +
+                "appstore link\n" +
+                "\n" +
+                "fb link:\n"+getResources().getString(R.string.facebook_page_address);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));*/
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
         return rootView;
     }
 

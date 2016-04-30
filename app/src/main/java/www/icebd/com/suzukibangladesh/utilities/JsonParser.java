@@ -115,6 +115,61 @@ public class JsonParser
 		return arrBikeList;
 	}
 
+	public ArrayList<NameValuePair> parseAPIgetQuizResultInfo(InputStream json) throws Exception
+	{
+		jsonArrayList = new ArrayList<NameValuePair>();
+		String oneObjectsItem_status = null;
+
+		String bike_code;
+		String bike_id;
+		String bike_name;
+		String bike_cc;
+		String bike_mileage;
+		String thumble_img;
+
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(json, "iso-8859-1"), 8);
+			builder = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			{
+				System.out.println("read line : "+line);
+				builder.append(line + "\n");
+			}
+			json.close();
+
+			jsonData = builder.toString();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Log.e("Buffer Error", "Error converting result " + e.toString());
+		}
+
+		try
+		{
+			jsonResponse = new JSONObject(jsonData);
+
+			boolean status = jsonResponse.getBoolean("status");
+
+			String message = jsonResponse.getString("message");
+
+			int status_code = jsonResponse.getInt("status_code");
+			jsonArrayList.add(new BasicNameValuePair("status", String.valueOf(status)));
+			jsonArrayList.add(new BasicNameValuePair("message", message));
+			jsonArrayList.add(new BasicNameValuePair("status_code", String.valueOf(status_code)));
+
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Log.e("JSON Parser", "Error parsing data " + e.toString());
+		}
+		// return JSON String
+		return jsonArrayList;
+	}
+
 
 	
 

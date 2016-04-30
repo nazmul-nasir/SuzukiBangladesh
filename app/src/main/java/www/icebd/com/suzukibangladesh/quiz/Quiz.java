@@ -1,6 +1,8 @@
 package www.icebd.com.suzukibangladesh.quiz;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -14,18 +16,26 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.bikelist.BikeList;
+import www.icebd.com.suzukibangladesh.bikelist.BikeListSwipeListAdapter;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.APIFactory;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
+import www.icebd.com.suzukibangladesh.utilities.JsonParser;
 
 
 public class Quiz extends Fragment implements AsyncResponse, View.OnClickListener {
@@ -61,6 +71,10 @@ public class Quiz extends Fragment implements AsyncResponse, View.OnClickListene
     SharedPreferences.Editor editor ;
     String question[]=new String[20] ,answerId[]=new String[20],questionId[]=new String[20],op1[]=new String[20],op2[]=new String[20],op3[]=new String[20],op4[]=new String[20],opId1[]=new String[20],opId2[]=new String[20],opId3[]=new String[20],opId4[]=new String[20];
 
+    APIFactory apiFactory;
+    CustomDialog customDialog;
+    ProgressDialog progressDialog;
+    //QizzesResultAsyncTask qizzesResultAsyncTask = null;
 
     public static Quiz newInstance() {
         Quiz fragment = new Quiz();
@@ -302,7 +316,12 @@ public class Quiz extends Fragment implements AsyncResponse, View.OnClickListene
 
             for (int i = 0; i <questionsNo ; i++) {
                 quiz_answer =quiz_answer + "{\'question_id\':\'"+questionId[i]+"\',"
-                        +"\'answer_id\':\'"+answerId[i]+"\'}";
+                        +"\'answer_id\':\'"+answerId[i]+"\'},";
+
+                if(i == questionsNo-1)
+                {
+                    quiz_answer=quiz_answer.substring(0, quiz_answer.length()-1);
+                }
                 /*HashMap<String, String> map1 = new HashMap();
                 map1.put("question_id",questionId[i]);
                 map1.put("answer_id",answerId[i]);
@@ -318,6 +337,8 @@ public class Quiz extends Fragment implements AsyncResponse, View.OnClickListene
 
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
             loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/quizResult");
+            /*qizzesResultAsyncTask = new QizzesResultAsyncTask(auth_key,user_id,quizId,quiz_answer);
+            qizzesResultAsyncTask.execute((Void) null);*/
 
 
 
@@ -350,4 +371,113 @@ public class Quiz extends Fragment implements AsyncResponse, View.OnClickListene
         showQuizes(++callingIndex);
 
     }
+
+    /*
+    public class QizzesResultAsyncTask extends AsyncTask<Void, Void, String>
+    {
+        private String RESULT = "OK";
+        private ArrayList<NameValuePair> returnJsonData;
+        private ArrayList<NameValuePair> nvp2=null;
+        private String device_type = "1";
+        private String device_token = "device_token";
+        private String udid = "udid";
+        private InputStream response;
+        private JsonParser jsonParser;
+
+        private String methodName = "";
+        private String GCMkey = "";
+        private String DeviceID = "udid";
+        private String auth_key, user_id, quiz_id, quiz_answer;
+
+        //UserLoginTask(String email, String password)
+        QizzesResultAsyncTask(String auth_key,String user_id,String quiz_id, String quiz_answer)
+        {
+            this.auth_key = auth_key;
+            this.user_id = user_id;
+            this.quiz_id = quiz_id;
+            this.quiz_answer = quiz_answer;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = ProgressDialog.show(getActivity(), null, null);
+        }
+        @Override
+        protected String doInBackground(Void... params)
+        {
+            try
+            {
+                if (ConnectionManager.hasInternetConnection())
+                {
+                    auth_key = "5384145a9afea0b20f740ed835c0b9bd";
+                    user_id="11";
+                    quiz_id = "19";
+                    quiz_answer = "[{'question_id':'27','answer_id':'83'},{'question_id':'28','answer_id':'87'},{'question_id':'29','answer_id':'91'},{'question_id':'30','answer_id':'95'}]";
+                    nvp2 = apiFactory.getQuizResultInfo(auth_key,user_id,quiz_id,quiz_answer);
+                    methodName = "quizResult";
+                    response = ConnectionManager.getResponseFromServer(methodName, nvp2);
+                    jsonParser = new JsonParser();
+
+                    System.out.println("server response : "+response);
+                    returnJsonData = jsonParser.parseAPIgetQuizResultInfo(response);
+                    System.out.println("return data : " + returnJsonData);
+
+                }
+                else
+                {
+                    RESULT = getString(R.string.error_no_internet);
+                    return RESULT;
+                }
+                return RESULT;
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                Log.e("APITask:", ex.getMessage());
+                RESULT = getString(R.string.error_sever_connection);
+                return RESULT;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            progressDialog.dismiss();
+
+            if(RESULT.equalsIgnoreCase("OK"))
+            {
+                try
+                {
+                    //finish();
+
+                    if (returnJsonData.size() > 0 && returnJsonData != null && returnJsonData.get(0).getValue().equals("true") == true )
+                    {
+                        //preferenceUtil.setPINstatus(1);
+                        Toast.makeText(getActivity(), returnJsonData.get(1).getValue().toString(), Toast.LENGTH_SHORT).show();
+
+                    } else
+                    {
+                        System.out.println("data return : " + returnJsonData);
+                        Toast.makeText(getActivity(), returnJsonData.get(1).getValue().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("APITask data error :", ex.getMessage());
+                }
+            }
+            else {
+
+                customDialog.alertDialog("ERROR", result);
+            }
+        }
+        @Override
+        protected void onCancelled()
+        {
+            qizzesResultAsyncTask = null;
+            progressDialog.dismiss();
+
+        }
+    }*/
 }
