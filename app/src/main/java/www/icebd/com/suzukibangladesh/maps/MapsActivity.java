@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.GPSTracker;
 import www.icebd.com.suzukibangladesh.app.LatLong;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
@@ -148,29 +150,40 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
 
                         // Add a marker in Sydney and move the camera
                         LatLng Address = new LatLng(lat, lng);
-                        mMap.addMarker(new MarkerOptions().position(Address).title(location_address));
+
+                        Log.i("Test","location_type: "+location_type);
+
+
+                        if (location_type.equals("1")){
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(Address)
+                                    .icon(BitmapDescriptorFactory
+                                            .defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                    .title(location_address)
+                                  //  .snippet("Show Room")
+                            );
+
+                        }
+                        else
+                        {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(Address)
+                                    .icon(BitmapDescriptorFactory
+                                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                    .title(location_address)
+                                  //  .snippet("Service Center")
+                            );
+                        }
+
 
 
                       //  mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 15));
 
 
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(Address));
-                     //   mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                       /* mMap.addMarker(new MarkerOptions().position(
-                                new LatLng(lat,lng))
-                                .title(Address.toString())
-                                .snippet(Address.toString()));
-*/
-                    }
+                    //    mMap.moveCamera(CameraUpdateFactory.newLatLng(Address));
 
-                 /*   LatLngBounds.Builder b = new LatLngBounds.Builder();
-                    for (Marker m : markers) {
-                        b.include(m.getPosition());
+
                     }
-                    LatLngBounds bounds = b.build();
-//Change the padding as per needed
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25,25,5);
-                    mMap.animateCamera(cu);*/
 
 
 
@@ -182,6 +195,41 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
             e.printStackTrace();
         }
 
+        for (int i = 0; i <3 ; i++) {
+            Toast.makeText(getActivity(),"Red: Show Room\nBlue: Service Center",Toast.LENGTH_LONG).show();
+
+        }
+
+
+
+
+        GPSTracker gps;
+        gps = new GPSTracker(getActivity());
+
+        if(gps.canGetLocation()) {
+            /*latitude = gps.getLatitude();
+            longitude = gps.getLongitude();*/
+
+            moveToCurrentLocation(new LatLng(gps.getLatitude(),gps.getLongitude()));
+
+          /*  Toast.makeText(
+                    getActivity().getApplicationContext(),
+                    "Your Location is -\nLat: " + gps.getLatitude() + "\nLong: "
+                            + gps.getLongitude(), Toast.LENGTH_LONG).show();*/
+
+          /*  mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng( gps.getLatitude(),gps.getLongitude()))
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                    .title("You are here..").visible(true));*/
+
+            Log.i("Test","Lat, long : "+gps.getLatitude()+" "+gps.getLongitude() );
+        } else {
+            gps.showSettingsAlert();
+        }
+
+
+
     }
 
     private boolean isNetworkAvailable() {
@@ -190,5 +238,19 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void moveToCurrentLocation(LatLng currentLocation)
+    {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,15));
+        // Zoom in, animating the camera.
+
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+
+    }
+
+
 
 }
