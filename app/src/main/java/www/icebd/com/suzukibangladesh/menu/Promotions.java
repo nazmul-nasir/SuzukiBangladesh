@@ -100,6 +100,7 @@ public class Promotions extends Fragment implements AsyncResponse {
 
 
 
+
             if (status_code.equals("200"))
             {
                // Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();

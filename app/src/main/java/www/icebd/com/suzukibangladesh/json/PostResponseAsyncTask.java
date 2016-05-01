@@ -27,6 +27,7 @@ import www.icebd.com.suzukibangladesh.menu.BottomHomeFragment;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
+import www.icebd.com.suzukibangladesh.notification.Notification;
 import www.icebd.com.suzukibangladesh.quiz.Quiz;
 import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.reg.ChangePassword;
@@ -165,6 +166,13 @@ public class PostResponseAsyncTask extends AsyncTask<String, Void, String> {
     public PostResponseAsyncTask(NewsEvents newsEvents, HashMap<String, String> postData) {
         this.delegate=newsEvents;
         this.context=newsEvents.getContext();
+        this.postData=postData;
+    }
+
+    public PostResponseAsyncTask(Notification notification, HashMap<String, String> postData) {
+
+        this.delegate=notification;
+        this.context=notification.getContext();
         this.postData=postData;
     }
 

@@ -37,6 +37,7 @@ import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
 import www.icebd.com.suzukibangladesh.menu.NewsEvents;
+import www.icebd.com.suzukibangladesh.notification.Notification;
 import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
@@ -280,7 +281,13 @@ public class FirstActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notifiction) {
 
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Notification.newInstance())
+                    .commit();
             return true;
+
+
         }
         else if (id==R.id.action_find_location)
         {
