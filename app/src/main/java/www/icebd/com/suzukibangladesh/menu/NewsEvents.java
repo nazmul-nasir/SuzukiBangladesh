@@ -12,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.R;
@@ -22,6 +27,7 @@ import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 public class NewsEvents extends Fragment implements AsyncResponse {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
+    ArrayList<HashMap<String, String>> arrList;
 
     public static NewsEvents newInstance() {
         NewsEvents fragment = new NewsEvents();
@@ -78,6 +84,43 @@ public class NewsEvents extends Fragment implements AsyncResponse {
     public void processFinish(String output) {
 
         Log.i("Test",output);
+
+        try {
+            JSONObject object = new JSONObject(output);
+            String status_code = object.getString("status_code");
+            String message = object.getString("message");
+            String auth_key = object.getString("auth_key");
+
+            if(status_code.equals("200"))
+            {
+                JSONArray news = object.getJSONArray("news");
+
+                for (int i = 0; i <news.length() ; i++) {
+
+                    JSONObject newsDetails = news.getJSONObject(i);
+                    HashMap<String, String> map = new HashMap();
+                    map.put("news_event_id", newsDetails.getString("news_event_id"));
+                    map.put("type", newsDetails.getString("type"));
+                    map.put("news_event_title", newsDetails.getString("news_event_title"));
+                    map.put("news_event_desc", newsDetails.getString("news_event_desc"));
+                    map.put("news_event_img_url", newsDetails.getString("news_event_img_url"));
+                    map.put("start_date", newsDetails.getString("start_date"));
+                    map.put("end_date", newsDetails.getString("end_date"));
+
+                    arrList.add(map);
+
+
+                }
+
+
+
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
