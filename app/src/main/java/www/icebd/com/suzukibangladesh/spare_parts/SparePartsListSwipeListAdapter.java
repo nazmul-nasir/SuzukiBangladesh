@@ -219,26 +219,51 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
 
             String filterString = constraint.toString().toLowerCase();
 
-            FilterResults results = new FilterResults();
+            FilterResults result = new FilterResults();
 
-            final List<SparePartsListObject.SparePartsItem> list = listSparePartsItemSearch;
+            SparePartsListObject obj_sparePartsList = new SparePartsListObject();
+            List<SparePartsListObject.SparePartsItem> filterItems = listSparePartsItemSearch;
 
-            int count = list.size();
-            final ArrayList<String> nlist = new ArrayList<String>(count);
+            try
+            {
+                //int count = list.size();
+                //final ArrayList<String> nlist = new ArrayList<String>(count);
+                if (constraint != null && constraint.toString().length() > 0)
+                {
 
-            String filterableString ;
+                    String filterableString;
+                    synchronized (this)
+                    {
+                        for (int i = 0; i < listSparePartsItem.size(); i++)
+                        {
 
-            for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).getSpare_parts_name();
-                if (filterableString.toLowerCase().contains(filterString)) {
-                    nlist.add(filterableString);
+                            SparePartsListObject.SparePartsItem obj_sparePartsItem = listSparePartsItem.get(i);
+                            filterableString = obj_sparePartsItem.getSpare_parts_name();
+                            if (filterableString.toLowerCase().contains(filterString))
+                            {
+                                filterItems.add(obj_sparePartsItem);
+                            }
+                        }
+                        result.count = filterItems.size();
+                        result.values = filterItems;
+                        //result.values = nlist;
+                        //result.count = nlist.size();
+                    }// end synchronized
+                } else
+                {
+                    synchronized (this)
+                    {
+                        result.count = listSparePartsItem.size();
+                        result.values = listSparePartsItem;
+                    }
                 }
             }
-
-            results.values = nlist;
-            results.count = nlist.size();
-
-            return results;
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+                Log.e("search-err: ", ex.getMessage());
+            }
+            return result;
         }
 
         @SuppressWarnings("unchecked")

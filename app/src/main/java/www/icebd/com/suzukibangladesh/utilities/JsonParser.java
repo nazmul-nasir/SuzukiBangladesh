@@ -155,41 +155,48 @@ public class JsonParser
 		{
 			jsonResponse = new JSONObject(jsonData);
 			SparePartsListObject obj_sparePartsList = new SparePartsListObject();
-			jarray = jsonResponse.getJSONArray("spare");
-
 			boolean status = jsonResponse.getBoolean("status");
 			obj_sparePartsList.setStatus(status);
-			String message = jsonResponse.getString("message");
-			obj_sparePartsList.setMessage(message);
-			int status_code = jsonResponse.getInt("status_code");
-			obj_sparePartsList.setStatus_code(status_code);
-
-			for (int i=0; i < jarray.length(); i++)
+			if(status == false)
 			{
-
-				jsonResponse = jarray.getJSONObject(i);
-				SparePartsListObject.SparePartsItem obj_sparePartsItem = obj_sparePartsList.new SparePartsItem();
-
-				spare_parts_id = jsonResponse.getString("spare_parts_id");
-				obj_sparePartsItem.setSpare_parts_id(spare_parts_id);
-				spare_parts_name = jsonResponse.getString("spare_parts_name");
-				obj_sparePartsItem.setSpare_parts_name(spare_parts_name);
-
-				spare_parts_price = jsonResponse.getString("spare_parts_price");
-				obj_sparePartsItem.setSpare_parts_price(spare_parts_price);
-				spare_parts_code = jsonResponse.getString("spare_parts_code");
-				obj_sparePartsItem.setSpare_parts_code(spare_parts_code);
-				parts_type = jsonResponse.getString("parts_type");
-				obj_sparePartsItem.setParts_type(parts_type);
-				bike_name = jsonResponse.getString("bike_name");
-				obj_sparePartsItem.setBike_name(bike_name);
-				thumble_img = jsonResponse.getString("large_image_name");
-				obj_sparePartsItem.setThumble_img(thumble_img);
-
-				arrSparePartsItem.add(obj_sparePartsItem);
+				arrSparePartsList = null;
 			}
-			obj_sparePartsList.setSparePartsItemsList(arrSparePartsItem);// set spare parts items to array list
-			arrSparePartsList.add(obj_sparePartsList);
+			else
+			{
+				jarray = jsonResponse.getJSONArray("spare");
+
+
+				String message = jsonResponse.getString("message");
+				obj_sparePartsList.setMessage(message);
+				int status_code = jsonResponse.getInt("status_code");
+				obj_sparePartsList.setStatus_code(status_code);
+
+				for (int i = 0; i < jarray.length(); i++)
+				{
+					jsonResponse = jarray.getJSONObject(i);
+					SparePartsListObject.SparePartsItem obj_sparePartsItem = obj_sparePartsList.new SparePartsItem();
+
+					spare_parts_id = jsonResponse.getString("spare_parts_id");
+					obj_sparePartsItem.setSpare_parts_id(spare_parts_id);
+					spare_parts_name = jsonResponse.getString("spare_parts_name");
+					obj_sparePartsItem.setSpare_parts_name(spare_parts_name);
+
+					spare_parts_price = jsonResponse.getString("spare_parts_price");
+					obj_sparePartsItem.setSpare_parts_price(spare_parts_price);
+					spare_parts_code = jsonResponse.getString("spare_parts_code");
+					obj_sparePartsItem.setSpare_parts_code(spare_parts_code);
+					parts_type = jsonResponse.getString("parts_type");
+					obj_sparePartsItem.setParts_type(parts_type);
+					bike_name = jsonResponse.getString("bike_name");
+					obj_sparePartsItem.setBike_name(bike_name);
+					thumble_img = jsonResponse.getString("large_image_name");
+					obj_sparePartsItem.setThumble_img(thumble_img);
+
+					arrSparePartsItem.add(obj_sparePartsItem);
+				}
+				obj_sparePartsList.setSparePartsItemsList(arrSparePartsItem);// set spare parts items to array list
+				arrSparePartsList.add(obj_sparePartsList);
+			}
 		}
 		catch(JSONException e)
 		{

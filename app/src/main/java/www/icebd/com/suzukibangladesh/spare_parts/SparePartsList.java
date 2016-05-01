@@ -40,6 +40,8 @@ import www.icebd.com.suzukibangladesh.utilities.Constant;
 import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
 import www.icebd.com.suzukibangladesh.utilities.JsonParser;
 
+import static com.google.android.gms.internal.zzir.runOnUiThread;
+
 
 public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRefreshListener
 {
@@ -91,8 +93,8 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
         no_spare_parts_item.setVisibility(View.VISIBLE);
 
         listSparePartsItem = new ArrayList<>();
-        //sparePartsListSwipeListAdapter = new SparePartsListSwipeListAdapter(context, listSparePartsItem,SparePartsList.this);
-        //listView.setAdapter(sparePartsListSwipeListAdapter);
+        sparePartsListSwipeListAdapter = new SparePartsListSwipeListAdapter(context, listSparePartsItem,SparePartsList.this);
+        listView.setAdapter(sparePartsListSwipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.post(new Runnable() {
@@ -208,7 +210,7 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
             {
                 if (ConnectionManager.hasInternetConnection())
                 {
-                    auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
+                    //auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
                     nvp2 = apiFactory.getSparePartsListInfo(auth_key);
                     methodName = "spareList";
                     response = ConnectionManager.getResponseFromServer(methodName, nvp2);
@@ -251,15 +253,22 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
                         Toast.makeText(getActivity(), returnJsonData.get(0).getMessage(), Toast.LENGTH_SHORT).show();
 
                         listSparePartsItem = returnJsonData.get(0).getSparePartsItemsList();
-                        sparePartsListSwipeListAdapter = new SparePartsListSwipeListAdapter(context, listSparePartsItem,SparePartsList.this);
-                        listView.setAdapter(sparePartsListSwipeListAdapter);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                //mAllResultsItem.add(item);
+                                //mAllResultsAdapter.notifyDataSetChanged();
+                                sparePartsListSwipeListAdapter = new SparePartsListSwipeListAdapter(context, listSparePartsItem,SparePartsList.this);
+                                listView.setAdapter(sparePartsListSwipeListAdapter);
 
-                        sparePartsListSwipeListAdapter.notifyDataSetChanged();
+                                sparePartsListSwipeListAdapter.notifyDataSetChanged();
+                            }
+                        }); // end of runOnUiThread
+
 
                     } else
                     {
                         System.out.println("data return : " + returnJsonData);
-                        Toast.makeText(getActivity(), returnJsonData.get(0).getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Data Not Found !", Toast.LENGTH_SHORT).show();
                         listView.setVisibility(View.GONE);
                         no_spare_parts_item.setVisibility(View.VISIBLE);
                     }

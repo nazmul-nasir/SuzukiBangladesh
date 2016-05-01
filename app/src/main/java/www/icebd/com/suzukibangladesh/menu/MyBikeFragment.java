@@ -80,8 +80,8 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         no_bike_item.setVisibility(View.GONE);
 
         bikeList = new ArrayList<>();
-        bikeListSwipeListAdapter = new BikeListSwipeListAdapter(context, bikeList,MyBikeFragment.this);
-        listView.setAdapter(bikeListSwipeListAdapter);
+        //bikeListSwipeListAdapter = new BikeListSwipeListAdapter(context, bikeList,MyBikeFragment.this);
+        //listView.setAdapter(bikeListSwipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.post(new Runnable() {
@@ -153,7 +153,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
             {
                 if (ConnectionManager.hasInternetConnection())
                 {
-                    auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
+                    //auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
                     nvp2 = apiFactory.getBikeListInfo(auth_key);
                     methodName = "getBikeList";
                     response = ConnectionManager.getResponseFromServer(methodName, nvp2);
