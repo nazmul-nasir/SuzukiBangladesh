@@ -18,6 +18,7 @@
 
 
 	<string name="fa_shopping_cart">&#xf07a;</string>
+	<string name="fa_shopping_add_to_cart">&#xf217;</string>
 	<string name="fa_shopping_bag">&#xf290;</string>
 	<string name="fa_shopping_failed_back">&#xf112;</string>
 	<string name="fa_cog">&#xf013;</string>

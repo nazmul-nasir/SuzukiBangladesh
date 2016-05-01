@@ -32,6 +32,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sos_value">+8801671079738</string>
 
+    <string name="qty_txt">QTY</string>
+    <string name="item_txt">ITEM</string>
+    <string name="price_txt">PRICE</string>
+    <string name="subtotal_txt">Sub Total</string>
+    <string name="total_with_vat_txt">Total (inc VAT)</string>
+    <string name="pay_with">PAY WITH</string>
+    <string name="no_items_display_txt">No Item Found</string>
+
     <string-array name="navigation_drawer_items_array">
         <item>HOME</item>
         <item>MY BIKE</item>
