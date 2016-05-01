@@ -2,6 +2,7 @@ package www.icebd.com.suzukibangladesh.request;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,6 +29,7 @@ import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
 public class RequestServices extends Fragment implements AsyncResponse, View.OnClickListener {
@@ -40,6 +43,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
     String auth_key;
     String[] bikeId;
     EditText userComments;
+    TextView text_right;
 
 
 
@@ -61,6 +65,10 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
+        Typeface iconFont = FontManager.getTypeface(getActivity().getApplicationContext(), FontManager.FONTAWESOME);
+        text_right = (TextView) rootView.findViewById(R.id.txt_email_right);
+        text_right.setTypeface(iconFont);
+
 
         HashMap<String, String> postData = new HashMap<String, String>();
 
@@ -121,8 +129,8 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
          //   postData.put("app_user_id",user_id);
 
             int position = dropdown_bike_name.getSelectedItemPosition();
-            postData.put("bike_id",bikeId[position]);
-            Log.i("Test","bike_id :"+bikeId[position]);
+            postData.put("bike_id",bikeId[position-1]);
+            Log.i("Test","bike_id :"+bikeId[position-1]);
             postData.put("bike_name",dropdown_bike_name.getSelectedItem().toString());
            // postData.put("bike_name","GS150R");
             Log.i("Test","bike_name :"+dropdown_bike_name.getSelectedItem().toString());
@@ -312,18 +320,16 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
             Log.i("Test", "Enter");
             JSONObject object = new JSONObject(output);
             String message ="";
-                  message =  object.getString("message ");
-            if (message.equals(""))
-            {
-                message =  object.getString("message");
-            }
+                  message =  object.getString("message");
+
            // Log.i("Test", "Enter");
 
-            if (message.equals("Successfull"))
+            if (message.equals("Successful"))
             {
                 Log.i("Test","I am successful");
                 JSONArray bikeList = object.getJSONArray("bikeList");
-                String[] string = new String[bikeList.length()];
+                String[] string = new String[bikeList.length()+1];
+                string [0] = "Model";
                 bikeId = new String[bikeList.length()];
                // ArrayList<String> mylist = new ArrayList<String>();
 
@@ -332,7 +338,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
                     String bike_name = bikeDetail.getString("bike_name");
                     String bike_cc = bikeDetail.getString("bike_cc");
                    // mylist.add(bike_name+"/"+bike_cc);
-                    string[i]=bike_name+"/"+bike_cc;
+                    string[i+1]=bike_name+"/"+bike_cc;
                     bikeId[i]= bikeDetail.getString("bike_id");
                     Log.i("Test",bike_name+"/"+bike_cc);
 
@@ -341,12 +347,6 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, string);
                 dropdown_bike_name.setAdapter(adapter);
-
-
-
-
-
-
 
             }
             else if (message.equals("Request failed please try again"))

@@ -2,16 +2,13 @@ package www.icebd.com.suzukibangladesh.quiz;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,11 +17,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadFactory;
 
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
-import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 
 public class QuizStarter extends Activity implements AsyncResponse {
 
@@ -56,7 +51,7 @@ public class QuizStarter extends Activity implements AsyncResponse {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.fragment_quiz);
 
         txtQuestion=(TextView)findViewById(R.id.textView1);
         txtTitle=(TextView)findViewById(R.id.textView);
@@ -154,7 +149,7 @@ public class QuizStarter extends Activity implements AsyncResponse {
     void showQuizes(int indexNow)
     {
 
-        //setContentView(R.layout.activity_quiz);
+        //setContentView(R.layout.fragment_quiz);
 
 
         if (questionsNo>indexNow) {

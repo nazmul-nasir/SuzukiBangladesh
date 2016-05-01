@@ -22,4 +22,5 @@
 	<string name="fa_shopping_bag">&#xf290;</string>
 	<string name="fa_shopping_failed_back">&#xf112;</string>
 	<string name="fa_cog">&#xf013;</string>
+	<string name="fa_double_down">&#xf103;</string>
 </resources>

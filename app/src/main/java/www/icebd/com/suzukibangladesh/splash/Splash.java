@@ -58,6 +58,8 @@ public class Splash extends Activity {
                 pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
                 editor = pref.edit();
                 String notification_key = pref.getString("gcm_registration_token",null);
+                editor.putString("running","no");
+                editor.apply();
                 Intent i;
 
                 if (notification_key==null)

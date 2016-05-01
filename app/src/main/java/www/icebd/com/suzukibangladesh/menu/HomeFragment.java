@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -30,6 +31,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.app.Constants;
@@ -57,9 +61,12 @@ public class HomeFragment extends Fragment implements AsyncResponse {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     String gallery_image [];
-    final int NUM_PAGES=3;
+    int NUM_PAGES;
+    CircleIndicator indicator;
     int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
+    ViewPager pager;
+
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -82,24 +89,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         editor = pref.edit();
 
 
-        String auth_key = pref.getString("auth_key",null);
 
-        if(auth_key!=null)
-        {
-            HashMap<String, String> postData = new HashMap<String, String>();
-            postData.put("auth_key",auth_key);
-
-            // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
-
-           /* PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");*/
-
-        }
-
-
-        Log.i("Test","Before Init");
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-        Log.i("Test","After Init");
 
 
 
@@ -154,34 +144,26 @@ public class HomeFragment extends Fragment implements AsyncResponse {
             }
         });
 
-        //btnMyBike.setText(getResources().getString(R.string.fa_motorcycle)+"\n\nMY BIKE");
-        //btnMyBike.setTypeface(iconFont);
 
 
-        final ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
-        pager.setAdapter(new ImageAdapter(getActivity()));
-        pager.setCurrentItem(1);
 
+        if (pager==null) {
+            String auth_key = pref.getString("auth_key",null);
 
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
+            if(auth_key!=null)
+            {
+                HashMap<String, String> postData = new HashMap<String, String>();
+                postData.put("auth_key",auth_key);
 
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
+                // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
 
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
+                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
 
-                    @Override
-                    public void run() {
-                        if (currentPage == NUM_PAGES) {
-                            currentPage = 0;
-                        }
-                        pager.setCurrentItem(currentPage++, true);
-                    }
-                });
             }
-        }, 500, 3000);
-       //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
+            pager = (ViewPager) rootView.findViewById(R.id.pager);
+            indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
+        }
 
 
 
@@ -205,6 +187,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
             {
                 JSONArray gallery = object.getJSONArray("gallery");
                 gallery_image =new String[gallery.length()];
+                NUM_PAGES = gallery.length();
 
                 for (int i = 0; i <gallery.length() ; i++) {
                     JSONObject galleryDetails = gallery.getJSONObject(i);
@@ -219,6 +202,34 @@ public class HomeFragment extends Fragment implements AsyncResponse {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        pager.setAdapter(new ImageAdapter((getActivity())));
+
+        //viewpager.setAdapter(mPageAdapter);
+         indicator.setViewPager(pager);
+
+
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+
+                    @Override
+                    public void run() {
+                        if (currentPage == NUM_PAGES) {
+                            currentPage = 0;
+                        }
+                        pager.setCurrentItem(currentPage++, true);
+                    }
+                });
+            }
+        }, 500, 3000);
+        //pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
+
+
 
 
     }
@@ -227,7 +238,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
 
 
 
-        private String[] IMAGE_URLS = Constants.IMAGES;
+        private String[] IMAGE_URLS = gallery_image;
 
         private LayoutInflater inflater;
         private DisplayImageOptions options;

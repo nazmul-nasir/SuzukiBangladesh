@@ -22,6 +22,8 @@ android {
 
 allprojects {
     repositories {
+
+        mavenCentral()
         jcenter()
     }
 }
@@ -38,8 +40,10 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.vlonjatg.android:app-tour:1.0'
     compile 'com.android.support:support-v4:23.3.0'
+    compile 'me.relex:circleindicator:1.2.0@aar'
 
     //added start by momen
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 }

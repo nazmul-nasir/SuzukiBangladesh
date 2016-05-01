@@ -16,6 +16,18 @@ public class APIFactory {
 
 		return nameValuePairs;
 	}
+	public ArrayList<NameValuePair> getQuizResultInfo(String auth_key,String user_id,String quiz_id, String quiz_answer)
+	{
+
+		nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("auth_key", auth_key));
+		nameValuePairs.add(new BasicNameValuePair("user_id", user_id));
+		nameValuePairs.add(new BasicNameValuePair("quiz_id", quiz_id));
+		nameValuePairs.add(new BasicNameValuePair("quiz_answer", quiz_answer));
+
+
+		return nameValuePairs;
+	}
 
 	public ArrayList<NameValuePair> getSparePartsListInfo(String auth_key)
 	{

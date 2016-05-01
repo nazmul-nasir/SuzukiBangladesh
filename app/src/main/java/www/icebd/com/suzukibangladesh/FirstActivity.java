@@ -1,11 +1,12 @@
 package www.icebd.com.suzukibangladesh;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -17,24 +18,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
@@ -46,7 +40,7 @@ import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.reg.Login;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
 import www.icebd.com.suzukibangladesh.menu.Promotions;
-import www.icebd.com.suzukibangladesh.menu.Quiz;
+import www.icebd.com.suzukibangladesh.quiz.Quiz;
 import www.icebd.com.suzukibangladesh.request.RequestServices;
 import www.icebd.com.suzukibangladesh.menu.SOS;
 import www.icebd.com.suzukibangladesh.menu.SocialMedia;
@@ -203,10 +197,28 @@ public class FirstActivity extends AppCompatActivity
                 fragment = new SOS().newInstance();
                 break;
             case 8:
-                fragment = new InviteFriends().newInstance();
+                //fragment = new InviteFriends().newInstance();
+                try {
+                    String shareBody = "Find Suzuki Bangladesh at:\n"+getResources().getString(R.string.facebook_page_address);
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                    startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
+
+
+                }catch(Exception e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+                }
                 break;
             case 9:
-                fragment = new SocialMedia().newInstance();
+                //fragment = new SocialMedia().newInstance();
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.facebook_page_address)));
+                    startActivity(intent);
+                } catch(Exception e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+                }
                 break;
             case 10:
                 fragment = new ChangePassword().newInstance();
