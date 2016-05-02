@@ -22,6 +22,7 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 
 public class Quotation extends Fragment implements AsyncResponse, View.OnClickListener {
@@ -123,7 +124,7 @@ public class Quotation extends Fragment implements AsyncResponse, View.OnClickLi
 
 
         PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-        loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/reqQuotation");
+        loginTask.execute(ConnectionManager.SERVER_URL+"reqQuotation");
 
     }
 }

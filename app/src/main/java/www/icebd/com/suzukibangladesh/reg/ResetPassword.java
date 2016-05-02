@@ -29,6 +29,7 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 
 public class ResetPassword extends Fragment implements View.OnClickListener, AsyncResponse {
@@ -86,7 +87,7 @@ public class ResetPassword extends Fragment implements View.OnClickListener, Asy
                 postData.put("user_email",email.getText().toString());
                 postData.put("user_id", user_id);
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(ResetPassword.this,postData);
-                loginTask.execute( "http://icebd.com/suzuki/suzukiApi/Server/forgetPassword");
+                loginTask.execute(ConnectionManager.SERVER_URL+"forgetPassword");
 
             }
 

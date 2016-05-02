@@ -51,6 +51,7 @@ import www.icebd.com.suzukibangladesh.reg.Logout;
 import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
 import www.icebd.com.suzukibangladesh.request.Quotation;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.DrawerItemCustomAdapter;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 import www.icebd.com.suzukibangladesh.utilities.ObjectDrawerItem;
@@ -152,7 +153,7 @@ public class FirstActivity extends AppCompatActivity
             postData.put("platform","1");
             if(isNetworkAvailable()) {
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
-                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getAuthKey");
+                loginTask.execute(ConnectionManager.SERVER_URL+"getAuthKey");
             }
             else
             {

@@ -268,7 +268,7 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
                     } else
                     {
                         System.out.println("data return : " + returnJsonData);
-                        Toast.makeText(getActivity(), "Data Not Found !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Request Data Not Found, Please Try Again !", Toast.LENGTH_SHORT).show();
                         listView.setVisibility(View.GONE);
                         no_spare_parts_item.setVisibility(View.VISIBLE);
                     }

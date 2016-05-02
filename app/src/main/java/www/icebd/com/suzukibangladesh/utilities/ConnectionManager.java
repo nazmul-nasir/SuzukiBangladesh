@@ -33,7 +33,7 @@ import android.util.Log;
 
 public class ConnectionManager {
 	
-	private static String SERVER_URL = "http://icebd.com/suzuki/suzukiApi/server/";
+	public static String SERVER_URL = "http://icebd.com/suzuki/suzukiApi/server/";
 
 	private static String response = null;
 	private final static int GETRequest = 1;

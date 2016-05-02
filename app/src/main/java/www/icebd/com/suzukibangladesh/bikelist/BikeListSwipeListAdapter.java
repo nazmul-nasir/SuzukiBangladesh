@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -151,9 +152,10 @@ public class BikeListSwipeListAdapter extends BaseAdapter
                 Bundle bundle = new Bundle();
                 bundle.putInt( "bike_id", Integer.parseInt( bikeList.get(position).getBike_id()) );
                 fragmentBikeDetails.setArguments(bundle);
-                FragmentManager fragmentManager = myBikeFragment.getChildFragmentManager();
+                FragmentManager fragmentManager = myBikeFragment.getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragmentBikeDetails);
+
                 fragmentTransaction.commit();
                 //myBikeFragment.goBikeDetails(Integer.parseInt( bikeList.get(position).getBike_id()));
             }

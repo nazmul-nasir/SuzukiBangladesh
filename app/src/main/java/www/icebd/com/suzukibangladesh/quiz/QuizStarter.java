@@ -2,6 +2,8 @@ package www.icebd.com.suzukibangladesh.quiz;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 public class QuizStarter extends Activity implements AsyncResponse {
 
@@ -48,10 +51,19 @@ public class QuizStarter extends Activity implements AsyncResponse {
     String start;
     String question[]=new String[20] ,questionId[]=new String[20],op1[]=new String[20],op2[]=new String[20],op3[]=new String[20],op4[]=new String[20],opId1[]=new String[20],opId2[]=new String[20],opId3[]=new String[20],opId4[]=new String[20];
 
+    Context context;
+
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_quiz);
+
+        context = getApplicationContext();
+        pref = context.getSharedPreferences("SuzukiBangladeshPref", context.MODE_PRIVATE);
+        editor = pref.edit();
 
         txtQuestion=(TextView)findViewById(R.id.textView1);
         txtTitle=(TextView)findViewById(R.id.textView);
@@ -69,11 +81,12 @@ public class QuizStarter extends Activity implements AsyncResponse {
             postData.put("blood_group",blood_group);
             postData.put("longitude",Double.toString(longitude));
             postData.put("latitude",Double.toString(latitude));*/
+        String auth_key = pref.getString("auth_key",null);
+        postData.put("auth_key",auth_key);
         postData.put("auth_key","3c227bbba98cd9360006d095558d09a9");
 
-          /*  PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getquizDetail");*/
-
+          /*PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+            loginTask.execute(ConnectionManager.SERVER_URL+"getquizDetail");*/
 
         //showQuizes();
 

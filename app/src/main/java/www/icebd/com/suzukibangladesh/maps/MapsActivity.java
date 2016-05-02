@@ -35,6 +35,7 @@ import www.icebd.com.suzukibangladesh.app.GPSTracker;
 import www.icebd.com.suzukibangladesh.app.LatLong;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 
 public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncResponse {
@@ -72,7 +73,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
             if (isNetworkAvailable()) {
 
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getLocation");
+                loginTask.execute(ConnectionManager.SERVER_URL+"getLocation");
             }
 
         }

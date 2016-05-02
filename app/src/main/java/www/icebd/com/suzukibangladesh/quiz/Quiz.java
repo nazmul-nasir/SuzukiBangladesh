@@ -119,7 +119,7 @@ public class Quiz extends Fragment implements AsyncResponse, View.OnClickListene
             postData.put("auth_key",auth_key);
 
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getquizDetail");
+            loginTask.execute(ConnectionManager.SERVER_URL+"getquizDetail");
 
         }
         else

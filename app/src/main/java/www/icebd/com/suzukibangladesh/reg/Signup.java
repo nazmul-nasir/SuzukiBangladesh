@@ -36,6 +36,7 @@ import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 /**
  * Created by Nasir on 11/11/2015.
@@ -123,7 +124,7 @@ public class Signup extends Fragment implements View.OnClickListener, AsyncRespo
             editor.commit();*/
 
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/registerUser");
+            loginTask.execute(ConnectionManager.SERVER_URL+"registerUser");
 
         }
         else {

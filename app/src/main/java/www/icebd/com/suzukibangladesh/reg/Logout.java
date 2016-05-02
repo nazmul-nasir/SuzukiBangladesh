@@ -25,6 +25,7 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 
 public class Logout extends Fragment implements View.OnClickListener, AsyncResponse {
@@ -85,7 +86,7 @@ public class Logout extends Fragment implements View.OnClickListener, AsyncRespo
                 postData.put("user_id",user_id);
 
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/logout");
+                loginTask.execute(ConnectionManager.SERVER_URL+"logout");
 
             }
 

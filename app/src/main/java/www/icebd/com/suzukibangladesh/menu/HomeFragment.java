@@ -48,6 +48,7 @@ import www.icebd.com.suzukibangladesh.app.Constants;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.notification.MainActivity;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.Constant;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
@@ -158,7 +159,7 @@ public class HomeFragment extends Fragment implements AsyncResponse {
                 // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
 
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-                loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getGallery");
+                loginTask.execute(ConnectionManager.SERVER_URL+"getGallery");
 
             }
             pager = (ViewPager) rootView.findViewById(R.id.pager);

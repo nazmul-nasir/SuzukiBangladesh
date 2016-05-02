@@ -29,6 +29,7 @@ import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
@@ -98,7 +99,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
         {
             postData.put("auth_key",auth_key);
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeList");
+            loginTask.execute(ConnectionManager.SERVER_URL+"getBikeList");
 
         }
         else
@@ -300,7 +301,7 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
 
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/reqService");
+            loginTask.execute(ConnectionManager.SERVER_URL+"reqService");
 
         }
         else

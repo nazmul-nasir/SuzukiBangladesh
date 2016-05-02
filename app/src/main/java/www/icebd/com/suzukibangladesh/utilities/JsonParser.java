@@ -76,7 +76,6 @@ public class JsonParser
 		{
 			jsonResponse = new JSONObject(jsonData);
 			BikeList obj_bikeList = new BikeList();
-			jarray = jsonResponse.getJSONArray("bikeList");
 
 			boolean status = jsonResponse.getBoolean("status");
 			obj_bikeList.setStatus(status);
@@ -85,29 +84,38 @@ public class JsonParser
 			int status_code = jsonResponse.getInt("status_code");
 			obj_bikeList.setStatus_code(status_code);
 
-			for (int i=0; i < jarray.length(); i++)
+			if(status == false)
 			{
-
-				jsonResponse = jarray.getJSONObject(i);
-				BikeList.BikeItem obj_bikeItem = obj_bikeList.new BikeItem();
-
-				bike_code = jsonResponse.getString("bike_code");
-				obj_bikeItem.setBike_code(bike_code);
-				bike_id = jsonResponse.getString("bike_id");
-				obj_bikeItem.setBike_id(bike_id);
-				bike_name = jsonResponse.getString("bike_name");
-				obj_bikeItem.setBike_name(bike_name);
-				bike_cc = jsonResponse.getString("bike_cc");
-				obj_bikeItem.setBike_cc(bike_cc);
-				bike_mileage = jsonResponse.getString("bike_mileage");
-				obj_bikeItem.setBike_mileage(bike_mileage);
-				thumble_img = jsonResponse.getString("thumble_img");
-				obj_bikeItem.setThumble_img(thumble_img);
-
-				arrBikeItem.add(obj_bikeItem);
+				arrBikeList = null;
 			}
-			obj_bikeList.setBikeItemsList(arrBikeItem);// set bike items to array list
-			arrBikeList.add(obj_bikeList);
+			else
+			{
+				jarray = jsonResponse.getJSONArray("bikeList");
+
+				for (int i = 0; i < jarray.length(); i++)
+				{
+
+					jsonResponse = jarray.getJSONObject(i);
+					BikeList.BikeItem obj_bikeItem = obj_bikeList.new BikeItem();
+
+					bike_code = jsonResponse.getString("bike_code");
+					obj_bikeItem.setBike_code(bike_code);
+					bike_id = jsonResponse.getString("bike_id");
+					obj_bikeItem.setBike_id(bike_id);
+					bike_name = jsonResponse.getString("bike_name");
+					obj_bikeItem.setBike_name(bike_name);
+					bike_cc = jsonResponse.getString("bike_cc");
+					obj_bikeItem.setBike_cc(bike_cc);
+					bike_mileage = jsonResponse.getString("bike_mileage");
+					obj_bikeItem.setBike_mileage(bike_mileage);
+					thumble_img = jsonResponse.getString("thumble_img");
+					obj_bikeItem.setThumble_img(thumble_img);
+
+					arrBikeItem.add(obj_bikeItem);
+				}
+				obj_bikeList.setBikeItemsList(arrBikeItem);// set bike items to array list
+				arrBikeList.add(obj_bikeList);
+			}
 		}
 		catch(JSONException e)
 		{
@@ -157,6 +165,10 @@ public class JsonParser
 			SparePartsListObject obj_sparePartsList = new SparePartsListObject();
 			boolean status = jsonResponse.getBoolean("status");
 			obj_sparePartsList.setStatus(status);
+			String message = jsonResponse.getString("message");
+			obj_sparePartsList.setMessage(message);
+			int status_code = jsonResponse.getInt("status_code");
+			obj_sparePartsList.setStatus_code(status_code);
 			if(status == false)
 			{
 				arrSparePartsList = null;
@@ -164,12 +176,6 @@ public class JsonParser
 			else
 			{
 				jarray = jsonResponse.getJSONArray("spare");
-
-
-				String message = jsonResponse.getString("message");
-				obj_sparePartsList.setMessage(message);
-				int status_code = jsonResponse.getInt("status_code");
-				obj_sparePartsList.setStatus_code(status_code);
 
 				for (int i = 0; i < jarray.length(); i++)
 				{

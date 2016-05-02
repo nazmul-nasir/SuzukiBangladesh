@@ -42,6 +42,7 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.app.Constants;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
@@ -88,7 +89,7 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
         {
             postData.put("auth_key",auth_key);
             PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeList");
+            loginTask.execute(ConnectionManager.SERVER_URL+"getBikeList");
 
         }
         else
@@ -140,7 +141,8 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
                 }
                 bikeID_cc =string;
 //                String dropdownstr = "Model" +string;
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, string);
+                //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, string);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, string);
                 dropdown_bike_name.setAdapter(adapter);
 
 

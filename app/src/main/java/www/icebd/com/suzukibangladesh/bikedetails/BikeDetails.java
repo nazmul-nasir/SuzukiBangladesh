@@ -2,6 +2,8 @@ package www.icebd.com.suzukibangladesh.bikedetails;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,10 +28,16 @@ import java.util.HashMap;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
 public class BikeDetails extends Fragment implements AsyncResponse {
     TableLayout tableLayout;
     TextView bike_name_tv;
+
+    Context context;
+
+    SharedPreferences pref ;
+    SharedPreferences.Editor editor;
 
     public static BikeDetails newInstance() {
         BikeDetails fragment = new BikeDetails();
@@ -43,6 +52,11 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.change_password, container,
                 false);
+
+        context = getActivity().getApplicationContext();
+        pref = context.getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+
         Bundle bundle = new Bundle();
         int bike_id = bundle.getInt("bike_id");
 
@@ -51,11 +65,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
         HashMap<String, String> postData = new HashMap<String, String>();
 
-        postData.put("auth_key","3c227bbba98cd9360006d095558d09a9");
+        String auth_key = pref.getString("auth_key",null);
+        postData.put("auth_key",auth_key);
         postData.put("bike_id",String.valueOf(bike_id));
 
         PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-        loginTask.execute("http://icebd.com/suzuki/suzukiApi/Server/getBikeDetail");
+        loginTask.execute(ConnectionManager.SERVER_URL+"getBikeDetail");
 
 
 
@@ -76,11 +91,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             JSONObject object = new JSONObject(output);
             String message = object.getString("message");
             String auth_key = object.getString("auth_key");
+            boolean status = object.getBoolean("status");
 
-            JSONObject bikeDetails = object.getJSONObject("bikeDetails");
-
-            if(message.equals("Success"))
+            //if(message.equals("Success"))
+            if( status == true)
             {
+                JSONObject bikeDetails = object.getJSONObject("bikeDetails");
                 JSONArray basic = bikeDetails.getJSONArray("basic");
                 JSONObject basicObject = basic.getJSONObject(0);
                 String bike_code = basicObject.getString("bike_code");
@@ -445,8 +461,10 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 space7.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space7);
 
-
-
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Data Not Found !", Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

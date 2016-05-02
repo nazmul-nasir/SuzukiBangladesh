@@ -189,7 +189,6 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 try
                 {
                     //finish();
-
                     if (returnJsonData.size() > 0 && returnJsonData != null && returnJsonData.get(0).isStatus() == true )
                     {
                         //preferenceUtil.setPINstatus(1);
@@ -203,7 +202,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     } else
                     {
                         System.out.println("data return : " + returnJsonData);
-                        Toast.makeText(getActivity(), returnJsonData.get(0).getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Request Data Not Found, Please Try Again !", Toast.LENGTH_SHORT).show();
                         listView.setVisibility(View.GONE);
                         no_bike_item.setVisibility(View.VISIBLE);
                     }
@@ -215,8 +214,8 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     Log.e("APITask data error :", ex.getMessage());
                 }
             }
-            else {
-
+            else
+            {
                 customDialog.alertDialog("ERROR", result);
             }
         }
