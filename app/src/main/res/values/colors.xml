@@ -17,5 +17,6 @@
     <color name="spare_parts_bg">#F8F8F8</color>
     <color name="spare_parts_line_col">#F1F0F1</color>
     <color name="spare_parts_row_border_color">#E1E1E1</color>
+    <color name="home_mybike_bd_color">#CC4A4A4A</color>
 
 </resources>

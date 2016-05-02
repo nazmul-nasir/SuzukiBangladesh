@@ -222,7 +222,7 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
             FilterResults result = new FilterResults();
 
             SparePartsListObject obj_sparePartsList = new SparePartsListObject();
-            List<SparePartsListObject.SparePartsItem> filterItems = listSparePartsItemSearch;
+            List<SparePartsListObject.SparePartsItem> filterItems = new ArrayList<SparePartsListObject.SparePartsItem>();
 
             try
             {
