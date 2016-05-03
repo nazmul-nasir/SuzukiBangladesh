@@ -66,6 +66,17 @@ public class RequestServices extends Fragment implements AsyncResponse, View.OnC
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
+
+        if(pref.getString("is_login","0").equals("1"))
+        {
+            //do nothing
+        }
+        else {
+            Toast.makeText(getActivity(),"Please Login",Toast.LENGTH_LONG).show();
+
+            ((FirstActivity)getActivity()).selectItem(11);
+        }
+
         Typeface iconFont = FontManager.getTypeface(getActivity().getApplicationContext(), FontManager.FONTAWESOME);
         text_right = (TextView) rootView.findViewById(R.id.txt_email_right);
         text_right.setTypeface(iconFont);

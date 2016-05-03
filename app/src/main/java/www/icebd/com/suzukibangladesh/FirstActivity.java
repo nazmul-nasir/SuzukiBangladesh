@@ -3,6 +3,7 @@ package www.icebd.com.suzukibangladesh;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -201,7 +202,13 @@ public class FirstActivity extends AppCompatActivity
             case 8:
                 //fragment = new InviteFriends().newInstance();
                 try {
-                    String shareBody = "Find Suzuki Bangladesh at:\n"+getResources().getString(R.string.facebook_page_address);
+                    String shareBody = "Welcome to Suzuki Bangladesh Official Mobile App\n" +
+                            "\n" +
+                            "google play link\n" +
+                            "\n" +
+                            "appstore link\n" +
+                            "\n" +
+                            "fb link:\n"+getResources().getString(R.string.facebook_page_address);
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
@@ -215,11 +222,27 @@ public class FirstActivity extends AppCompatActivity
                 break;
             case 9:
                 //fragment = new SocialMedia().newInstance();
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.facebook_page_address)));
-                    startActivity(intent);
-                } catch(Exception e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+                boolean installed  =   appInstalledOrNot("com.facebook.katana");
+                if(installed)
+                {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.getString(R.string.facebook_page_address)));
+                        intent.setPackage("com.facebook.katana");
+                        startActivity(intent);
+                    } catch(Exception e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+                    }
+
+
+                }
+                else
+                {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.getString(R.string.facebook_page_address)));
+                        startActivity(intent);
+                    } catch(Exception e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+                    }
                 }
                 break;
             case 10:
@@ -407,6 +430,22 @@ public class FirstActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean appInstalledOrNot(String uri)
+    {
+        PackageManager pm = this.getPackageManager();
+        boolean app_installed = false;
+        try
+        {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            app_installed = false;
+        }
+        return app_installed ;
     }
 
 
