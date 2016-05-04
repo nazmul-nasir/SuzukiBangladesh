@@ -50,7 +50,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.change_password, container,
+        View rootView = inflater.inflate(R.layout.fragment_bike_details, container,
                 false);
 
         context = getActivity().getApplicationContext();

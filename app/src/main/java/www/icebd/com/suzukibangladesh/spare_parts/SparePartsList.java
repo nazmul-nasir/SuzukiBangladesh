@@ -152,14 +152,14 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                System.out.println("Text ["+s+"]");
-                sparePartsListSwipeListAdapter.getFilter().filter(s.toString());
+
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
-
+                System.out.println("Text ["+s+"]");
+                sparePartsListSwipeListAdapter.getFilter().filter(s.toString());
             }
         });
 

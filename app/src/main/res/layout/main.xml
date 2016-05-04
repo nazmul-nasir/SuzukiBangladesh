@@ -21,17 +21,27 @@
         android:background="#8033b5e5"
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_main_drawer" /-->
+    <!--TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txtSuzuki"
+        android:gravity="left"
+        android:text="@string/txt_suzuki"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        /-->
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/menu_bg"
+        android:background="@color/home_mybike_bg_color"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />

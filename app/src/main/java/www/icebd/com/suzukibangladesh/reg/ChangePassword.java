@@ -12,8 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,7 +55,7 @@ public class ChangePassword extends Fragment implements View.OnClickListener, As
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.change_password, container,
                 false);
-
+        setupUI(rootView.findViewById(R.id.parentChangePass));
 
         oldPassword = (EditText) rootView.findViewById(R.id.old_password);
         newPassword = (EditText) rootView.findViewById(R.id.new_password);
@@ -68,7 +70,36 @@ public class ChangePassword extends Fragment implements View.OnClickListener, As
         return rootView;
     }
 
+    public void setupUI(View view) {
 
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(getActivity());
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+    private void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
     @Override
     public void onClick(View v) {

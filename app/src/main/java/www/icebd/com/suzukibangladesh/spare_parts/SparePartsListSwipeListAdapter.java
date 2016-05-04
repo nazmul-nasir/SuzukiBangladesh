@@ -40,7 +40,7 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
 {
     //private Activity activity;
     private LayoutInflater inflater;
-    private List<SparePartsListObject.SparePartsItem> listSparePartsItem;
+    private List<SparePartsListObject.SparePartsItem> listSparePartsItem = null;
     private List<SparePartsListObject.SparePartsItem> listSparePartsItemSearch;
     private String[] bgColors;
     public ImageLoader imageLoader = null;
@@ -56,7 +56,8 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
     public SparePartsListSwipeListAdapter(Context context, List<SparePartsListObject.SparePartsItem> listSparePartsItem, SparePartsList sparePartsListFragment) {
         this.context = context;
         this.listSparePartsItem = listSparePartsItem;
-        this.listSparePartsItemSearch = listSparePartsItem;
+        this.listSparePartsItemSearch = new ArrayList<SparePartsListObject.SparePartsItem>();
+        this.listSparePartsItemSearch.addAll(listSparePartsItem);
         this.sparePartsListFragment = sparePartsListFragment;
         mInflater = LayoutInflater.from(context);
         //bgColors = activity.getApplicationContext().getResources().getStringArray(R.array.movie_serial_bg);
@@ -217,20 +218,16 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-            String filterString = constraint.toString().toLowerCase();
-
+            /*String filterString = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
-
             SparePartsListObject obj_sparePartsList = new SparePartsListObject();
             List<SparePartsListObject.SparePartsItem> filterItems = new ArrayList<SparePartsListObject.SparePartsItem>();
-
             try
             {
                 //int count = list.size();
                 //final ArrayList<String> nlist = new ArrayList<String>(count);
                 if (constraint != null && constraint.toString().length() > 0)
                 {
-
                     String filterableString;
                     synchronized (this)
                     {
@@ -263,6 +260,28 @@ public class SparePartsListSwipeListAdapter extends BaseAdapter implements Filte
                 ex.printStackTrace();
                 Log.e("search-err: ", ex.getMessage());
             }
+            return result;*/
+            FilterResults result = new FilterResults();
+            constraint = constraint.toString().toLowerCase();
+            listSparePartsItem.clear();
+            if (constraint.length() == 0) {
+                listSparePartsItem.addAll(listSparePartsItemSearch);
+            }
+            else
+            {
+                for (SparePartsListObject.SparePartsItem spi : listSparePartsItemSearch)
+                {
+
+                    //SparePartsListObject.SparePartsItem obj_sparePartsItem = listSparePartsItem.get(i);
+                    if (spi.getSpare_parts_name().toLowerCase().contains(constraint))
+                    {
+                        listSparePartsItem.add(spi);
+                    }
+                }
+            }
+            result.count = listSparePartsItem.size();
+            result.values = listSparePartsItem;
+
             return result;
         }
 

@@ -144,7 +144,7 @@ public class BikeListSwipeListAdapter extends BaseAdapter
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                //Toast.makeText(context, "You Clicked "+bikeList.get(position).getBike_id(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked "+bikeList.get(position).getBike_id(), Toast.LENGTH_LONG).show();
 
                 //MyBikeFragment fa = (MyBikeFragment) context.getSupportFragmentManager().findFragmentById(R.id.container);
                 //MyBikeFragment fa = new MyBikeFragment();

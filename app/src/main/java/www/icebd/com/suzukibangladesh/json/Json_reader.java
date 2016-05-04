@@ -26,8 +26,8 @@ public class Json_reader extends Activity implements AsyncResponse {
         postData.put("notification_key","4");
         postData.put("platform","2");*/
 
-        postData.put("auth_key","eebc982aeafbfd31c93914150a67b606");
-        postData.put("bike_id","27");
+        //postData.put("auth_key","eebc982aeafbfd31c93914150a67b606");
+        //postData.put("bike_id","27");
 
        /* PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData );
         //loginTask.execute("http://icebd.com/suzuki/suzukiApi/server/getAuthKey");

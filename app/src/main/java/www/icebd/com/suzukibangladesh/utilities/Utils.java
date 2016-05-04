@@ -9,6 +9,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,11 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.text.Spannable;
 import android.text.style.URLSpan;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class Utils {
@@ -158,4 +164,5 @@ public class Utils {
 
 	    return output;
 	}
+
 }

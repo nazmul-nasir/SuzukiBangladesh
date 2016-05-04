@@ -3,6 +3,7 @@ package www.icebd.com.suzukibangladesh;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -135,7 +136,7 @@ public class FirstActivity extends AppCompatActivity
 
         String auth_key = pref.getString("auth_key",null);
         String notification_key = pref.getString("gcm_registration_token",null);
-      //  Log.i("Test","GCM registration token :"+notification_key);
+        Log.i("Test","GCM registration token :"+notification_key);
 
         if (auth_key==null)
         {
@@ -145,8 +146,8 @@ public class FirstActivity extends AppCompatActivity
                     Settings.Secure.ANDROID_ID);
 
             Log.i("Test","Android ID : "+android_id);
-        Log.i("Test","Notification key : "+notification_key);
-        //Log.i("Test","Auth_key : "+auth_key);
+            Log.i("Test","Notification key : "+notification_key);
+            //Log.i("Test","Auth_key : "+auth_key);
 
             postData.put("unique_device_id",android_id);
             postData.put("notification_key", notification_key);
@@ -215,12 +216,10 @@ public class FirstActivity extends AppCompatActivity
                 break;
             case 9:
                 //fragment = new SocialMedia().newInstance();
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.facebook_page_address)));
-                    startActivity(intent);
-                } catch(Exception e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
-                }
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = getFacebookPageURL(this);
+                facebookIntent.setData(Uri.parse(facebookUrl));
+                startActivity(facebookIntent);
                 break;
             case 10:
                 fragment = new ChangePassword().newInstance();
@@ -251,6 +250,27 @@ public class FirstActivity extends AppCompatActivity
         }
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //drawer.closeDrawer(GravityCompat.START);
+    }
+    public String getFacebookPageURL(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            packageManager.getPackageInfo("com.facebook.katana", 0);
+            System.out.println("facebook version code: "+versionCode);
+
+            return getResources().getString(R.string.facebook_url_schemes);
+            /*if (versionCode >= 3002850) { //newer versions of fb app
+                System.out.println("facebook new version");
+                return "fb://facewebmodal/f?href=" + getResources().getString(R.string.facebook_page_address);
+            } else { //older versions of fb app
+                System.out.println("facebook old version");
+                return getResources().getString(R.string.facebook_url_schemes);
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("err facebook: ",e.getMessage());
+            return getResources().getString(R.string.facebook_page_address); //normal web url
+        }
     }
 
     @Override

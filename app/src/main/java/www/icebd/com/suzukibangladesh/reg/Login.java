@@ -1,5 +1,6 @@
 package www.icebd.com.suzukibangladesh.reg;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,8 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
 
+    Context context;
+
     public static Login newInstance() {
         Login fragment = new Login();
         return fragment;
@@ -48,6 +53,8 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container,
                 false);
+        setupUI(rootView.findViewById(R.id.parentLogin));
+        context = getActivity().getApplicationContext();
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
@@ -86,6 +93,36 @@ public class Login extends Fragment implements View.OnClickListener, AsyncRespon
         button.setOnClickListener(this);
 
         return rootView;
+    }
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(getActivity());
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+    private void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override
