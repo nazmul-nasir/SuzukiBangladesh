@@ -61,14 +61,14 @@ public class Splash extends Activity {
                 editor.putString("running","no");
                 editor.apply();
                 Intent i;
-
-                if (notification_key==null)
+                i = new Intent(getBaseContext(), FirstActivity.class);
+                /*if (notification_key==null)
                 {
                     i = new Intent(getBaseContext(), MainActivity.class);
                 }
                 else {
                     i = new Intent(getBaseContext(), FirstActivity.class);
-                }
+                }*/
 
                 //
 

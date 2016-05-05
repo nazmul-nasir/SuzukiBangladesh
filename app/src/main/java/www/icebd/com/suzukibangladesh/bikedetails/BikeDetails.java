@@ -103,10 +103,15 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 String bike_id = basicObject.getString("bike_id");
                 String bike_name = basicObject.getString("bike_name");
                 String thumble_img = basicObject.getString("thumble_img");
+                String video_url = basicObject.getString("video_url");
 
 
                 if (bike_name != null) {
                     bike_name_tv.setText(bike_name);
+                }
+                if( ! video_url.equals(""))
+                {
+
                 }
 
 
