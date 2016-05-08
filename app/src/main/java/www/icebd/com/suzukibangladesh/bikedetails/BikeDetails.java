@@ -4,35 +4,66 @@ package www.icebd.com.suzukibangladesh.bikedetails;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 
+import static com.google.android.gms.internal.zzir.runOnUiThread;
+
 public class BikeDetails extends Fragment implements AsyncResponse {
     TableLayout tableLayout;
     TextView bike_name_tv;
+    WebView webView;
+
+    String gallery_image [];
+    int NUM_PAGES;
+    CircleIndicator indicator;
+    int  currentPage=0;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
+    ViewPager pager;
 
     Context context;
 
@@ -60,6 +91,9 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         Bundle bundle = this.getArguments();
         int bike_id = bundle.getInt("bike_id");
 
+
+        webView = (WebView)rootView.findViewById(R.id.help_webview);
+
         Log.i("Bike ID: ",String.valueOf(bike_id));
         tableLayout=(TableLayout)rootView.findViewById(R.id.main_table);
         bike_name_tv = (TextView)rootView.findViewById(R.id.bike_name);
@@ -72,6 +106,9 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
         PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
         loginTask.execute(ConnectionManager.SERVER_URL+"getBikeDetail");
+
+        pager = (ViewPager) rootView.findViewById(R.id.pager);
+        indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
 
 
 
@@ -99,6 +136,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             {
                 JSONObject bikeDetails = object.getJSONObject("bikeDetails");
                 JSONArray basic = bikeDetails.getJSONArray("basic");
+                JSONArray images = bikeDetails.getJSONArray("images");
                 JSONObject basicObject = basic.getJSONObject(0);
                 String bike_code = basicObject.getString("bike_code");
                 String bike_id = basicObject.getString("bike_id");
@@ -110,10 +148,28 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 if (bike_name != null) {
                     bike_name_tv.setText(bike_name);
                 }
-                if( ! video_url.equals(""))
-                {
+                if( ! video_url.equals("")) {
 
+                    Log.i("url", video_url);
+
+
+                    // webView.getSettings().setJavaScriptEnabled(true);
+                    // webView.setVisibility(View.VISIBLE);
+
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.getSettings().setDomStorageEnabled(true);
+                    webView.setWebChromeClient(new WebChromeClient() {
+                    });
+                    webView.loadUrl(video_url);
+
+                    WebSettings w = webView.getSettings();
+                    w.setPluginState(WebSettings.PluginState.ON);
                 }
+                
+                
+
+                
+                
 
 
                 JSONObject specification = bikeDetails.getJSONObject("specification");
@@ -467,6 +523,19 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 space7.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space7);
 
+
+                NUM_PAGES = images.length();
+                gallery_image =new String[NUM_PAGES];
+
+                for (int i = 0; i <images.length(); i++) {
+
+                    JSONObject imagesDetails = images.getJSONObject(i);
+                    gallery_image[i] =imagesDetails.getString("large_image_link");
+                    // gallery_image[i]=g_image;
+                    Log.i("Test large", gallery_image[i]);
+
+                }
+
             }
             else
             {
@@ -476,6 +545,110 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             e.printStackTrace();
         }
 
+        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 
+
+
+        pager.setAdapter(new ImageAdapter((getActivity())));
+
+
+
+    }
+
+    private class ImageAdapter extends PagerAdapter {
+
+
+
+        private String[] IMAGE_URLS = gallery_image;
+
+        private LayoutInflater inflater;
+        private DisplayImageOptions options;
+
+        ImageAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+
+            options = new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.ic_empty)
+                    .showImageOnFail(R.drawable.ic_error)
+                    .resetViewBeforeLoading(true)
+                    .cacheOnDisk(true)
+                    .imageScaleType(ImageScaleType.EXACTLY)
+                    .bitmapConfig(Bitmap.Config.RGB_565)
+                    .considerExifParams(true)
+                    .displayer(new FadeInBitmapDisplayer(300))
+                    .build();
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        @Override
+        public int getCount() {
+            return IMAGE_URLS.length;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup view, int position) {
+            View imageLayout = inflater.inflate(R.layout.item_pager_image_bikedetails, view, false);
+            assert imageLayout != null;
+            ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+            final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
+
+            ImageLoader.getInstance().displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    spinner.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    String message = null;
+                    switch (failReason.getType()) {
+                        case IO_ERROR:
+                            message = "Input/Output error";
+                            break;
+                        case DECODING_ERROR:
+                            message = "Image can't be decoded";
+                            break;
+                        case NETWORK_DENIED:
+                            message = "Downloads are denied";
+                            break;
+                        case OUT_OF_MEMORY:
+                            message = "Out Of Memory error";
+                            break;
+                        case UNKNOWN:
+                            message = "Unknown error";
+                            break;
+                    }
+                    Toast.makeText(view.getContext(), message, Toast.LENGTH_SHORT).show();
+
+                    spinner.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    spinner.setVisibility(View.GONE);
+                }
+            });
+
+            view.addView(imageLayout, 0);
+            return imageLayout;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+        }
+
+        @Override
+        public Parcelable saveState() {
+            return null;
+        }
     }
 }

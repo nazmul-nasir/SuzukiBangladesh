@@ -45,18 +45,28 @@
 
             </TableLayout>
 
-            <TextView
-
-                android:text="Image"
+            <RelativeLayout
                 android:layout_height="130dp"
                 android:gravity="bottom|center"
-                android:layout_weight="6"
+                android:layout_weight="6">
 
-                />
+
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pager"
+                    >
+
+
+                </android.support.v4.view.ViewPager>
+
+            </RelativeLayout>
             <Button
                 android:text="Get A Quote"
                 android:background="@android:color/transparent"
                 android:layout_weight="2"
+                android:gravity="bottom|center"
+                android:layout_gravity="bottom"
                 android:layout_marginRight="10dp"
                 />
         </TableRow>
@@ -64,6 +74,15 @@
         <View
             android:layout_height="5dp"
             android:background="#FFFFFF" />
+
+        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/help_webview"
+
+
+
+            />
+
 
     </TableLayout>
 </ScrollView>
