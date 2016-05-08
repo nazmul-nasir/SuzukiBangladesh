@@ -82,9 +82,7 @@ public class FirstActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 5000;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private boolean isReceiverRegistered;
+
 
 
     @Override
@@ -144,62 +142,9 @@ public class FirstActivity extends AppCompatActivity
         });
 
         //Select home by default
-        //selectItem(0);
 
-        String notification_key = pref.getString("gcm_registration_token",null);
-        if(notification_key == null)
-        {
-            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
 
-                    // Toast.makeText(this,"Received Notification ",Toast.LENGTH_LONG).show();
-                    Toast.makeText(FirstActivity.this, "Received Notification ", Toast.LENGTH_LONG).show();
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    SharedPreferences sharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean sentToken = sharedPreferences
-                            .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                    /*if (sentToken) {
-                        mInformationTextView.setText(getString(R.string.gcm_send_message));
 
-                    } else {
-                        mInformationTextView.setText(getString(R.string.token_error_message));
-                    }*/
-
-              /*  Intent intent1 = new Intent(context.getApplicationContext(), FirstActivity.class);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startService(intent1);*/
-
-                   /* Intent i = new Intent();
-                    i.setClassName("www.icebd.com.suzukibangladesh", "www.icebd.com.suzukibangladesh.FirstActivity");
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);*/
-
-                    Log.i("Test", "I am from onReceive end");
-                }
-            };
-        }
-        /*else
-        {
-            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-
-                    // Toast.makeText(this,"Received Notification ",Toast.LENGTH_LONG).show();
-                    Toast.makeText(FirstActivity.this, "Received Notification ", Toast.LENGTH_LONG).show();
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    SharedPreferences sharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean sentToken = sharedPreferences
-                            .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-
-                    Log.i("Test", "I am from onReceive end");
-                }
-            };
-        }*/
-        // Registering BroadcastReceiver
-        registerReceiver();
 
         String auth_key = pref.getString("auth_key",null);
         //String notification_key = pref.getString("gcm_registration_token",null);
@@ -229,52 +174,16 @@ public class FirstActivity extends AppCompatActivity
             }
 
         }
+        else
+        {
+            selectItem(0);
+        }
 
     /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String uid = telephonyManager.getDeviceId();
         Log.i("Test",uid);*/
 
 
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver();
-    }
-
-    @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        isReceiverRegistered = false;
-        super.onPause();
-    }
-
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
-        }
-    }
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                //Log.i(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
     public void selectItem(int position) {
