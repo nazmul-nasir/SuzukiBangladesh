@@ -57,9 +57,10 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         pref = context.getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
 
-        Bundle bundle = new Bundle();
+        Bundle bundle = this.getArguments();
         int bike_id = bundle.getInt("bike_id");
 
+        Log.i("Bike ID: ",String.valueOf(bike_id));
         tableLayout=(TableLayout)rootView.findViewById(R.id.main_table);
         bike_name_tv = (TextView)rootView.findViewById(R.id.bike_name);
 
@@ -79,7 +80,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
     @Override
     public void processFinish(String output) {
-        //  Log.i("Test","output : "+output);
+        Log.i("Test","output : "+output);
 
         TableRow row = new TableRow(getActivity());
         row.setLayoutParams(new TableRow.LayoutParams(300,

@@ -2,17 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="www.icebd.com.suzukibangladesh">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Google Services requires a Google account -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+
     <permission
-        android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:name=".permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+    <uses-permission android:name=".permission.C2D_MESSAGE" />
+    <!--permission
+        android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" /-->
 
 
     <!--
@@ -21,6 +30,8 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
 
     <application
         android:allowBackup="true"
@@ -60,16 +71,6 @@
 
         </activity>
 
-        <service
-            android:name=".notification.RegistrationIntentService"
-            android:exported="false" />
-        <service
-            android:name=".notification.MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -77,8 +78,9 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.codepath.gcmquickstart" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="www.icebd.com.suzukibangladesh" />
             </intent-filter>
         </receiver>
 
@@ -87,6 +89,16 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".notification.RegistrationIntentService"
+            android:exported="false" />
+        <service
+            android:name=".notification.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
 

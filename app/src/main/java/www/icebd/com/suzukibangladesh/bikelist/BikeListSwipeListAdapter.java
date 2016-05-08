@@ -148,14 +148,14 @@ public class BikeListSwipeListAdapter extends BaseAdapter
 
                 //MyBikeFragment fa = (MyBikeFragment) context.getSupportFragmentManager().findFragmentById(R.id.container);
                 //MyBikeFragment fa = new MyBikeFragment();
+                FragmentManager fragmentManager = myBikeFragment.getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
                 BikeDetails fragmentBikeDetails = new BikeDetails();
                 Bundle bundle = new Bundle();
                 bundle.putInt( "bike_id", Integer.parseInt( bikeList.get(position).getBike_id()) );
                 fragmentBikeDetails.setArguments(bundle);
-                FragmentManager fragmentManager = myBikeFragment.getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragmentBikeDetails);
-
                 fragmentTransaction.commit();
                 //myBikeFragment.goBikeDetails(Integer.parseInt( bikeList.get(position).getBike_id()));
             }
