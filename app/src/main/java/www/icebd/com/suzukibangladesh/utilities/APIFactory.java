@@ -36,6 +36,13 @@ public class APIFactory {
 
 		return nameValuePairs;
 	}
+	public ArrayList<NameValuePair> getMediaInfo(String auth_key)
+	{
+		nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("auth_key", auth_key));
+
+		return nameValuePairs;
+	}
 
 
 

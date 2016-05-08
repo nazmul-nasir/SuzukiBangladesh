@@ -27,14 +27,14 @@ public class InviteFriends extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_invite_friends, container,
                 false);
 
-
+        MediaLink mediaLink = new MediaLink();
         String shareBody = "Welcome to Suzuki Bangladesh Official Mobile App\n" +
                 "\n" +
-                "google play link\n" +
+                mediaLink.getPlay_store() +
                 "\n" +
-                "appstore link\n" +
+                mediaLink.getApp_store() +
                 "\n" +
-                "fb link:\n"+getResources().getString(R.string.facebook_page_address);
+                mediaLink.getFb();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");

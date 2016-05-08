@@ -45,6 +45,7 @@ import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
+import www.icebd.com.suzukibangladesh.menu.MediaLink;
 import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.notification.Notification;
 import www.icebd.com.suzukibangladesh.notification.QuickstartPreferences;
@@ -64,6 +65,7 @@ import www.icebd.com.suzukibangladesh.request.Quotation;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.DrawerItemCustomAdapter;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
+import www.icebd.com.suzukibangladesh.utilities.JsonParser;
 import www.icebd.com.suzukibangladesh.utilities.ObjectDrawerItem;
 
 
@@ -218,7 +220,14 @@ public class FirstActivity extends AppCompatActivity
             case 8:
                 //fragment = new InviteFriends().newInstance();
                 try {
-                    String shareBody = "Find Suzuki Bangladesh at:\n"+getResources().getString(R.string.facebook_page_address);
+                    JsonParser jsonParser = new JsonParser();
+                    String shareBody = "Welcome to Suzuki Bangladesh Official Mobile Apps\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getPlay_store()+"\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getApp_store()+"\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getFb();
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");

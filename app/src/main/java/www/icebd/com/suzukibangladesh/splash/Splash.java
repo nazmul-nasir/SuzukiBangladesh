@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -22,10 +23,23 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.apache.http.NameValuePair;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.notification.QuickstartPreferences;
 import www.icebd.com.suzukibangladesh.notification.RegistrationIntentService;
+import www.icebd.com.suzukibangladesh.spare_parts.SparePartsListObject;
+import www.icebd.com.suzukibangladesh.spare_parts.SparePartsListSwipeListAdapter;
+import www.icebd.com.suzukibangladesh.utilities.APIFactory;
+import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
+import www.icebd.com.suzukibangladesh.utilities.JsonParser;
+
+import static com.google.android.gms.internal.zzir.runOnUiThread;
 
 
 public class Splash extends Activity {
@@ -35,7 +49,10 @@ public class Splash extends Activity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 5000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
-    private ProgressDialog progressDialog;
+    APIFactory apiFactory;
+    CustomDialog customDialog;
+    ProgressDialog progressDialog;
+    private MediaTask mediaTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +133,10 @@ public class Splash extends Activity {
             }
         }, 2000);// delay in milliseconds (200)
 
+        apiFactory = new APIFactory();
+        customDialog = new CustomDialog(getApplicationContext());
+        mediaTask = new MediaTask(pref.getString("auth_key",null));
+        mediaTask.execute((Void) null);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -189,6 +210,103 @@ public class Splash extends Activity {
             return false;
         }
         return true;
+    }
+
+    public class MediaTask extends AsyncTask<Void, Void, String>
+    {
+        private String RESULT = "OK";
+        private ArrayList<NameValuePair> returnJsonData;
+        private ArrayList<NameValuePair> nvp2=null;
+        private InputStream response;
+        private JsonParser jsonParser;
+
+        private String methodName = "";
+        private String auth_key;
+
+        //UserLoginTask(String email, String password)
+        MediaTask(String auth_key)
+        {
+            this.auth_key = auth_key;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            //progressDialog = ProgressDialog.show(getActivity(), null, null);
+        }
+        @Override
+        protected String doInBackground(Void... params)
+        {
+            try
+            {
+                if (ConnectionManager.hasInternetConnection())
+                {
+                    //auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
+                    nvp2 = apiFactory.getMediaInfo(auth_key);
+                    methodName = "getMedia";
+                    response = ConnectionManager.getResponseFromServer(methodName, nvp2);
+                    jsonParser = new JsonParser();
+
+                    System.out.println("server response : "+response);
+                    returnJsonData = jsonParser.parseAPIgetMediaInfo(response);
+                    System.out.println("return data : " + returnJsonData);
+
+                }
+                else
+                {
+                    RESULT = getString(R.string.error_no_internet);
+                    return RESULT;
+                }
+                return RESULT;
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                Log.e("APITask:", ex.getMessage());
+                RESULT = getString(R.string.error_sever_connection);
+                return RESULT;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            //progressDialog.dismiss();
+            if(RESULT.equalsIgnoreCase("OK"))
+            {
+                try
+                {
+                    //finish();
+
+                    if (returnJsonData.size() > 0 && returnJsonData != null && returnJsonData.get(0).getValue().equals("true") == true )
+                    {
+                        //preferenceUtil.setPINstatus(1);
+                        Toast.makeText(getApplicationContext(), returnJsonData.get(1).getValue(), Toast.LENGTH_SHORT).show();
+
+
+
+                    } else
+                    {
+                        System.out.println("data return : " + returnJsonData);
+                        Toast.makeText(getApplicationContext(), "Request Data Not Found, Please Try Again !", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("APITask data error :", ex.getMessage());
+                }
+            }
+            else {
+
+                customDialog.alertDialog("ERROR", result);
+            }
+        }
+        @Override
+        protected void onCancelled()
+        {
+            mediaTask = null;
+            //progressDialog.dismiss();
+        }
     }
 
 }
