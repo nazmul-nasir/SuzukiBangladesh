@@ -3,16 +3,21 @@ package www.icebd.com.suzukibangladesh.bikedetails;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +28,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,6 +47,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -590,8 +599,8 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup view, int position) {
-            View imageLayout = inflater.inflate(R.layout.item_pager_image_bikedetails, view, false);
+        public Object instantiateItem(ViewGroup view, final int position) {
+            View imageLayout = inflater.inflate(R.layout.item_pager_image_bike_details, view, false);
             assert imageLayout != null;
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
@@ -634,6 +643,17 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             });
 
             view.addView(imageLayout, 0);
+
+            imageLayout.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    getAlertDialogWithImage(IMAGE_URLS[position]);
+                }
+            });
+
+
             return imageLayout;
         }
 
@@ -649,6 +669,53 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         @Override
         public Parcelable saveState() {
             return null;
+        }
+
+        private void getAlertDialogWithImage(String img_uri)
+        {
+            Toast.makeText(context,img_uri,Toast.LENGTH_LONG).show();
+            try
+            {
+                /*URL url = new URL(img_uri);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                Bitmap bmImg = BitmapFactory.decodeStream(is);*/
+
+                ImageView photo = new ImageView(context);
+                //photo.setImageBitmap(bmImg);
+
+                ImageLoader.getInstance().displayImage(img_uri,photo);
+
+                LinearLayout layout = new LinearLayout(context);
+                LinearLayout.LayoutParams layoutParamsL = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layout.setLayoutParams(layoutParamsL);
+                layout.setGravity(Gravity.CENTER);
+                int widthPX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400, getResources().getDisplayMetrics());
+                int heightPX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthPX, heightPX);
+
+
+                photo.setLayoutParams(layoutParams);
+                //layout.addView(photo);
+
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(context).
+                                setMessage(""). // this is quite ugly
+                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).setView(photo);
+                final AlertDialog alert = builder.create();
+                alert.show();
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
         }
     }
 }

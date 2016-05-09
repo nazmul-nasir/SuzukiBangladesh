@@ -53,6 +53,7 @@ public class Splash extends Activity {
     CustomDialog customDialog;
     ProgressDialog progressDialog;
     private MediaTask mediaTask;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,7 @@ public class Splash extends Activity {
         }, 2000);// delay in milliseconds (200)
 
         apiFactory = new APIFactory();
-        customDialog = new CustomDialog(getApplicationContext());
+        customDialog = new CustomDialog(context);
         mediaTask = new MediaTask(pref.getString("auth_key",null));
         mediaTask.execute((Void) null);
 
@@ -232,7 +233,7 @@ public class Splash extends Activity {
         @Override
         protected void onPreExecute() {
 
-            //progressDialog = ProgressDialog.show(getActivity(), null, null);
+            //progressDialog = ProgressDialog.show(context, null, null);
         }
         @Override
         protected String doInBackground(Void... params)
