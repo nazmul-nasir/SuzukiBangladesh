@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -59,16 +60,23 @@ import www.icebd.com.suzukibangladesh.R;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 import static com.google.android.gms.internal.zzir.runOnUiThread;
 
 public class BikeDetails extends Fragment implements AsyncResponse {
     TableLayout tableLayout;
+    LinearLayout linearLayoutBikeFone;
+    LinearLayout.LayoutParams lp;
     TextView bike_name_tv;
+    TextView txt_bike_cc;
     WebView webView;
 
     String gallery_image [];
+    String image_color[];
     int NUM_PAGES;
+    Typeface iconFont;
+
     CircleIndicator indicator;
     int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
@@ -97,15 +105,19 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         pref = context.getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
 
+        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
+
         Bundle bundle = this.getArguments();
         int bike_id = bundle.getInt("bike_id");
 
-
+        linearLayoutBikeFone = (LinearLayout) rootView.findViewById(R.id.linear_font_bike);
+        lp = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT,    LinearLayout.LayoutParams.WRAP_CONTENT);
         webView = (WebView)rootView.findViewById(R.id.help_webview);
 
         Log.i("Bike ID: ",String.valueOf(bike_id));
         tableLayout=(TableLayout)rootView.findViewById(R.id.main_table);
         bike_name_tv = (TextView)rootView.findViewById(R.id.bike_name);
+        txt_bike_cc = (TextView)rootView.findViewById(R.id.bike_cc);
 
         HashMap<String, String> postData = new HashMap<String, String>();
 
@@ -128,7 +140,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
     public void processFinish(String output) {
         Log.i("Test","output : "+output);
 
-        TableRow row = new TableRow(getActivity());
+        TableRow row = new TableRow(context);
         row.setLayoutParams(new TableRow.LayoutParams(300,
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
@@ -150,6 +162,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 String bike_code = basicObject.getString("bike_code");
                 String bike_id = basicObject.getString("bike_id");
                 String bike_name = basicObject.getString("bike_name");
+                String bike_cc = basicObject.getString("bike_cc");
                 String thumble_img = basicObject.getString("thumble_img");
                 String video_url = basicObject.getString("video_url");
 
@@ -157,22 +170,27 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 if (bike_name != null) {
                     bike_name_tv.setText(bike_name);
                 }
+                if(bike_cc != null)
+                {
+                    txt_bike_cc.setText(bike_cc);
+                }
                 if( ! video_url.equals("")) {
 
                     Log.i("url", video_url);
 
-
-                    // webView.getSettings().setJavaScriptEnabled(true);
-                    // webView.setVisibility(View.VISIBLE);
+                    webView.setVisibility(View.VISIBLE);
 
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.getSettings().setDomStorageEnabled(true);
+
+                    webView.loadUrl(video_url);
                     webView.setWebChromeClient(new WebChromeClient() {
                     });
-                    webView.loadUrl(video_url);
+                    webView.getSettings().setPluginState(WebSettings.PluginState.ON);
 
-                    WebSettings w = webView.getSettings();
-                    w.setPluginState(WebSettings.PluginState.ON);
+                    /*WebSettings w = webView.getSettings();
+                    w.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+                    w.setPluginState(WebSettings.PluginState.ON);*/
                 }
                 
                 
@@ -200,15 +218,16 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 /*Engine Started from here */
 
-                TextView engineTextView=new TextView(getActivity());
+                TextView engineTextView=new TextView(context);
                 engineTextView.setText("Engine");
+                engineTextView.setTextColor(getResources().getColor(R.color.white));
                 row.addView(engineTextView);
                 row.setPadding(50,0,0,10);
-                row.setBackgroundColor(Color.parseColor("#939393"));
+                row.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));//"#939393"
                 tableLayout.addView(row);
 
 
-                View space = new View(getActivity());
+                View space = new View(context);
                 space.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 //   v.setBackgroundColor(Color.rgb(51, 51, 51));
                 tableLayout.addView(space);
@@ -219,18 +238,20 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_title = EngineObject.getString("specification_title");
                     String specification_value = EngineObject.getString("specification_value");
 
-                    TableRow row_engine = new TableRow(getActivity());
+                    TableRow row_engine = new TableRow(context);
                     row_engine.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView engine_Title_TextView=new TextView(getActivity());
-                    TextView engine_Value_TextView=new TextView(getActivity());
+                    TextView engine_Title_TextView=new TextView(context);
+                    TextView engine_Value_TextView=new TextView(context);
                     engine_Title_TextView.setText(specification_title);
                     engine_Value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
                     {
-                        engine_Title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        engine_Value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+                        engine_Title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        engine_Value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        engine_Title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        engine_Value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     row_engine.addView(engine_Title_TextView);
                     row_engine.addView(engine_Value_TextView);
@@ -247,7 +268,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                  /*Engine end from here */
 
 
-                View space1 = new View(getActivity());
+                View space1 = new View(context);
                 space1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 //   v.setBackgroundColor(Color.rgb(51, 51, 51));
                 tableLayout.addView(space1);
@@ -255,19 +276,19 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                  /*Electrical Started from here */
 
-                TableRow rowelctrical = new TableRow(getActivity());
+                TableRow rowelctrical = new TableRow(context);
                 rowelctrical.setLayoutParams(new TableRow.LayoutParams(300,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 
-                TextView electricalTextView=new TextView(getActivity());
+                TextView electricalTextView=new TextView(context);
                 electricalTextView.setText("Electrical");
                 rowelctrical.addView(electricalTextView);
                 rowelctrical.setPadding(50,0,0,10);
-                rowelctrical.setBackgroundColor(Color.parseColor("#939393"));
+                rowelctrical.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
                 tableLayout.addView(rowelctrical);
 
 
-                View space2 = new View(getActivity());
+                View space2 = new View(context);
                 space2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space2);
 
@@ -279,12 +300,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_value = ElectricalObject.getString("specification_value");
 
 
-                    TableRow dynamic_row = new TableRow(getActivity());
+                    TableRow dynamic_row = new TableRow(context);
                     dynamic_row.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView title_TextView=new TextView(getActivity());
-                    TextView value_TextView=new TextView(getActivity());
+                    TextView title_TextView=new TextView(context);
+                    TextView value_TextView=new TextView(context);
                     title_TextView.setText(specification_title);
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
@@ -305,24 +326,24 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 }
                  /*Electrical End from here */
 
-                View space3 = new View(getActivity());
+                View space3 = new View(context);
                 space3.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space3);
 
 
                 /* Suspension started from here */
-                TableRow row_susp = new TableRow(getActivity());
+                TableRow row_susp = new TableRow(context);
                 row_susp.setLayoutParams(new TableRow.LayoutParams(300,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 
-                TextView susp_TextView=new TextView(getActivity());
+                TextView susp_TextView=new TextView(context);
                 susp_TextView.setText("Suspension");
                 row_susp.addView(susp_TextView);
                 row_susp.setPadding(50,0,0,10);
-                row_susp.setBackgroundColor(Color.parseColor("#939393"));
+                row_susp.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
                 tableLayout.addView(row_susp);
 
-                View space13 = new View(getActivity());
+                View space13 = new View(context);
                 space13.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space13);
 
@@ -331,12 +352,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_title = SuspensionObject.getString("specification_title");
                     String specification_value = SuspensionObject.getString("specification_value");
 
-                    TableRow dynamic_row = new TableRow(getActivity());
+                    TableRow dynamic_row = new TableRow(context);
                     dynamic_row.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView title_TextView=new TextView(getActivity());
-                    TextView value_TextView=new TextView(getActivity());
+                    TextView title_TextView=new TextView(context);
+                    TextView value_TextView=new TextView(context);
                     //  title_TextView.setSingleLine(false);
                     //  title_TextView.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
@@ -367,25 +388,25 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                  /* Suspension end from here */
 
-                View space4 = new View(getActivity());
+                View space4 = new View(context);
                 space4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space4);
 
 
                  /* Tyre started from here */
 
-                TableRow row_tyre = new TableRow(getActivity());
+                TableRow row_tyre = new TableRow(context);
                 row_tyre.setLayoutParams(new TableRow.LayoutParams(300,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 
-                TextView tyre_TextView=new TextView(getActivity());
+                TextView tyre_TextView=new TextView(context);
                 tyre_TextView.setText("Tyre");
                 row_tyre.addView(tyre_TextView);
                 row_tyre.setPadding(50,0,0,10);
-                row_tyre.setBackgroundColor(Color.parseColor("#939393"));
+                row_tyre.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
                 tableLayout.addView(row_tyre);
 
-                View space14 = new View(getActivity());
+                View space14 = new View(context);
                 space14.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space14);
 
@@ -394,12 +415,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_title = Tyre_SizeObject.getString("specification_title");
                     String specification_value = Tyre_SizeObject.getString("specification_value");
 
-                    TableRow dynamic_row = new TableRow(getActivity());
+                    TableRow dynamic_row = new TableRow(context);
                     dynamic_row.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView title_TextView=new TextView(getActivity());
-                    TextView value_TextView=new TextView(getActivity());
+                    TextView title_TextView=new TextView(context);
+                    TextView value_TextView=new TextView(context);
                     title_TextView.setText(specification_title);
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
@@ -420,23 +441,23 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 }
 
                  /* Type end from here */
-                View space5 = new View(getActivity());
+                View space5 = new View(context);
                 space5.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space5);
 
                  /* Brake started from here */
-                TableRow row_brake = new TableRow(getActivity());
+                TableRow row_brake = new TableRow(context);
                 row_brake.setLayoutParams(new TableRow.LayoutParams(300,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 
-                TextView brake_TextView=new TextView(getActivity());
+                TextView brake_TextView=new TextView(context);
                 brake_TextView.setText("Brake");
                 row_brake.addView(brake_TextView);
                 row_brake.setPadding(50,0,0,10);
-                row_brake.setBackgroundColor(Color.parseColor("#939393"));
+                row_brake.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
                 tableLayout.addView(row_brake);
 
-                View space15 = new View(getActivity());
+                View space15 = new View(context);
                 space15.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space15);
 
@@ -447,12 +468,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_title = BrakeObject.getString("specification_title");
                     String specification_value = BrakeObject.getString("specification_value");
 
-                    TableRow dynamic_row = new TableRow(getActivity());
+                    TableRow dynamic_row = new TableRow(context);
                     dynamic_row.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView title_TextView=new TextView(getActivity());
-                    TextView value_TextView=new TextView(getActivity());
+                    TextView title_TextView=new TextView(context);
+                    TextView value_TextView=new TextView(context);
                     title_TextView.setText(specification_title);
                     value_TextView.setText(" : "+specification_value);
 
@@ -475,24 +496,24 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                  /* Brake end from here */
 
-                View space6 = new View(getActivity());
+                View space6 = new View(context);
                 space6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space6);
 
                  /* Dimensions started from here */
 
-                TableRow row_dimension = new TableRow(getActivity());
+                TableRow row_dimension = new TableRow(context);
                 row_dimension.setLayoutParams(new TableRow.LayoutParams(300,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 
-                TextView dimension_TextView=new TextView(getActivity());
+                TextView dimension_TextView=new TextView(context);
                 dimension_TextView.setText("Dimensions");
                 row_dimension.addView(dimension_TextView);
                 row_dimension.setPadding(50,0,0,10);
-                row_dimension.setBackgroundColor(Color.parseColor("#939393"));
+                row_dimension.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
                 tableLayout.addView(row_dimension);
 
-                View space16 = new View(getActivity());
+                View space16 = new View(context);
                 space16.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space16);
 
@@ -501,12 +522,12 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     String specification_title = DimensionsObject.getString("specification_title");
                     String specification_value = DimensionsObject.getString("specification_value");
 
-                    TableRow dynamic_row = new TableRow(getActivity());
+                    TableRow dynamic_row = new TableRow(context);
                     dynamic_row.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                    TextView title_TextView=new TextView(getActivity());
-                    TextView value_TextView=new TextView(getActivity());
+                    TextView title_TextView=new TextView(context);
+                    TextView value_TextView=new TextView(context);
                     title_TextView.setText(specification_title);
 
                     value_TextView.setText(" : "+specification_value);
@@ -528,13 +549,16 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 }
 
                  /* Dimensions end from here */
-                View space7 = new View(getActivity());
+                View space7 = new View(context);
                 space7.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 15));
                 tableLayout.addView(space7);
 
 
                 NUM_PAGES = images.length();
                 gallery_image =new String[NUM_PAGES];
+                image_color = new String[NUM_PAGES];
+                TextView[] pairs = new TextView[NUM_PAGES];
+
 
                 for (int i = 0; i <images.length(); i++) {
 
@@ -543,22 +567,36 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     // gallery_image[i]=g_image;
                     Log.i("Test large", gallery_image[i]);
 
+                    image_color[i] = imagesDetails.getString("image_color");
+                    pairs[i] = new TextView(context);
+                    pairs[i].setTextSize(15);
+                    lp.setMargins(10,0,0,0);
+                    //lp.setMarginStart(5);
+                    pairs[i].setLayoutParams(lp);
+                    pairs[i].setId(i);
+                    //pairs[i].setText((i + 1) + ": something");
+                    pairs[i].setText(getResources().getString(R.string.fa_motorcycle));
+                    pairs[i].setTypeface(iconFont);
+                    //pairs[i].setTextColor( Color.BLACK );
+                    pairs[i].setTextColor( Color.parseColor( image_color[i] ) );
+                    linearLayoutBikeFone.addView(pairs[i]);
+
                 }
 
             }
             else
             {
-                Toast.makeText(getActivity(), "Data Not Found !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Data Not Found !", Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
 
 
-        pager.setAdapter(new ImageAdapter((getActivity())));
+        pager.setAdapter(new ImageAdapter((context)));
 
 
 
@@ -569,12 +607,15 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
 
         private String[] IMAGE_URLS = gallery_image;
+        public ImageLoader imageLoader = null;
 
         private LayoutInflater inflater;
         private DisplayImageOptions options;
 
         ImageAdapter(Context context) {
             inflater = LayoutInflater.from(context);
+            imageLoader = ImageLoader.getInstance();
+            imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
             options = new DisplayImageOptions.Builder()
                     .showImageForEmptyUri(R.drawable.ic_empty)
@@ -605,7 +646,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-            ImageLoader.getInstance().displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
+            imageLoader.displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     spinner.setVisibility(View.VISIBLE);
@@ -698,18 +739,20 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
 
                 photo.setLayoutParams(layoutParams);
-                //layout.addView(photo);
+                layout.addView(photo);
 
-                AlertDialog.Builder builder =
+                //LayoutInflater factory = LayoutInflater.from(context);
+                //final View view = factory.inflate(layout.getId(),null);
+                AlertDialog.Builder alert =
                         new AlertDialog.Builder(context).
                                 setMessage(""). // this is quite ugly
-                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                setPositiveButton("Done", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
-                        }).setView(photo);
-                final AlertDialog alert = builder.create();
+                        }).setView(layout);
+                //final AlertDialog alert = builder.create();
                 alert.show();
             }
             catch (Exception ex)

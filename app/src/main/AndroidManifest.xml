@@ -38,11 +38,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true">
 
         <activity
             android:name=".splash.Splash"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +54,8 @@
 
 
 
-        <activity android:name=".FirstActivity">
+        <activity android:name=".FirstActivity"
+                  android:screenOrientation="portrait">
 
 
         </activity>
@@ -60,14 +63,16 @@
 
 
 
-        <activity android:name=".quiz.QuizStarter">
+        <activity android:name=".quiz.QuizStarter"
+                  android:screenOrientation="portrait">
 
         </activity>
 
         <activity android:name=".json.Json_reader">
 
         </activity>
-        <activity android:name=".notification.MainActivity">
+        <activity android:name=".notification.MainActivity"
+                  android:screenOrientation="portrait">
 
         </activity>
 
