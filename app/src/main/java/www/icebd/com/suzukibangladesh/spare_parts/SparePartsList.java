@@ -30,6 +30,7 @@ import java.util.List;
 
 import www.icebd.com.suzukibangladesh.R;
 
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.bikelist.BikeList;
 import www.icebd.com.suzukibangladesh.bikelist.BikeListSwipeListAdapter;
 import www.icebd.com.suzukibangladesh.menu.MyBikeFragment;
@@ -103,9 +104,16 @@ public class SparePartsList extends Fragment implements SwipeRefreshLayout.OnRef
                                         swipeRefreshLayout.setRefreshing(true);
                                         apiFactory = new APIFactory();
                                         customDialog = new CustomDialog(getActivity());
-                                        fetchSparePartsListTask = new FetchSparePartsListTask(pref.getString("auth_key",null));
-                                        fetchSparePartsListTask.execute((Void) null);
-                                        //fetchBikeList();
+                                        if(CheckNetworkConnection.isConnectionAvailable(context) == true)
+                                        {
+                                            fetchSparePartsListTask = new FetchSparePartsListTask(pref.getString("auth_key", null));
+                                            fetchSparePartsListTask.execute((Void) null);
+                                            //fetchBikeList();
+                                        }
+                                        else
+                                        {
+                                            customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+                                        }
                                     }
                                 }
         );

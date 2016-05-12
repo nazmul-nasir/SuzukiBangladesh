@@ -40,11 +40,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.maps.MapsActivity;
 import www.icebd.com.suzukibangladesh.menu.HomeFragment;
 import www.icebd.com.suzukibangladesh.menu.InviteFriends;
+import www.icebd.com.suzukibangladesh.menu.MediaLink;
 import www.icebd.com.suzukibangladesh.menu.NewsEvents;
 import www.icebd.com.suzukibangladesh.notification.Notification;
 import www.icebd.com.suzukibangladesh.notification.QuickstartPreferences;
@@ -62,13 +64,15 @@ import www.icebd.com.suzukibangladesh.reg.ResetPassword;
 import www.icebd.com.suzukibangladesh.reg.Signup;
 import www.icebd.com.suzukibangladesh.request.Quotation;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
 import www.icebd.com.suzukibangladesh.utilities.DrawerItemCustomAdapter;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
+import www.icebd.com.suzukibangladesh.utilities.JsonParser;
 import www.icebd.com.suzukibangladesh.utilities.ObjectDrawerItem;
 
 
 public class FirstActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AsyncResponse
+        implements NavigationView.OnNavigationItemSelectedListener
 
 {
     SharedPreferences pref ;
@@ -81,7 +85,8 @@ public class FirstActivity extends AppCompatActivity
     private ListView mDrawerList;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-
+    final Context context = this;
+    CustomDialog customDialog;
 
 
 
@@ -146,7 +151,7 @@ public class FirstActivity extends AppCompatActivity
 
 
 
-        String auth_key = pref.getString("auth_key",null);
+        /*String auth_key = pref.getString("auth_key",null);
         //String notification_key = pref.getString("gcm_registration_token",null);
         Log.i("Test","GCM registration token :"+pref.getString("gcm_registration_token",null));
 
@@ -164,21 +169,23 @@ public class FirstActivity extends AppCompatActivity
             postData.put("unique_device_id",android_id);
             postData.put("notification_key", pref.getString("gcm_registration_token",null));
             postData.put("platform","1");
-            if(isNetworkAvailable()) {
+            customDialog = new CustomDialog(context);
+            if(CheckNetworkConnection.isConnectionAvailable(context) == true)
+            {
                 PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
                 loginTask.execute(ConnectionManager.SERVER_URL+"getAuthKey");
             }
             else
             {
-                Toast.makeText(this,"Please connect to Internet",Toast.LENGTH_LONG).show();
+                customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
             }
 
         }
         else
         {
             selectItem(0);
-        }
-
+        }*/
+        selectItem(0);
     /*    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String uid = telephonyManager.getDeviceId();
         Log.i("Test",uid);*/
@@ -218,7 +225,14 @@ public class FirstActivity extends AppCompatActivity
             case 8:
                 //fragment = new InviteFriends().newInstance();
                 try {
-                    String shareBody = "Find Suzuki Bangladesh at:\n"+getResources().getString(R.string.facebook_page_address);
+                    JsonParser jsonParser = new JsonParser();
+                    String shareBody = "Welcome to Suzuki Bangladesh Official Mobile Apps\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getPlay_store()+"\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getApp_store()+"\n" +
+                            "\n" +
+                            jsonParser.mediaLink.getFb();
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
@@ -443,35 +457,6 @@ public class FirstActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    @Override
-    public void processFinish(String output) {
-        Log.i("Test",output);
-
-        try {
-            JSONObject object = new JSONObject(output);
-            String status_code = object.getString("status_code");
-            String message = object.getString("message");
-            String auth_key = object.getString("auth_key");
-
-            editor.putString("auth_key",auth_key);
-            editor.commit();
-            Log.i("Test","auth_key ="+auth_key);
-
-           // Log.i("Test","Auth Key from Shared Pref "+pref.getString("auth_key","empty"));
-            if(!auth_key.equals("null"))
-            {
-                selectItem(0);
-            }
-
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /*public void onSectionAttached(int position) {

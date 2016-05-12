@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 import android.util.Log;
 
 import www.icebd.com.suzukibangladesh.bikelist.BikeList;
+import www.icebd.com.suzukibangladesh.menu.MediaLink;
 import www.icebd.com.suzukibangladesh.spare_parts.SparePartsListObject;
 
 public class JsonParser 
@@ -36,8 +37,61 @@ public class JsonParser
 	BufferedReader reader=null;
 	
 	private ArrayList<NameValuePair> jsonArrayList;
+	public static MediaLink mediaLink;
 
+	public ArrayList<NameValuePair> parseAPIgetAuthKeyInfo(InputStream json) throws Exception
+	{
+		jsonArrayList = new ArrayList<NameValuePair>();
 
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(json, "iso-8859-1"), 8);
+			builder = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			{
+				//System.out.println("read line : "+line);
+				builder.append(line + "\n");
+			}
+			json.close();
+
+			jsonData = builder.toString();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Log.e("Buffer Error", "Error converting result " + e.toString());
+		}
+		try
+		{
+			jsonResponse = new JSONObject(jsonData);
+
+			boolean status = jsonResponse.getBoolean("status");
+			jsonArrayList.add(new BasicNameValuePair("status", String.valueOf(status)));
+
+			String message = jsonResponse.getString("message");
+			jsonArrayList.add(new BasicNameValuePair("message", message));
+			int status_code = jsonResponse.getInt("status_code");
+			jsonArrayList.add(new BasicNameValuePair("status_code", String.valueOf(status_code)));
+			if(status == false)
+			{
+				jsonArrayList = null;
+			}
+			else
+			{
+				String auth_key = jsonResponse.getString("auth_key");
+				jsonArrayList.add(new BasicNameValuePair("auth_key", auth_key));
+			}
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Log.e("JSON Parser", "Error parsing data " + e.toString());
+			//checking...
+		}
+		// return JSON String
+		return jsonArrayList;
+	}
 
 	public ArrayList<BikeList> parseAPIgetBikeListInfo(InputStream json) throws Exception
 	{
@@ -59,7 +113,7 @@ public class JsonParser
 			String line = null;
 			while ((line = reader.readLine()) != null)
 			{
-				System.out.println("read line : "+line);
+				//System.out.println("read line : "+line);
 				builder.append(line + "\n");
 			}
 			json.close();
@@ -146,7 +200,7 @@ public class JsonParser
 			String line = null;
 			while ((line = reader.readLine()) != null)
 			{
-				System.out.println("read line : "+line);
+				//System.out.println("read line : "+line);
 				builder.append(line + "\n");
 			}
 			json.close();
@@ -212,6 +266,87 @@ public class JsonParser
 		}
 		// return JSON String
 		return arrSparePartsList;
+	}
+	public ArrayList<NameValuePair> parseAPIgetMediaInfo(InputStream json) throws Exception
+	{
+		jsonArrayList = new ArrayList<NameValuePair>();
+
+		String media_id;
+		String play_store;
+		String fb;
+		String app_store;
+
+
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(json, "iso-8859-1"), 8);
+			builder = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			{
+				//System.out.println("read line : "+line);
+				builder.append(line + "\n");
+			}
+			json.close();
+
+			jsonData = builder.toString();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Log.e("Buffer Error", "Error converting result " + e.toString());
+		}
+
+		try
+		{
+			jsonResponse = new JSONObject(jsonData);
+
+			boolean status = jsonResponse.getBoolean("status");
+			jsonArrayList.add(new BasicNameValuePair("status", String.valueOf(status)));
+
+			String message = jsonResponse.getString("message");
+			jsonArrayList.add(new BasicNameValuePair("message", message));
+			int status_code = jsonResponse.getInt("status_code");
+			jsonArrayList.add(new BasicNameValuePair("status_code", String.valueOf(status_code)));
+			if(status == false)
+			{
+				jsonArrayList = null;
+			}
+			else
+			{
+				jarray = jsonResponse.getJSONArray("link");
+
+				for (int i = 0; i < jarray.length(); i++)
+				{
+					jsonResponse = jarray.getJSONObject(i);
+					mediaLink = new MediaLink();
+					media_id = jsonResponse.getString("media_id");
+					mediaLink.setMedia_id(media_id);
+					play_store = jsonResponse.getString("play_store");
+					mediaLink.setPlay_store(play_store);
+
+					fb = jsonResponse.getString("fb");
+					mediaLink.setFb(fb);
+					app_store = jsonResponse.getString("app_store");
+					mediaLink.setApp_store(app_store);
+
+					jsonArrayList.add(new BasicNameValuePair("media_id", media_id));
+					jsonArrayList.add(new BasicNameValuePair("play_store", play_store));
+					jsonArrayList.add(new BasicNameValuePair("fb", fb));
+					jsonArrayList.add(new BasicNameValuePair("app_store", app_store));
+
+					//jsonArrayList.add(mediaLink);
+				}
+			}
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Log.e("JSON Parser", "Error parsing data " + e.toString());
+			//checking...
+		}
+		// return JSON String
+		return jsonArrayList;
 	}
 	
 

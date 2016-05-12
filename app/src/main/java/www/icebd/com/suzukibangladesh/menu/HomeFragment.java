@@ -44,12 +44,14 @@ import java.util.TimerTask;
 import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.app.Constants;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.notification.MainActivity;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
 import www.icebd.com.suzukibangladesh.utilities.Constant;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 import static com.google.android.gms.internal.zzir.runOnUiThread;
@@ -68,6 +70,9 @@ public class HomeFragment extends Fragment implements AsyncResponse {
     public ImageLoader imageLoader = ImageLoader.getInstance();
     ViewPager pager;
 
+    Context context;
+    CustomDialog customDialog;
+
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -82,9 +87,8 @@ public class HomeFragment extends Fragment implements AsyncResponse {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container,
                 false);
+        context = getActivity().getApplicationContext();
         Typeface iconFont = FontManager.getTypeface(getActivity(), FontManager.FONTAWESOME);
-
-
 
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
@@ -157,9 +161,16 @@ public class HomeFragment extends Fragment implements AsyncResponse {
                 postData.put("auth_key",auth_key);
 
                 // getSupportFragmentManager().beginTransaction().replace(R.id.frag, fragmentS1).commit();
-
-                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-                loginTask.execute(ConnectionManager.SERVER_URL+"getGallery");
+                customDialog = new CustomDialog(context);
+                if(CheckNetworkConnection.isConnectionAvailable(context) == true)
+                {
+                    PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+                    loginTask.execute(ConnectionManager.SERVER_URL + "getGallery");
+                }
+                else
+                {
+                    customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+                }
 
             }
             pager = (ViewPager) rootView.findViewById(R.id.pager);

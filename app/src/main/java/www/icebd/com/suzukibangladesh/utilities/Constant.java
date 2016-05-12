@@ -15,6 +15,7 @@ public class Constant {
 	
 	//public static final Integer[] right_menu_images = { R.drawable.ic_card_xdpi,R.drawable.menu_myprofile_normal, R.drawable.menu_logout_normal};
 	public static final double taxPercentage = 24.0;
+	public static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 0;
 
 	public static List<SparePartsListObject.SparePartsItem> listMyCartObj = new ArrayList<SparePartsListObject.SparePartsItem>();
 

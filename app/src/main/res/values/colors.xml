@@ -19,4 +19,7 @@
     <color name="spare_parts_row_border_color">#E1E1E1</color>
     <color name="home_mybike_bg_color">#CC4A4A4A</color>
 
+    <color name="bike_details_spec_header_bg">#6A8090</color>
+    <color name="bike_details_spec_row_bg">#F2F2F2</color>
+
 </resources>
