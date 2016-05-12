@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.bikedetails.BikeDetails;
 import www.icebd.com.suzukibangladesh.bikelist.BikeList;
 import www.icebd.com.suzukibangladesh.bikelist.BikeListSwipeListAdapter;
@@ -62,7 +63,7 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_bike, container,
                 false);
@@ -84,15 +85,23 @@ public class MyBikeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         //listView.setAdapter(bikeListSwipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
+
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
                                         apiFactory = new APIFactory();
-                                        customDialog = new CustomDialog(getActivity());
-                                        fetchBikeListTask = new FetchBikeListTask(pref.getString("auth_key",null));
-                                        fetchBikeListTask.execute((Void) null);
-                                        //fetchBikeList();
+                                        customDialog = new CustomDialog(context);
+                                        if(CheckNetworkConnection.isConnectionAvailable(context) == true)
+                                        {
+                                            fetchBikeListTask = new FetchBikeListTask(pref.getString("auth_key", null));
+                                            fetchBikeListTask.execute((Void) null);
+                                            //fetchBikeList();
+                                        }
+                                        else
+                                        {
+                                            customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+                                        }
                                     }
                                 }
         );

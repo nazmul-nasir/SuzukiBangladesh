@@ -1,6 +1,7 @@
 package www.icebd.com.suzukibangladesh.bikedetails;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,10 +19,12 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.FloatMath;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -57,9 +62,11 @@ import java.util.TimerTask;
 
 import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 import static com.google.android.gms.internal.zzir.runOnUiThread;
@@ -81,11 +88,26 @@ public class BikeDetails extends Fragment implements AsyncResponse {
     int  currentPage=0;
     public ImageLoader imageLoader = ImageLoader.getInstance();
     ViewPager pager;
+    private String global_bike_name = "";
 
     Context context;
+    CustomDialog customDialog;
 
     SharedPreferences pref ;
     SharedPreferences.Editor editor;
+
+    /*****************************/
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
+    PointF startPoint = new PointF();
+    PointF midPoint = new PointF();
+    float oldDist = 1f;
+    final int NONE = 0;
+    final int DRAG = 1;
+    final int ZOOM = 2;
+    int mode = NONE;
+
+    /*****************************/
 
     public static BikeDetails newInstance() {
         BikeDetails fragment = new BikeDetails();
@@ -125,8 +147,16 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         postData.put("auth_key",auth_key);
         postData.put("bike_id",String.valueOf(bike_id));
 
-        PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-        loginTask.execute(ConnectionManager.SERVER_URL+"getBikeDetail");
+        customDialog = new CustomDialog(context);
+        if(CheckNetworkConnection.isConnectionAvailable(context) == true)
+        {
+            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+            loginTask.execute(ConnectionManager.SERVER_URL + "getBikeDetail");
+        }
+        else
+        {
+            customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+        }
 
         pager = (ViewPager) rootView.findViewById(R.id.pager);
         indicator = (CircleIndicator) rootView.findViewById(R.id.indicator);
@@ -152,6 +182,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             String auth_key = object.getString("auth_key");
             boolean status = object.getBoolean("status");
 
+            global_bike_name = "";
             //if(message.equals("Success"))
             if( status == true)
             {
@@ -169,6 +200,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 if (bike_name != null) {
                     bike_name_tv.setText(bike_name);
+                    global_bike_name = bike_name;
                 }
                 if(bike_cc != null)
                 {
@@ -282,6 +314,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 TextView electricalTextView=new TextView(context);
                 electricalTextView.setText("Electrical");
+                electricalTextView.setTextColor(getResources().getColor(R.color.white));
                 rowelctrical.addView(electricalTextView);
                 rowelctrical.setPadding(50,0,0,10);
                 rowelctrical.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
@@ -310,8 +343,10 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
                     {
-                        title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+                        title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     dynamic_row.addView(title_TextView);
                     dynamic_row.addView(value_TextView);
@@ -338,6 +373,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 TextView susp_TextView=new TextView(context);
                 susp_TextView.setText("Suspension");
+                susp_TextView.setTextColor(getResources().getColor(R.color.white));
                 row_susp.addView(susp_TextView);
                 row_susp.setPadding(50,0,0,10);
                 row_susp.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
@@ -372,8 +408,10 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
                     {
-                        title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+                        title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     dynamic_row.addView(title_TextView);
                     dynamic_row.addView(value_TextView);
@@ -401,6 +439,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 TextView tyre_TextView=new TextView(context);
                 tyre_TextView.setText("Tyre");
+                tyre_TextView.setTextColor(getResources().getColor(R.color.white));
                 row_tyre.addView(tyre_TextView);
                 row_tyre.setPadding(50,0,0,10);
                 row_tyre.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
@@ -425,8 +464,11 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
                     {
-                        title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+
+                        title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     dynamic_row.addView(title_TextView);
                     dynamic_row.addView(value_TextView);
@@ -452,6 +494,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 TextView brake_TextView=new TextView(context);
                 brake_TextView.setText("Brake");
+                brake_TextView.setTextColor(getResources().getColor(R.color.white));
                 row_brake.addView(brake_TextView);
                 row_brake.setPadding(50,0,0,10);
                 row_brake.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
@@ -479,8 +522,11 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                     if((i%2)==0)
                     {
-                        title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+
+                        title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     dynamic_row.addView(title_TextView);
                     dynamic_row.addView(value_TextView);
@@ -508,6 +554,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
 
                 TextView dimension_TextView=new TextView(context);
                 dimension_TextView.setText("Dimensions");
+                dimension_TextView.setTextColor(getResources().getColor(R.color.white));
                 row_dimension.addView(dimension_TextView);
                 row_dimension.setPadding(50,0,0,10);
                 row_dimension.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_header_bg));
@@ -533,8 +580,11 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                     value_TextView.setText(" : "+specification_value);
                     if((i%2)==0)
                     {
-                        title_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
-                        value_TextView.setBackgroundColor(Color.parseColor("#d8d8d8"));
+
+                        title_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));//"#d8d8d8"
+                        value_TextView.setBackgroundColor(getResources().getColor(R.color.bike_details_spec_row_bg));
+                        title_TextView.setTextColor(getResources().getColor(R.color.line_grey));
+                        value_TextView.setTextColor(getResources().getColor(R.color.line_grey));
                     }
                     dynamic_row.addView(title_TextView);
                     dynamic_row.addView(value_TextView);
@@ -690,7 +740,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 @Override
                 public void onClick(View v)
                 {
-                    getAlertDialogWithImage(IMAGE_URLS[position]);
+                    getAlertDialogWithImage(IMAGE_URLS[position],global_bike_name);
                 }
             });
 
@@ -712,8 +762,10 @@ public class BikeDetails extends Fragment implements AsyncResponse {
             return null;
         }
 
-        private void getAlertDialogWithImage(String img_uri)
+        private void getAlertDialogWithImage(String img_uri,String product_name)
         {
+
+
             Toast.makeText(context,img_uri,Toast.LENGTH_LONG).show();
             try
             {
@@ -725,7 +777,70 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 Bitmap bmImg = BitmapFactory.decodeStream(is);*/
 
                 ImageView photo = new ImageView(context);
+                photo.setScaleType(ImageView.ScaleType.MATRIX);
                 //photo.setImageBitmap(bmImg);
+                photo.setRotation(90);
+                photo.setOnTouchListener(new View.OnTouchListener() {
+                    @Override public boolean onTouch(View v, MotionEvent event)
+                    {
+                        ImageView view = (ImageView) v;
+                        System.out.println("matrix=" + savedMatrix.toString());
+                        switch (event.getAction() & MotionEvent.ACTION_MASK)
+                        {
+                            case MotionEvent.ACTION_DOWN:
+                                savedMatrix.set(matrix);
+                                startPoint.set(event.getX(), event.getY());
+                                mode = DRAG;
+                                break;
+                            case MotionEvent.ACTION_POINTER_DOWN:
+                                oldDist = spacing(event);
+                                if (oldDist > 10f)
+                                {
+                                    savedMatrix.set(matrix);
+                                    midPoint(midPoint, event);
+                                    mode = ZOOM; }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                            case MotionEvent.ACTION_POINTER_UP:
+                                mode = NONE;
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                if (mode == DRAG)
+                                {
+                                    matrix.set(savedMatrix);
+                                    matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
+                                }
+                                else if (mode == ZOOM)
+                                {
+                                    float newDist = spacing(event);
+                                    if (newDist > 10f)
+                                    {
+                                        matrix.set(savedMatrix);
+                                        float scale = newDist / oldDist;
+                                        matrix.postScale(scale, scale, midPoint.x, midPoint.y);
+                                    }
+                                }
+                                break;
+                        }
+                        view.setImageMatrix(matrix);
+                        return true;
+                    }
+                    @SuppressLint("FloatMath") private float spacing(MotionEvent event)
+                    {
+                        float x = event.getX(0) - event.getX(1);
+                        float y = event.getY(0) - event.getY(1);
+
+                        //return FloatMath.sqrt(x * x + y * y);\
+                        return (float)Math.sqrt(x * x + y * y);
+                    }
+                    private void midPoint(PointF point, MotionEvent event)
+                    {
+                        float x = event.getX(0) + event.getX(1);
+                        float y = event.getY(0) + event.getY(1);
+                        point.set(x / 2, y / 2);
+                    }
+                });
+
 
                 ImageLoader.getInstance().displayImage(img_uri,photo);
 
@@ -744,7 +859,8 @@ public class BikeDetails extends Fragment implements AsyncResponse {
                 //LayoutInflater factory = LayoutInflater.from(context);
                 //final View view = factory.inflate(layout.getId(),null);
                 AlertDialog.Builder alert =
-                        new AlertDialog.Builder(context).
+                        new AlertDialog.Builder(getActivity()).
+                                setTitle(product_name).
                                 setMessage(""). // this is quite ugly
                                 setPositiveButton("Done", new DialogInterface.OnClickListener() {
                             @Override

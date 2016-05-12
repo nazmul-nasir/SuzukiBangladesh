@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
@@ -24,12 +25,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.notification.QuickstartPreferences;
 import www.icebd.com.suzukibangladesh.notification.RegistrationIntentService;
 import www.icebd.com.suzukibangladesh.spare_parts.SparePartsListObject;
@@ -42,7 +47,8 @@ import www.icebd.com.suzukibangladesh.utilities.JsonParser;
 import static com.google.android.gms.internal.zzir.runOnUiThread;
 
 
-public class Splash extends Activity {
+public class Splash extends Activity
+{
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
 
@@ -54,6 +60,7 @@ public class Splash extends Activity {
     ProgressDialog progressDialog;
     private MediaTask mediaTask;
     final Context context = this;
+    private AuthKeyTask authKeyTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,41 +143,65 @@ public class Splash extends Activity {
 
         apiFactory = new APIFactory();
         customDialog = new CustomDialog(context);
-        mediaTask = new MediaTask(pref.getString("auth_key",null));
-        mediaTask.execute((Void) null);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    finish();
-                    pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
-                    editor = pref.edit();
-                    String notification_key = pref.getString("gcm_registration_token", null);
-                    editor.putString("running", "no");
-                    editor.apply();
-                    Intent i;
-                    i = new Intent(getBaseContext(), FirstActivity.class);
-                    /*if (notification_key==null)
-                    {
-                        i = new Intent(getBaseContext(), MainActivity.class);
-                    }
-                    else {
-                        i = new Intent(getBaseContext(), FirstActivity.class);
-                    }*/
-                    startActivity(i);
-
-                }
-                catch(Exception ex)
+        if(CheckNetworkConnection.isConnectedToInternet(this) == true)
+        {
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
                 {
-                    ex.printStackTrace();
-                    Log.i("exception: ", ex.getMessage());
-                }
+                    try
+                    {
+                        finish();
+                        pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+                        editor = pref.edit();
+                        //String notification_key = pref.getString("gcm_registration_token", null);
+                        editor.putString("running", "no");
+                        editor.apply();
 
-                //startActivity(i);
-            }
-        }, 4000);// delay in milliseconds (200)
+                        String auth_key = pref.getString("auth_key",null);
+                        //String notification_key = pref.getString("gcm_registration_token",null);
+                        Log.i("Test","GCM registration token :"+pref.getString("gcm_registration_token",null));
+                        if (auth_key == null)
+                        {
+                            String android_id = Settings.Secure.getString(Splash.this.getContentResolver(),
+                                    Settings.Secure.ANDROID_ID);
+
+                            Log.i("Test","Android ID : "+android_id);
+                            Log.i("Test","Notification key : "+pref.getString("gcm_registration_token",null));
+                            //Log.i("Test","Auth_key : "+auth_key);
+
+                            String unique_device_id = android_id;
+                            String notification_key = pref.getString("gcm_registration_token",null);
+                            String platform = "1";
+                            if(CheckNetworkConnection.isConnectedToInternet(context) == true)
+                            {
+                                authKeyTask = new AuthKeyTask(unique_device_id,notification_key,platform);
+                                authKeyTask.execute((Void) null);
+                            }
+                            else
+                            {
+                                customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+                            }
+                        }
+                        else
+                        {
+                            mediaTask = new MediaTask(pref.getString("auth_key", null));
+                            mediaTask.execute((Void) null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.printStackTrace();
+                        Log.i("exception: ", ex.getMessage());
+                    }
+                }
+            }, 6000);// delay in milliseconds (200)
+        }
+        else
+        {
+            customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+        }
     }
     @Override
     protected void onResume() {
@@ -213,6 +244,110 @@ public class Splash extends Activity {
         return true;
     }
 
+    public class AuthKeyTask extends AsyncTask<Void, Void, String>
+    {
+        private String RESULT = "OK";
+        private ArrayList<NameValuePair> returnJsonData;
+        private ArrayList<NameValuePair> nvp2=null;
+        private InputStream response;
+        private JsonParser jsonParser;
+
+        private String methodName = "";
+        private String unique_device_id, notification_key, platform;
+
+        //UserLoginTask(String email, String password)
+        AuthKeyTask(String unique_device_id,String notification_key,String platform)
+        {
+            this.unique_device_id = unique_device_id;
+            this.notification_key = notification_key;
+            this.platform = platform;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            //progressDialog = ProgressDialog.show(context, null, null);
+        }
+        @Override
+        protected String doInBackground(Void... params)
+        {
+            try
+            {
+                if (ConnectionManager.hasInternetConnection())
+                {
+                    //auth_key = "b78c0c986e4a3d962cd220427bc8ff07";
+                    nvp2 = apiFactory.getAuthKeyInfo(unique_device_id,notification_key,platform);
+                    methodName = "getAuthKey";
+                    response = ConnectionManager.getResponseFromServer(methodName, nvp2);
+                    jsonParser = new JsonParser();
+
+                    System.out.println("server response : "+response);
+                    returnJsonData = jsonParser.parseAPIgetAuthKeyInfo(response);
+                    System.out.println("return data : " + returnJsonData);
+
+                }
+                else
+                {
+                    RESULT = getString(R.string.error_no_internet);
+                    return RESULT;
+                }
+                return RESULT;
+            }
+            catch (Exception ex) {
+                //ex.printStackTrace();
+                Log.e("APITask:", ex.getMessage());
+                RESULT = getString(R.string.error_sever_connection);
+                return RESULT;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            //progressDialog.dismiss();
+            if(RESULT.equalsIgnoreCase("OK"))
+            {
+                try
+                {
+                    //finish();
+
+                    if (returnJsonData.size() > 0 && returnJsonData != null && returnJsonData.get(0).getValue().equals("true") == true )
+                    {
+                        //preferenceUtil.setPINstatus(1);
+                        Toast.makeText(getApplicationContext(), returnJsonData.get(1).getValue(), Toast.LENGTH_SHORT).show();
+                        String auth_key = returnJsonData.get(3).getValue();
+                        editor.putString("auth_key",auth_key);
+                        editor.commit();
+                        Log.i("Test","auth_key found ="+auth_key);
+                        if(!auth_key.equals("null"))
+                        {
+                            mediaTask = new MediaTask(pref.getString("auth_key", null));
+                            mediaTask.execute((Void) null);
+                        }
+                    } else
+                    {
+                        System.out.println("data return : " + returnJsonData);
+                        Toast.makeText(getApplicationContext(), "Request Data Not Found, Please Try Again !", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("APITask data error :", ex.getMessage());
+                }
+            }
+            else {
+
+                customDialog.alertDialog("ERROR", result);
+            }
+        }
+        @Override
+        protected void onCancelled()
+        {
+            authKeyTask = null;
+            //progressDialog.dismiss();
+        }
+    }
     public class MediaTask extends AsyncTask<Void, Void, String>
     {
         private String RESULT = "OK";
@@ -261,7 +396,7 @@ public class Splash extends Activity {
                 return RESULT;
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
                 Log.e("APITask:", ex.getMessage());
                 RESULT = getString(R.string.error_sever_connection);
                 return RESULT;
@@ -282,8 +417,9 @@ public class Splash extends Activity {
                     {
                         //preferenceUtil.setPINstatus(1);
                         Toast.makeText(getApplicationContext(), returnJsonData.get(1).getValue(), Toast.LENGTH_SHORT).show();
-
-
+                        Intent i;
+                        i = new Intent(getBaseContext(), FirstActivity.class);
+                        startActivity(i);
 
                     } else
                     {
@@ -297,8 +433,8 @@ public class Splash extends Activity {
                     Log.e("APITask data error :", ex.getMessage());
                 }
             }
-            else {
-
+            else
+            {
                 customDialog.alertDialog("ERROR", result);
             }
         }

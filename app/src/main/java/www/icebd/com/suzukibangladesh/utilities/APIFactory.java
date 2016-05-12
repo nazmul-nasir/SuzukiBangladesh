@@ -9,6 +9,15 @@ public class APIFactory {
 
 	static ArrayList<NameValuePair> nameValuePairs;
 
+	public ArrayList<NameValuePair> getAuthKeyInfo(String unique_device_id,String notification_key,String platform)
+	{
+		nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("unique_device_id", unique_device_id));
+		nameValuePairs.add(new BasicNameValuePair("notification_key", notification_key));
+		nameValuePairs.add(new BasicNameValuePair("platform", platform));
+
+		return nameValuePairs;
+	}
 	public ArrayList<NameValuePair> getBikeListInfo(String auth_key)
 	{
 		nameValuePairs = new ArrayList<NameValuePair>();

@@ -8,6 +8,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -39,16 +41,20 @@ import java.util.HashMap;
 import me.relex.circleindicator.CircleIndicator;
 import www.icebd.com.suzukibangladesh.FirstActivity;
 import www.icebd.com.suzukibangladesh.R;
+import www.icebd.com.suzukibangladesh.app.CheckNetworkConnection;
 import www.icebd.com.suzukibangladesh.app.Constants;
+import www.icebd.com.suzukibangladesh.bikedetails.BikeDetails;
 import www.icebd.com.suzukibangladesh.json.AsyncResponse;
 import www.icebd.com.suzukibangladesh.json.PostResponseAsyncTask;
 import www.icebd.com.suzukibangladesh.utilities.ConnectionManager;
+import www.icebd.com.suzukibangladesh.utilities.CustomDialog;
 import www.icebd.com.suzukibangladesh.utilities.FontManager;
 
 
 public class BottomHomeFragment extends Fragment implements AsyncResponse, AdapterView.OnItemSelectedListener {
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
+    String[] strBikeName;
     String[] bikeId;
     String[] bikeID_cc;
     ViewPager pager;
@@ -58,6 +64,8 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
 
     TextView text_left;
     TextView text_right;
+    Context context;
+    CustomDialog customDialog;
 
 
     public static BottomHomeFragment newInstance() {
@@ -73,31 +81,56 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_bottom_home, container,
                 false);
+        context = getActivity().getApplicationContext();
         pref = getActivity().getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", getActivity().MODE_PRIVATE);
         editor = pref.edit();
         Typeface iconFont = FontManager.getTypeface(getActivity().getApplicationContext(), FontManager.FONTAWESOME);
 
         text_left = (TextView) rootView.findViewById(R.id.text_left);
         text_left.setTypeface(iconFont);
-       /* text_right = (TextView) rootView.findViewById(R.id.text_right);
-        text_right.setTypeface(iconFont);*/
+        text_right = (TextView) rootView.findViewById(R.id.text_right);
+
 
         HashMap<String, String> postData = new HashMap<String, String>();
         String auth_key= pref.getString("auth_key","empty");
 
-        if(!auth_key.equals("empty"))
+        customDialog = new CustomDialog(context);
+        if(CheckNetworkConnection.isConnectionAvailable(context) == true)
         {
-            postData.put("auth_key",auth_key);
-            PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this,postData);
-            loginTask.execute(ConnectionManager.SERVER_URL+"getBikeList");
+            if (!auth_key.equals("empty"))
+            {
+                postData.put("auth_key", auth_key);
+                PostResponseAsyncTask loginTask = new PostResponseAsyncTask(this, postData);
+                loginTask.execute(ConnectionManager.SERVER_URL + "getBikeList");
 
+            }
         }
         else
         {
-            Toast.makeText(getActivity(),"Connect to internet and restart the app",Toast.LENGTH_LONG).show();
+            customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
         }
         dropdown_bike_name =(Spinner)rootView.findViewById(R.id.txt_dropdown);
          pager = (ViewPager) rootView.findViewById(R.id.pager_bottom);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                text_right.setText(strBikeName[position]);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+
+            }
+        });
 
         return rootView;
     }
@@ -111,16 +144,19 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
             Log.i("Test", "Enter");
             JSONObject object = new JSONObject(output);
             String message ="";
+            boolean status = object.getBoolean("status");
             message =  object.getString("message");
 
             // Log.i("Test", "Enter");
 
-            if (message.equals("Successful"))
+            //if (message.equals("Successful"))
+            if(status == true)
             {
                 Log.i("Test","I am successful");
                 JSONArray bikeList = object.getJSONArray("bikeList");
                 String[] string = new String[bikeList.length()+1];
                 string[0]="Model";
+                strBikeName = new String[bikeList.length()];
                 bikeId = new String[bikeList.length()];
                 bikeID_cc = new String[bikeList.length()];
                 IMAGE_URLS = new String[bikeList.length()];
@@ -129,6 +165,11 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
                 for (int i = 0; i <bikeList.length() ; i++) {
                     JSONObject bikeDetail = bikeList.getJSONObject(i);
                     String bike_name = bikeDetail.getString("bike_name");
+                    strBikeName[i] = bikeDetail.getString("bike_name");
+                    if(i==0)
+                    {
+                        text_right.setText(strBikeName[i]);
+                    }
                     String bike_cc = bikeDetail.getString("bike_cc");
                     // mylist.add(bike_name+"/"+bike_cc);
                     string[i+1]=bike_name+"/"+bike_cc;
@@ -147,31 +188,18 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
 
 
                 dropdown_bike_name.setOnItemSelectedListener(this);
-
-
-
             }
-
+            else
+            {
+                Toast.makeText(context, "Data Not Found !", Toast.LENGTH_SHORT).show();
+            }
 
         } catch (JSONException e) {
             //   Log.i("Test", "Enter");
             e.printStackTrace();
         }
         imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-
-
-
         pager.setAdapter(new ImageAdapter((getActivity())));
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -194,9 +222,12 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
 
         private LayoutInflater inflater;
         private DisplayImageOptions options;
+        public ImageLoader imageLoader = null;
 
         ImageAdapter(Context context) {
             inflater = LayoutInflater.from(context);
+            imageLoader = ImageLoader.getInstance();
+            imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
             options = new DisplayImageOptions.Builder()
                     .showImageForEmptyUri(R.drawable.ic_empty)
@@ -222,13 +253,13 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
         }
 
         @Override
-        public Object instantiateItem(ViewGroup view, int position) {
+        public Object instantiateItem(ViewGroup view, final int position) {
             View imageLayout = inflater.inflate(R.layout.item_pager_image_bottom, view, false);
             assert imageLayout != null;
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-            ImageLoader.getInstance().displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
+            imageLoader.displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     spinner.setVisibility(View.VISIBLE);
@@ -266,6 +297,24 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
             });
 
             view.addView(imageLayout, 0);
+
+            imageLayout.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    BikeDetails fragmentBikeDetails = new BikeDetails();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt( "bike_id", Integer.valueOf(bikeId[position]) );
+                    fragmentBikeDetails.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.container, fragmentBikeDetails);
+                    fragmentTransaction.commit();
+                }
+            });
+
             return imageLayout;
         }
 
