@@ -44,6 +44,17 @@
     <string name="pay_with">PAY WITH</string>
     <string name="no_items_display_txt">No Item Found</string>
 
+    <string name="text_accept_bkash">We accept bKash payment</string>
+    <string name="text_access_bkash">Access bKash system from own bKash wallet</string>
+    <string name="text_bkash_step1">Step 1 : Select 3.payment</string>
+    <string name="text_bkash_step2">Step 2 : Merchant bKash wattet no. 01777776660</string>
+    <string name="text_bkash_step3">Step 3 : Enter amount : Total Price (Such as 190)</string>
+    <string name="text_bkash_step4">Step 4 : Enter Reference : Subscribe code L3RE5281</string>
+    <string name="text_bkash_step5">Step 5 : Enter Counter No. 1</string>
+    <string name="text_bkash_ok">Than ok</string>
+    <string name="text_bkash_rec_trx">You will receive a payment confirmation SMS with</string>
+    <string name="text_bkash_trx">TrxID</string>
+
     <string-array name="navigation_drawer_items_array">
         <item>HOME</item>
         <item>MY BIKE</item>

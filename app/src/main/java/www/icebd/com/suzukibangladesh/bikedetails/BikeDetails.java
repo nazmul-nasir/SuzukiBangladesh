@@ -766,7 +766,7 @@ public class BikeDetails extends Fragment implements AsyncResponse {
         {
 
 
-            Toast.makeText(context,img_uri,Toast.LENGTH_LONG).show();
+            //Toast.makeText(context,img_uri,Toast.LENGTH_LONG).show();
             try
             {
                 /*URL url = new URL(img_uri);

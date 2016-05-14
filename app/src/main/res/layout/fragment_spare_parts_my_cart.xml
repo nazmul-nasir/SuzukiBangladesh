@@ -186,7 +186,7 @@
                         android:textSize="18dp"
                         android:gravity="center_vertical"
                         android:paddingTop="15dp"
-                        android:paddingLeft="30dp"
+                        android:paddingLeft="10dp"
                         android:textAlignment="gravity"/>
 
                 </RelativeLayout>

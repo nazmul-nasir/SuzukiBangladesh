@@ -303,7 +303,7 @@ public class BottomHomeFragment extends Fragment implements AsyncResponse, Adapt
                 @Override
                 public void onClick(View v)
                 {
-                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                     BikeDetails fragmentBikeDetails = new BikeDetails();

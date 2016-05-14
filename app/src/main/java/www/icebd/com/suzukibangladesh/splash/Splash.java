@@ -139,13 +139,59 @@ public class Splash extends Activity
                // iv1.startAnimation(an3);
                 iv.startAnimation(an3);
             }
-        }, 2000);// delay in milliseconds (200)
+        }, 3000);// delay in milliseconds (200)
 
         apiFactory = new APIFactory();
         customDialog = new CustomDialog(context);
         if(CheckNetworkConnection.isConnectedToInternet(this) == true)
         {
-            new Handler().postDelayed(new Runnable()
+            try
+            {
+                //finish();
+                pref = getApplicationContext().getSharedPreferences("SuzukiBangladeshPref", MODE_PRIVATE);
+                editor = pref.edit();
+                //String notification_key = pref.getString("gcm_registration_token", null);
+                editor.putString("running", "no");
+                editor.apply();
+
+                String auth_key = pref.getString("auth_key",null);
+                //String notification_key = pref.getString("gcm_registration_token",null);
+                Log.i("Test","GCM registration token :"+pref.getString("gcm_registration_token",null));
+                if (auth_key == null)
+                {
+                    String android_id = Settings.Secure.getString(Splash.this.getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+
+                    Log.i("Test","Android ID : "+android_id);
+                    Log.i("Test","Notification key : "+pref.getString("gcm_registration_token",null));
+                    //Log.i("Test","Auth_key : "+auth_key);
+
+                    String unique_device_id = android_id;
+                    String noti_key = pref.getString("gcm_registration_token",null);
+                    String platform = "1";
+                    if(CheckNetworkConnection.isConnectedToInternet(context) == true)
+                    {
+                        authKeyTask = new AuthKeyTask(unique_device_id,noti_key,platform);
+                        authKeyTask.execute((Void) null);
+                    }
+                    else
+                    {
+                        customDialog.alertDialog("ERROR", getString(R.string.error_no_internet));
+                    }
+                }
+                else
+                {
+                    mediaTask = new MediaTask(pref.getString("auth_key", null));
+                    mediaTask.execute((Void) null);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                Log.i("exception: ", ex.getMessage());
+            }
+
+            /*new Handler().postDelayed(new Runnable()
             {
                 @Override
                 public void run()
@@ -197,6 +243,7 @@ public class Splash extends Activity
                     }
                 }
             }, 6000);// delay in milliseconds (200)
+            */
         }
         else
         {

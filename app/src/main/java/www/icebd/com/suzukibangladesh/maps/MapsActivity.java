@@ -165,6 +165,8 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, AsyncR
                                     .icon(BitmapDescriptorFactory
                                             .defaultMarker(BitmapDescriptorFactory.HUE_RED))
                                     .title(location_address)
+                                    .snippet("Contact Person Name: "+location_contact_person_name+"\nContact Person Email: "+location_contact_person_email+
+                                    "\nContact Person Phone: "+location_contact_person_phone)
                                   //  .snippet(show_room)
                             );
 
